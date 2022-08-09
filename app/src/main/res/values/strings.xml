@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GI Handbook</string>
+
+    <string name="screen_title_characters">Characters</string>
+    <string name="pager_title_heroes">Heroes</string>
+    <string name="pager_title_enemies">Enemies</string>
+
 </resources>
