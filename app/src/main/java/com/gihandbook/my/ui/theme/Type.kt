@@ -20,5 +20,11 @@ val Typography = Typography(
         fontFamily = FontFamily(Font(R.font.quicksand)),
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp
+    ),
+
+    h3 = TextStyle(
+        fontFamily = FontFamily(Font(R.font.quicksand)),
+        fontWeight = FontWeight.Bold,
+        fontSize = 12.sp
     )
 )

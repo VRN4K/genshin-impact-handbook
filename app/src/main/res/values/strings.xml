@@ -5,4 +5,9 @@
     <string name="pager_title_heroes">Heroes</string>
     <string name="pager_title_enemies">Enemies</string>
 
+    <string name="search_character_not_found">No relevant character found</string>
+
+    <string name="filter_title_weapon_type">Weapon type</string>
+    <string name="filter_title_vision">Vision</string>
+
 </resources>

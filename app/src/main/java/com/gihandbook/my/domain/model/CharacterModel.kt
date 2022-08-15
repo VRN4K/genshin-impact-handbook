@@ -27,6 +27,16 @@ enum class WeaponType(val imageId: Int, val title: String) {
     CLAYMORE(R.drawable.claymore, "Claymore")
 }
 
+enum class Vision {
+    Anemo,
+    Cryo,
+    Dendro,
+    Electro,
+    Geo,
+    Hydro,
+    Pyro
+}
+
 data class CharacterCardModel(
     val name: String,
     val imageUrl: String,

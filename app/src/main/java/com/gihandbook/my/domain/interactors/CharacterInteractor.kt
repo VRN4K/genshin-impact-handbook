@@ -41,10 +41,8 @@ class CharacterInteractor @Inject constructor(
 
     override suspend fun getEnemiesList(): List<EnemyCardModel> {
         val enemies = mutableListOf<EnemyCardModel>()
-
         charactersNetRepository.getEnemies().onEach { name ->
             val enemy = charactersNetRepository.getEnemyByName(name)
-            println(name + " " + (enemy.elements?.size ?: 0))
             enemies.add(
                 enemy.toCardModel(
                     "https://api.genshin.dev/enemies/$name/icon",
