@@ -9,15 +9,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -30,70 +27,14 @@ import com.gihandbook.my.domain.model.WeaponType
 import com.gihandbook.my.ui.theme.FilterChipClicked
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
-import com.google.accompanist.pager.ExperimentalPagerApi
 
-@ExperimentalPagerApi
 @Composable
-fun AppBarWithPager(
-    title: Int,
-    selectedTabIndex: Int,
-    onSelectedTab: (TabPagesCharacters) -> Unit,
-    onFilterClick: () -> Unit,
-    onSearchClick: () -> Unit
+fun SearchView(
+    initValue: String = "",
+    onSearchButtonClick: (String) -> Unit,
+    onClearButtonClick: () -> Unit,
 ) {
-    TopAppBar(
-        backgroundColor = MaterialTheme.colors.onPrimary,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(94.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .padding(horizontal = 8.dp)
-            .padding(top = 8.dp),
-        elevation = 0.dp,
-    ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp)
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                IconButton(
-                    onClick = { onFilterClick() }
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_round_filter_list_24),
-                        colorFilter = ColorFilter.tint(Color.Black),
-                        contentDescription = null,
-                        modifier = Modifier.padding(0.dp)
-                    )
-                }
-                Text(
-                    text = stringResource(id = title),
-                    style = MaterialTheme.typography.h1,
-                    color = MaterialTheme.colors.primary,
-                    modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
-                )
-                IconButton(
-                    onClick = { onSearchClick() }
-                ) {
-                    Image(
-                        imageVector = Icons.Outlined.Search,
-                        colorFilter = ColorFilter.tint(Color.Black),
-                        contentDescription = null
-                    )
-                }
-            }
-            TabBar(selectedTabIndex = selectedTabIndex, onSelectedTab = { onSelectedTab(it) })
-        }
-    }
-}
-
-@Composable
-fun SearchView(onSearchButtonClick: (String) -> Unit, onClearButtonClick: () -> Unit) {
-    var query by remember { mutableStateOf("") }
+    var query by remember { mutableStateOf(initValue) }
 
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -139,38 +80,9 @@ fun SearchView(onSearchButtonClick: (String) -> Unit, onClearButtonClick: () -> 
     }
 }
 
-@ExperimentalPagerApi
-@Composable
-fun TabBar(selectedTabIndex: Int, onSelectedTab: (TabPagesCharacters) -> Unit) {
-    TabRow(
-        selectedTabIndex = selectedTabIndex,
-        backgroundColor = MaterialTheme.colors.onPrimary,
-        modifier = Modifier
-    ) {
-        TabPagesCharacters.values().forEachIndexed { index, tabPagesCharacters ->
-            Tab(
-                selected = index == selectedTabIndex,
-                onClick = { onSelectedTab(tabPagesCharacters) },
-                text = {
-                    Text(
-                        text = stringResource(id = tabPagesCharacters.tabTitle),
-                        style = MaterialTheme.typography.h1
-                    )
-                }
-            )
-        }
-    }
-}
-
-enum class TabPagesCharacters(val tabTitle: Int) {
-    CHARACTERS(R.string.pager_title_heroes),
-    ENEMIES(R.string.pager_title_enemies)
-}
 
 @Composable
-fun FilterBlock(
-    onChipClick: (FilterItemsType?, String?) -> Unit
-) {
+fun FilterBlock(onChipClick: (FilterItemsType?, String?) -> Unit) {
     var isFilterReset by remember { mutableStateOf(false) }
 
     Card(
@@ -280,16 +192,16 @@ fun FilterItem(
 }
 
 @Composable
-fun showLoading() {
+fun ShowLoading() {
     CircularProgressIndicator(color = Color.Black, modifier = Modifier)
 }
 
 @Composable
-fun showNotFoundText() {
+fun ShowNotFoundText() {
     Text(
         text = stringResource(id = R.string.search_character_not_found),
-        style = MaterialTheme.typography.h1, color = MaterialTheme.colors.onPrimary,
-        modifier = Modifier.fillMaxWidth()
+        style = MaterialTheme.typography.h1, color = MaterialTheme.colors.primary,
+        modifier = Modifier
     )
 }
 
@@ -297,8 +209,8 @@ fun showNotFoundText() {
 fun <T> showContent(
     stateLiveData: StateLiveData<T>,
     onContent: @Composable (T) -> Unit,
-    onLoading: @Composable () -> Unit = { showLoading() },
-    onNotFound: @Composable () -> Unit = { showNotFoundText() },
+    onLoading: @Composable () -> Unit = { ShowLoading() },
+    onNotFound: @Composable () -> Unit = { ShowNotFoundText() },
 ) {
     val state = stateLiveData.observeAsState().value
 

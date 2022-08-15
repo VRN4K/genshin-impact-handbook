@@ -100,7 +100,6 @@ fun EnemyCard(enemy: EnemyCardModel) {
                                 ElementTitle(element = item)
                             })
                         }
-
                     }
                 }
             }

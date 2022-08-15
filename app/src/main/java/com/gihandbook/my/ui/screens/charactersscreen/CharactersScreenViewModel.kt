@@ -19,10 +19,6 @@ class CharactersScreenViewModel @Inject constructor(private val characterInterac
     val characterState = StateLiveData<List<CharacterCardModel>>()
     val enemiesState = StateLiveData<List<EnemyCardModel>>()
 
-    private var lastFilteredWeaponType: WeaponType? = null
-    private var lastFilteredVision: String? = null
-
-
     init {
         getCharacters()
     }
@@ -41,29 +37,31 @@ class CharactersScreenViewModel @Inject constructor(private val characterInterac
 
     fun onWeaponFilterClick(weaponType: WeaponType? = null, element: String? = null) {
         when {
-            weaponType != null
-            -> characterState.postComplete(charactersFromServer.filter { character ->
-                if (lastFilteredVision == null) character.weaponType == weaponType else
-                    character.weaponType == weaponType && character.element.name == lastFilteredVision
-            }).also { lastFilteredWeaponType = weaponType }
-            element != null -> characterState.postComplete(charactersFromServer.filter { character ->
-                if (lastFilteredWeaponType == null) character.element.name == element else
-                    character.weaponType == lastFilteredWeaponType && character.element.name == element
-            }).also { lastFilteredVision = element }
-            lastFilteredVision != null -> characterState.postComplete(
-                charactersFromServer.filter { character -> character.element.name == lastFilteredVision })
-            lastFilteredWeaponType != null -> characterState.postComplete(
-                charactersFromServer.filter { character -> character.weaponType == lastFilteredWeaponType })
-            else -> characterState.postComplete(charactersFromServer).also {
-                lastFilteredVision = null
-                lastFilteredWeaponType = null
-            }
+            weaponType != null -> characterState.postComplete(with(charactersFromServer) {
+                if (element == null) {
+                    filter { character -> character.weaponType == weaponType }
+                } else {
+                    filter { character ->
+                        character.weaponType == weaponType && character.element.name == element
+                    }
+                }
+            })
+            element != null -> characterState.postComplete(with(charactersFromServer) {
+                filter { character -> character.element.name == element }
+            })
+            else -> characterState.postComplete(charactersFromServer)
         }
     }
 
     fun onSearchButtonClick(searchText: String) {
-        charactersFromServer.filter { it.name == searchText || it.region == searchText }.apply {
-            if (size == 0) characterState.postNotFound() else characterState.postComplete(this)
+        charactersFromServer.filter {
+            it.name.contains(searchText, true) || it.region.contains(searchText, true)
+        }.apply {
+            if (size == 0) {
+                characterState.postNotFound()
+            } else {
+                characterState.postComplete(this)
+            }
         }
     }
 

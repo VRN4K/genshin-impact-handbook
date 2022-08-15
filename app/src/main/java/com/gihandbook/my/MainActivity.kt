@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
@@ -56,9 +55,19 @@ fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
             AppBarWithPager(
                 title = R.string.screen_title_characters,
                 pagerState.ordinal,
-                onSelectedTab = { pagerState = it },
-                onFilterClick = { isFilterShown = !isFilterShown },
-                onSearchClick = { isSearchShown = !isSearchShown }
+                onSelectedTab = {
+                    pagerState = it
+                    isFilterShown = false
+                    isSearchShown = false
+                },
+                onFilterClick = {
+                    isFilterShown = !isFilterShown
+                    if (isFilterShown) isSearchShown = false
+                },
+                onSearchClick = {
+                    isSearchShown = !isSearchShown
+                    if (isSearchShown) isFilterShown = false
+                }
             )
         }
     ) { insets ->
@@ -69,27 +78,23 @@ fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
         ) {
             ShowCharacter(pagerState, viewModel)
             if (isFilterShown) {
-                isSearchShown = false
                 FilterBlock(onChipClick = { filterType, item ->
                     if (filterType == FilterItemsType.weaponType) {
                         selectedWeaponType = item
-                        viewModel.onWeaponFilterClick(
-                            weaponType = WeaponType.values()
-                                .find { it.title == selectedWeaponType })
                     }
                     if (filterType == FilterItemsType.vision) {
                         selectedVision = item
-                        viewModel.onWeaponFilterClick(element = selectedVision)
                     }
                     if (filterType == null) {
                         selectedWeaponType = null
                         selectedVision = null
-                        viewModel.onWeaponFilterClick()
                     }
+                    viewModel.onWeaponFilterClick(weaponType = WeaponType.values()
+                        .find { it.title == selectedWeaponType }, selectedVision
+                    )
                 })
             }
             if (isSearchShown) {
-                isFilterShown = false
                 SearchView(
                     onSearchButtonClick = { viewModel.onSearchButtonClick(it) },
                     onClearButtonClick = { viewModel.onClearButtonClick() })
@@ -104,34 +109,37 @@ enum class FilterItemsType {
 
 @Composable
 fun ShowCharacter(currentTab: TabPagesCharacters, viewModel: CharactersScreenViewModel) {
-    var characters by remember { mutableStateOf(listOf<CharacterCardModel>()) }
-    var enemies by remember { mutableStateOf(listOf<EnemyCardModel>()) }
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        showContent(stateLiveData = viewModel.characterState, onContent = { characters = it })
-        showContent(stateLiveData = viewModel.enemiesState, onContent = { enemies = it })
-        LazyColumn(
-            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 3.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            if (currentTab.ordinal == 0) {
-                showCharacters(characters = characters)
-            } else {
-                showEnemies(characters = enemies)
-            }
+        if (currentTab.ordinal == 0) {
+            showContent(
+                stateLiveData = viewModel.characterState,
+                onContent = { ShowCharacters(it, currentTab) })
+        } else {
+            showContent(
+                stateLiveData = viewModel.enemiesState,
+                onContent = { ShowCharacters(it, currentTab) })
         }
     }
 }
 
-fun LazyListScope.showCharacters(characters: List<CharacterCardModel>) {
-    items(items = characters, itemContent = { item -> CharacterCard(character = item) })
-}
 
-fun LazyListScope.showEnemies(characters: List<EnemyCardModel>) {
-    items(items = characters, itemContent = { item -> EnemyCard(enemy = item) })
+@Composable
+fun ShowCharacters(characters: List<*>, tabPagesCharacters: TabPagesCharacters) {
+    LazyColumn(
+        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 3.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        items(items = characters, itemContent = { item ->
+            if (tabPagesCharacters == TabPagesCharacters.CHARACTERS) {
+                CharacterCard(character = item as CharacterCardModel)
+            } else {
+                EnemyCard(enemy = item as EnemyCardModel)
+            }
+        })
+    }
 }
 
 
