@@ -30,11 +30,10 @@ import com.google.accompanist.flowlayout.SizeMode
 
 @Composable
 fun SearchView(
-    initValue: String = "",
     onSearchButtonClick: (String) -> Unit,
     onClearButtonClick: () -> Unit,
 ) {
-    var query by remember { mutableStateOf(initValue) }
+    var query by remember { mutableStateOf("") }
 
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -80,9 +79,8 @@ fun SearchView(
     }
 }
 
-
 @Composable
-fun FilterBlock(onChipClick: (FilterItemsType?, String?) -> Unit) {
+fun FilterHeroesBlock(onChipClick: (FilterItemsType?, String?) -> Unit) {
     var isFilterReset by remember { mutableStateOf(false) }
 
     Card(
@@ -100,18 +98,20 @@ fun FilterBlock(onChipClick: (FilterItemsType?, String?) -> Unit) {
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         ) {
-            ChipGrid(
+            SingleSelectChipGrid(
                 stringResource(id = R.string.filter_title_weapon_type),
+                isFilterReset,
                 WeaponType.values().map { it.title },
                 onItemSelected = { onChipClick(FilterItemsType.weaponType, it) },
-                isFilterReset = isFilterReset
             )
-            ChipGrid(
+            SingleSelectChipGrid(
                 stringResource(id = R.string.filter_title_vision),
+                isFilterReset,
                 Vision.values().map { it.name },
                 onItemSelected = { onChipClick(FilterItemsType.vision, it) },
-                isFilterReset = isFilterReset
             )
+
+            isFilterReset = false
 
             TextButton(
                 onClick = {
@@ -128,13 +128,98 @@ fun FilterBlock(onChipClick: (FilterItemsType?, String?) -> Unit) {
 }
 
 @Composable
-fun ChipGrid(
+fun FilterEnemiesBlock(onChipClick: (FilterItemsType?, String?) -> Unit) {
+    var isFilterReset by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+
+        shape = RoundedCornerShape(2.dp),
+        backgroundColor = MaterialTheme.colors.onPrimary,
+        elevation = 1.dp
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        ) {
+            MultiSelectChipGrid(
+                stringResource(id = R.string.filter_title_vision),
+                isFilterReset,
+                Vision.values().map { it.name },
+                onItemSelected = { onChipClick(FilterItemsType.vision, it) }
+            )
+
+            isFilterReset = false
+
+            TextButton(
+                onClick = {
+                    onChipClick(null, null)
+                    isFilterReset = true
+                }, modifier = Modifier
+                    .padding(top = 8.dp)
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text(text = "Reset", style = MaterialTheme.typography.h2)
+            }
+        }
+    }
+}
+
+@Composable
+fun MultiSelectChipGrid(
     gridTitle: String,
+    isFilterReset: Boolean? = null,
     itemsList: List<String>,
-    onItemSelected: (String?) -> Unit,
-    isFilterReset: Boolean
+    onItemSelected: (String?) -> Unit
+) {
+    val clickedIndexes = remember { mutableStateListOf<Int?>() }
+    isFilterReset?.let { if (it) clickedIndexes.clear() }
+
+    Text(
+        text = gridTitle,
+        style = MaterialTheme.typography.h1,
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+    )
+
+    FlowRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        mainAxisSize = SizeMode.Expand,
+        crossAxisSpacing = 12.dp,
+        mainAxisSpacing = 8.dp
+    ) {
+        itemsList.onEachIndexed { index, item ->
+            FilterItem(
+                item,
+                index,
+                isClicked = clickedIndexes.contains(index),
+                onClick = {
+                    if (clickedIndexes.contains(index)) {
+                        clickedIndexes.remove(index)
+                    } else {
+                        clickedIndexes.add(index)
+                    }
+                    onItemSelected.invoke(item)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun SingleSelectChipGrid(
+    gridTitle: String,
+    isFilterReset: Boolean? = null,
+    itemsList: List<String>,
+    onItemSelected: (String?) -> Unit
 ) {
     var clickedIndex by remember { mutableStateOf<Int?>(null) }
+    isFilterReset?.let { if (it) clickedIndex = null }
 
     Text(
         text = gridTitle,
@@ -157,8 +242,7 @@ fun ChipGrid(
                 onClick = {
                     clickedIndex = it
                     onItemSelected.invoke(it?.let { item })
-                },
-                isFilterReset = isFilterReset
+                }
             )
         }
     }
@@ -169,7 +253,6 @@ fun FilterItem(
     title: String,
     index: Int,
     isClicked: Boolean,
-    isFilterReset: Boolean,
     onClick: (Int?) -> Unit
 ) {
     Card(
@@ -179,12 +262,12 @@ fun FilterItem(
             .clickable {
                 onClick.invoke(if (isClicked) null else index)
             },
-        backgroundColor = if (isClicked && !isFilterReset) FilterChipClicked else MaterialTheme.colors.onSecondary,
+        backgroundColor = if (isClicked) FilterChipClicked else MaterialTheme.colors.onSecondary,
         elevation = 0.dp
     ) {
         Text(
             text = title,
-            color = if (isClicked && !isFilterReset) Color.White else MaterialTheme.colors.secondary,
+            color = if (isClicked) Color.White else MaterialTheme.colors.secondary,
             style = MaterialTheme.typography.h3,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
         )
@@ -200,8 +283,7 @@ fun ShowLoading() {
 fun ShowNotFoundText() {
     Text(
         text = stringResource(id = R.string.search_character_not_found),
-        style = MaterialTheme.typography.h1, color = MaterialTheme.colors.primary,
-        modifier = Modifier
+        style = MaterialTheme.typography.h1, color = MaterialTheme.colors.primary
     )
 }
 

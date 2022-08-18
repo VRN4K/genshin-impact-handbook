@@ -44,10 +44,10 @@ fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
     var pagerState by remember { mutableStateOf(TabPagesCharacters.CHARACTERS) }
     var isFilterShown by remember { mutableStateOf(false) }
     var isSearchShown by remember { mutableStateOf(false) }
-    var filterResetState by remember { mutableStateOf(false) }
 
-    var selectedWeaponType by remember { mutableStateOf<String?>(null) }
-    var selectedVision by remember { mutableStateOf<String?>(null) }
+    val selectedEnemiesVision = remember { mutableStateListOf<String>() }
+    var selectedCharactersWeaponType by remember { mutableStateOf<String?>(null) }
+    var selectedCharactersVision by remember { mutableStateOf<String?>(null) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -78,26 +78,48 @@ fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
         ) {
             ShowCharacter(pagerState, viewModel)
             if (isFilterShown) {
-                FilterBlock(onChipClick = { filterType, item ->
-                    if (filterType == FilterItemsType.weaponType) {
-                        selectedWeaponType = item
-                    }
-                    if (filterType == FilterItemsType.vision) {
-                        selectedVision = item
-                    }
-                    if (filterType == null) {
-                        selectedWeaponType = null
-                        selectedVision = null
-                    }
-                    viewModel.onWeaponFilterClick(weaponType = WeaponType.values()
-                        .find { it.title == selectedWeaponType }, selectedVision
+                if (pagerState == TabPagesCharacters.CHARACTERS) {
+                    FilterHeroesBlock(onChipClick = { filterType, item ->
+                        if (filterType == FilterItemsType.weaponType) {
+                            selectedCharactersWeaponType = item
+                        }
+                        if (filterType == FilterItemsType.vision) {
+                            selectedCharactersVision = item
+                        }
+                        if (filterType == null) {
+                            selectedCharactersWeaponType = null
+                            selectedCharactersVision = null
+                        }
+                        viewModel.onCharacterFilterChipClick(
+                            weaponType = WeaponType.values()
+                                .find { it.title == selectedCharactersWeaponType },
+                            selectedCharactersVision
+                        )
+                    })
+                } else {
+                    FilterEnemiesBlock(
+                        onChipClick = { filterType, item ->
+                            if (filterType == FilterItemsType.vision) {
+                                if (!selectedEnemiesVision.contains(item)) {
+                                    selectedEnemiesVision.add(item!!)
+                                    viewModel.onEnemyFilterChipClick(selectedEnemiesVision.toMutableList())
+                                } else {
+                                    selectedEnemiesVision.remove(item)
+                                    viewModel.onEnemyFilterChipClick(selectedEnemiesVision.toMutableList())
+                                }
+                            }
+                            if (filterType == null) {
+                                selectedEnemiesVision.clear()
+                                viewModel.onClearButtonClick(pagerState)
+                            }
+                        }
                     )
-                })
+                }
             }
             if (isSearchShown) {
                 SearchView(
-                    onSearchButtonClick = { viewModel.onSearchButtonClick(it) },
-                    onClearButtonClick = { viewModel.onClearButtonClick() })
+                    onSearchButtonClick = { viewModel.onSearchButtonClick(it, pagerState) },
+                    onClearButtonClick = { viewModel.onClearButtonClick(pagerState) })
             }
         }
     }
@@ -113,7 +135,7 @@ fun ShowCharacter(currentTab: TabPagesCharacters, viewModel: CharactersScreenVie
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (currentTab.ordinal == 0) {
+        if (currentTab == TabPagesCharacters.CHARACTERS) {
             showContent(
                 stateLiveData = viewModel.characterState,
                 onContent = { ShowCharacters(it, currentTab) })
