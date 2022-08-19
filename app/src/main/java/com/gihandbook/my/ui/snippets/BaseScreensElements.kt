@@ -80,7 +80,11 @@ fun SearchView(
 }
 
 @Composable
-fun FilterHeroesBlock(onChipClick: (FilterItemsType?, String?) -> Unit) {
+fun FilterHeroesBlock(
+    initialSelectedWeaponType: String?,
+    initialSelectedVision: String?,
+    onChipClick: (FilterItemsType?, String?) -> Unit
+) {
     var isFilterReset by remember { mutableStateOf(false) }
 
     Card(
@@ -100,14 +104,20 @@ fun FilterHeroesBlock(onChipClick: (FilterItemsType?, String?) -> Unit) {
         ) {
             SingleSelectChipGrid(
                 stringResource(id = R.string.filter_title_weapon_type),
-                isFilterReset,
-                WeaponType.values().map { it.title },
+                isFilterReset = isFilterReset,
+                itemsList = WeaponType.values().map { it.title },
+                initialSelectedValue = initialSelectedWeaponType?.let {
+                    WeaponType.values().map { it.name }.indexOf(it)
+                },
                 onItemSelected = { onChipClick(FilterItemsType.weaponType, it) },
             )
             SingleSelectChipGrid(
                 stringResource(id = R.string.filter_title_vision),
-                isFilterReset,
-                Vision.values().map { it.name },
+                isFilterReset = isFilterReset,
+                itemsList = Vision.values().map { it.name },
+                initialSelectedValue = initialSelectedVision?.let {
+                    Vision.values().map { it.name }.indexOf(it)
+                },
                 onItemSelected = { onChipClick(FilterItemsType.vision, it) },
             )
 
@@ -128,7 +138,10 @@ fun FilterHeroesBlock(onChipClick: (FilterItemsType?, String?) -> Unit) {
 }
 
 @Composable
-fun FilterEnemiesBlock(onChipClick: (FilterItemsType?, String?) -> Unit) {
+fun FilterEnemiesBlock(
+    initialSelectedValues: List<String>? = null,
+    onChipClick: (FilterItemsType?, String?) -> Unit
+) {
     var isFilterReset by remember { mutableStateOf(false) }
 
     Card(
@@ -149,6 +162,7 @@ fun FilterEnemiesBlock(onChipClick: (FilterItemsType?, String?) -> Unit) {
             MultiSelectChipGrid(
                 stringResource(id = R.string.filter_title_vision),
                 isFilterReset,
+                initialSelectedValues?.map { Vision.values().map { it.name }.indexOf(it) },
                 Vision.values().map { it.name },
                 onItemSelected = { onChipClick(FilterItemsType.vision, it) }
             )
@@ -173,10 +187,13 @@ fun FilterEnemiesBlock(onChipClick: (FilterItemsType?, String?) -> Unit) {
 fun MultiSelectChipGrid(
     gridTitle: String,
     isFilterReset: Boolean? = null,
+    initialSelectedValues: List<Int>? = null,
     itemsList: List<String>,
     onItemSelected: (String?) -> Unit
 ) {
-    val clickedIndexes = remember { mutableStateListOf<Int?>() }
+    val clickedIndexes = remember {
+        mutableStateListOf<Int?>().apply { initialSelectedValues?.let { this.addAll(it) } }
+    }
     isFilterReset?.let { if (it) clickedIndexes.clear() }
 
     Text(
@@ -214,11 +231,12 @@ fun MultiSelectChipGrid(
 @Composable
 fun SingleSelectChipGrid(
     gridTitle: String,
+    initialSelectedValue: Int? = null,
     isFilterReset: Boolean? = null,
     itemsList: List<String>,
     onItemSelected: (String?) -> Unit
 ) {
-    var clickedIndex by remember { mutableStateOf<Int?>(null) }
+    var clickedIndex by remember { mutableStateOf(initialSelectedValue) }
     isFilterReset?.let { if (it) clickedIndex = null }
 
     Text(

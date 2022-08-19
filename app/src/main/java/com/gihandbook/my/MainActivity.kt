@@ -79,25 +79,29 @@ fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
             ShowCharacter(pagerState, viewModel)
             if (isFilterShown) {
                 if (pagerState == TabPagesCharacters.CHARACTERS) {
-                    FilterHeroesBlock(onChipClick = { filterType, item ->
-                        if (filterType == FilterItemsType.weaponType) {
-                            selectedCharactersWeaponType = item
-                        }
-                        if (filterType == FilterItemsType.vision) {
-                            selectedCharactersVision = item
-                        }
-                        if (filterType == null) {
-                            selectedCharactersWeaponType = null
-                            selectedCharactersVision = null
-                        }
-                        viewModel.onCharacterFilterChipClick(
-                            weaponType = WeaponType.values()
-                                .find { it.title == selectedCharactersWeaponType },
-                            selectedCharactersVision
-                        )
-                    })
+                    FilterHeroesBlock(
+                        selectedCharactersWeaponType,
+                        selectedCharactersVision,
+                        onChipClick = { filterType, item ->
+                            if (filterType == FilterItemsType.weaponType) {
+                                selectedCharactersWeaponType = item
+                            }
+                            if (filterType == FilterItemsType.vision) {
+                                selectedCharactersVision = item
+                            }
+                            if (filterType == null) {
+                                selectedCharactersWeaponType = null
+                                selectedCharactersVision = null
+                            }
+                            viewModel.onCharacterFilterChipClick(
+                                weaponType = WeaponType.values()
+                                    .find { it.title == selectedCharactersWeaponType },
+                                selectedCharactersVision
+                            )
+                        })
                 } else {
                     FilterEnemiesBlock(
+                        selectedEnemiesVision.toList(),
                         onChipClick = { filterType, item ->
                             if (filterType == FilterItemsType.vision) {
                                 if (!selectedEnemiesVision.contains(item)) {
