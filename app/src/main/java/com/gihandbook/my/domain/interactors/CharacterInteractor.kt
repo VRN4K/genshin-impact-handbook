@@ -3,9 +3,11 @@ package com.gihandbook.my.domain.interactors
 import com.gihandbook.my.data.net.model.Character
 import com.gihandbook.my.data.net.model.Enemy
 import com.gihandbook.my.data.net.model.toCardModel
+import com.gihandbook.my.data.net.model.toUI
 import com.gihandbook.my.domain.datacontracts.ICharacterInteractor
 import com.gihandbook.my.domain.datacontracts.ICharacterNetRepository
 import com.gihandbook.my.domain.model.CharacterCardModel
+import com.gihandbook.my.domain.model.CharacterUIModel
 import com.gihandbook.my.domain.model.Element
 import com.gihandbook.my.domain.model.EnemyCardModel
 import javax.inject.Inject
@@ -17,6 +19,8 @@ class CharacterInteractor @Inject constructor(
     override suspend fun getHeroByName(name: String): Character {
         return charactersNetRepository.getPlayableCharacterByName(name)
     }
+
+
 
     override suspend fun getHeroesList(): List<CharacterCardModel> {
         val characters = mutableListOf<CharacterCardModel>()
@@ -33,6 +37,10 @@ class CharacterInteractor @Inject constructor(
             )
         }
         return characters
+    }
+
+    override suspend fun getHeroDetailInformation(name: String): CharacterUIModel {
+        return charactersNetRepository.getPlayableCharacterByName(name).toUI()
     }
 
     override suspend fun getEnemyByName(name: String): Enemy {

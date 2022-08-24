@@ -116,7 +116,9 @@ fun FilterHeroesBlock(
                 isFilterReset = isFilterReset,
                 itemsList = Vision.values().map { it.name },
                 initialSelectedValue = initialSelectedVision?.let {
-                    Vision.values().map { it.name }.indexOf(it)
+                    Vision.values().map { vision ->
+                        vision.name
+                    }.indexOf(it)
                 },
                 onItemSelected = { onChipClick(FilterItemsType.vision, it) },
             )
@@ -192,7 +194,9 @@ fun MultiSelectChipGrid(
     onItemSelected: (String?) -> Unit
 ) {
     val clickedIndexes = remember {
-        mutableStateListOf<Int?>().apply { initialSelectedValues?.let { this.addAll(it) } }
+        mutableStateListOf<Int?>().apply {
+            initialSelectedValues?.let { this.addAll(it) }
+        }
     }
     isFilterReset?.let { if (it) clickedIndexes.clear() }
 
@@ -289,6 +293,14 @@ fun FilterItem(
             style = MaterialTheme.typography.h3,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
         )
+    }
+}
+
+@Composable
+fun TextBlock(title: String, text: String) {
+    Column(modifier = Modifier) {
+        Text(text = title, style = MaterialTheme.typography.h2)
+        Text(text = text, style = MaterialTheme.typography.body1)
     }
 }
 

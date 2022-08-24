@@ -13,18 +13,41 @@ val Typography = Typography(
     h1 = TextStyle(
         fontFamily = FontFamily(Font(R.font.quicksand)),
         fontWeight = FontWeight.Bold,
-        fontSize = 18.sp
+        fontSize = 30.sp
     ),
 
     h2 = TextStyle(
         fontFamily = FontFamily(Font(R.font.quicksand)),
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp
     ),
 
     h3 = TextStyle(
         fontFamily = FontFamily(Font(R.font.quicksand)),
         fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
+    ),
+
+    h4 = TextStyle(
+        fontFamily = FontFamily(Font(R.font.quicksand)),
+        fontWeight = FontWeight.Bold,
         fontSize = 12.sp
-    )
+    ),
+
+    h5 = TextStyle(
+        fontFamily = FontFamily(Font(R.font.quicksand)),
+        fontWeight = FontWeight.Normal,
+        fontSize = 10.sp
+    ),
+
+    body1 = TextStyle(
+        fontFamily = FontFamily(Font(R.font.quicksand)),
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
+    ),
+    body2 = TextStyle(
+        fontFamily = FontFamily(Font(R.font.quicksand)),
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp
+    ),
 )

@@ -16,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.gihandbook.my.domain.model.CharacterCardModel
 import com.gihandbook.my.domain.model.EnemyCardModel
 import com.gihandbook.my.domain.model.WeaponType
+import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
 import com.gihandbook.my.ui.screens.charactersscreen.CharacterCard
 import com.gihandbook.my.ui.screens.charactersscreen.CharactersScreenViewModel
 import com.gihandbook.my.ui.screens.charactersscreen.EnemyCard
@@ -31,7 +32,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GIHandbookTheme {
-                CharactersScreen()
+                //CharactersScreen()
+                CharacterDetailsScreen()
             }
         }
     }
@@ -45,9 +47,9 @@ fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
     var isFilterShown by remember { mutableStateOf(false) }
     var isSearchShown by remember { mutableStateOf(false) }
 
-    val selectedEnemiesVision = remember { mutableStateListOf<String>() }
-    var selectedCharactersWeaponType by remember { mutableStateOf<String?>(null) }
-    var selectedCharactersVision by remember { mutableStateOf<String?>(null) }
+    val selectedEnemiesVision = mutableListOf<String>()
+    var selectedCharactersWeaponType: String? = null
+    var selectedCharactersVision: String? = null
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -150,7 +152,6 @@ fun ShowCharacter(currentTab: TabPagesCharacters, viewModel: CharactersScreenVie
         }
     }
 }
-
 
 @Composable
 fun ShowCharacters(characters: List<*>, tabPagesCharacters: TabPagesCharacters) {

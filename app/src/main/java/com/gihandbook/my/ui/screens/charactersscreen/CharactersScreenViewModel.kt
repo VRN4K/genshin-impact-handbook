@@ -22,9 +22,7 @@ class CharactersScreenViewModel @Inject constructor(private val characterInterac
     val characterState = StateLiveData<List<CharacterCardModel>>()
     val enemiesState = StateLiveData<List<EnemyCardModel>>()
 
-    init {
-        getCharacters()
-    }
+    init { getCharacters() }
 
     private fun getCharacters() {
 
