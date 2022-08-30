@@ -3,8 +3,6 @@ package com.gihandbook.my.ui.screens.charactersscreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -16,14 +14,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
-import com.gihandbook.my.domain.model.CharacterCardModel
-import com.gihandbook.my.domain.model.Element
-import com.gihandbook.my.domain.model.EnemyCardModel
-import com.gihandbook.my.domain.model.WeaponType
+import com.gihandbook.my.domain.model.*
 import com.gihandbook.my.ui.theme.ImagesBackgroundColorLight
 
+
 @Composable
-fun CharacterCard(character: CharacterCardModel) {
+fun CharacterCard(character: CharacterCardModel, rowContent: @Composable () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
@@ -36,8 +32,7 @@ fun CharacterCard(character: CharacterCardModel) {
                 error = rememberAsyncImagePainter(model = character.imageUrlOnError),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .sizeIn(minHeight = 100.dp, maxHeight = 100.dp)
-                    .width(100.dp)
+                    .size(104.dp)
                     .background(ImagesBackgroundColorLight)
             )
             Column(
@@ -55,52 +50,7 @@ fun CharacterCard(character: CharacterCardModel) {
                     style = MaterialTheme.typography.h2
                 )
                 Row(modifier = Modifier.padding(4.dp)) {
-                    ElementTitle(element = character.element)
-                    WeaponTitle(weaponType = character.weaponType)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun EnemyCard(enemy: EnemyCardModel) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        backgroundColor = MaterialTheme.colors.onPrimary,
-        elevation = 2.dp
-    ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            AsyncImage(
-                model = enemy.imageUrl, contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .sizeIn(minHeight = 100.dp, maxHeight = 100.dp)
-                    .width(100.dp)
-                    .background(ImagesBackgroundColorLight)
-            )
-            Column(modifier = Modifier.padding(top = 4.dp, start = 12.dp, bottom = 4.dp)) {
-                Text(
-                    modifier = Modifier.padding(top = 4.dp, start = 4.dp),
-                    text = enemy.name, color = MaterialTheme.colors.primary,
-                    style = MaterialTheme.typography.h1
-                )
-                Text(
-                    modifier = Modifier.padding(bottom = 4.dp, start = 4.dp),
-                    text = enemy.region, color = MaterialTheme.colors.primary,
-                    style = MaterialTheme.typography.h2
-                )
-                Row(modifier = Modifier.padding(4.dp)) {
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(1.dp)
-                    ) {
-                        enemy.element?.let {
-                            items(items = it, itemContent = { item ->
-                                ElementTitle(element = item)
-                            })
-                        }
-                    }
+                    rowContent.invoke()
                 }
             }
         }

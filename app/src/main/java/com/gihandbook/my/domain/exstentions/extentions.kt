@@ -1,4 +1,4 @@
-package com.gihandbook.my.domain
+package com.gihandbook.my.domain.exstentions
 
 fun <T> List<T>.contains(list: List<T>): Boolean {
     var isContains = false
@@ -10,7 +10,6 @@ fun <T> List<T>.contains(list: List<T>): Boolean {
             isContains = false
             return false
         }
-
     }
 
     return isContains

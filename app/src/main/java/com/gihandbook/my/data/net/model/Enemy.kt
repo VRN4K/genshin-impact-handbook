@@ -13,9 +13,10 @@ class Enemy(
 
 fun Enemy.toCardModel(imageUrl: String, elements: List<Element>): EnemyCardModel {
     return EnemyCardModel(
-        this.let { name } ?: "Unknown",
+        elements,
+        "",
+        let { name } ?: "Unknown",
         imageUrl,
-        this.let { region } ?: "Unknown",
-        elements
+        let { region } ?: "Unknown"
     )
 }

@@ -1,7 +1,8 @@
 package com.gihandbook.my.data.net.model
 
-import com.gihandbook.my.domain.model.CharacterCardModel
+
 import com.gihandbook.my.domain.model.Element
+import com.gihandbook.my.domain.model.HeroCardModel
 import com.gihandbook.my.domain.model.WeaponType
 import kotlinx.serialization.Serializable
 
@@ -44,13 +45,13 @@ fun Character.toCardModel(
     imageUrl: String,
     imageUrlOnError: String,
     elementImageUrl: String
-): CharacterCardModel {
-    return CharacterCardModel(
-        this.name,
+): HeroCardModel {
+    return HeroCardModel(
+        weapon,
+        Element(vision, elementImageUrl),
+        name,
         imageUrl,
         imageUrlOnError,
-        this.nation,
-        this.weapon,
-        Element(this.vision, elementImageUrl)
-    )
+        nation
+        )
 }
