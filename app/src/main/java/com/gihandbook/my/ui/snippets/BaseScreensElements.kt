@@ -39,7 +39,7 @@ fun SearchView(
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 8.dp),
+            .padding(8.dp),
         backgroundColor = MaterialTheme.colors.onPrimary
     ) {
         Row(
@@ -94,8 +94,7 @@ fun FilterHeroesBlock(
             .padding(horizontal = 8.dp, vertical = 4.dp),
 
         shape = RoundedCornerShape(2.dp),
-        backgroundColor = MaterialTheme.colors.onPrimary,
-        elevation = 1.dp
+        backgroundColor = MaterialTheme.colors.onPrimary
     ) {
         Column(
             modifier = Modifier
@@ -106,21 +105,15 @@ fun FilterHeroesBlock(
                 stringResource(id = R.string.filter_title_weapon_type),
                 isFilterReset = isFilterReset,
                 itemsList = WeaponType.values().map { it.title },
-                initialSelectedValue = initialSelectedWeaponType?.let {
-                    WeaponType.values().map { it.name }.indexOf(it)
-                },
-                onItemSelected = { onChipClick(FilterItemsType.weaponType, it) },
+                initialSelectedValue = initialSelectedWeaponType,
+                onItemSelected = { onChipClick(FilterItemsType.WEAPON_TYPE, it) },
             )
             SingleSelectChipGrid(
                 stringResource(id = R.string.filter_title_vision),
                 isFilterReset = isFilterReset,
                 itemsList = Vision.values().map { it.name },
-                initialSelectedValue = initialSelectedVision?.let {
-                    Vision.values().map { vision ->
-                        vision.name
-                    }.indexOf(it)
-                },
-                onItemSelected = { onChipClick(FilterItemsType.vision, it) },
+                initialSelectedValue = initialSelectedVision,
+                onItemSelected = { onChipClick(FilterItemsType.VISION, it) },
             )
 
             isFilterReset = false
@@ -164,9 +157,9 @@ fun FilterEnemiesBlock(
             MultiSelectChipGrid(
                 stringResource(id = R.string.filter_title_vision),
                 isFilterReset,
-                initialSelectedValues?.map { Vision.values().map { it.name }.indexOf(it) },
+                initialSelectedValues,
                 Vision.values().map { it.name },
-                onItemSelected = { onChipClick(FilterItemsType.vision, it) }
+                onItemSelected = { onChipClick(FilterItemsType.VISION, it) }
             )
 
             isFilterReset = false
@@ -189,16 +182,14 @@ fun FilterEnemiesBlock(
 fun MultiSelectChipGrid(
     gridTitle: String,
     isFilterReset: Boolean? = null,
-    initialSelectedValues: List<Int>? = null,
+    initialSelectedValues: List<String>? = null,
     itemsList: List<String>,
     onItemSelected: (String?) -> Unit
 ) {
-    val clickedIndexes = remember {
-        mutableStateListOf<Int?>().apply {
-            initialSelectedValues?.let { this.addAll(it) }
-        }
+    val clickedItems = remember {
+        mutableStateListOf<String?>().apply { initialSelectedValues?.let { this.addAll(it) } }
     }
-    isFilterReset?.let { if (it) clickedIndexes.clear() }
+    isFilterReset?.let { if (it) clickedItems.clear() }
 
     Text(
         text = gridTitle,
@@ -214,16 +205,15 @@ fun MultiSelectChipGrid(
         crossAxisSpacing = 12.dp,
         mainAxisSpacing = 8.dp
     ) {
-        itemsList.onEachIndexed { index, item ->
+        itemsList.forEach { item ->
             FilterItem(
                 item,
-                index,
-                isClicked = clickedIndexes.contains(index),
+                isClicked = clickedItems.contains(item),
                 onClick = {
-                    if (clickedIndexes.contains(index)) {
-                        clickedIndexes.remove(index)
+                    if (clickedItems.contains(item)) {
+                        clickedItems.remove(item)
                     } else {
-                        clickedIndexes.add(index)
+                        clickedItems.add(item)
                     }
                     onItemSelected.invoke(item)
                 }
@@ -235,13 +225,13 @@ fun MultiSelectChipGrid(
 @Composable
 fun SingleSelectChipGrid(
     gridTitle: String,
-    initialSelectedValue: Int? = null,
+    initialSelectedValue: String? = null,
     isFilterReset: Boolean? = null,
     itemsList: List<String>,
     onItemSelected: (String?) -> Unit
 ) {
-    var clickedIndex by remember { mutableStateOf(initialSelectedValue) }
-    isFilterReset?.let { if (it) clickedIndex = null }
+    var clickedItem by remember { mutableStateOf(initialSelectedValue) }
+    isFilterReset?.let { if (it) clickedItem = null }
 
     Text(
         text = gridTitle,
@@ -256,13 +246,12 @@ fun SingleSelectChipGrid(
         crossAxisSpacing = 12.dp,
         mainAxisSpacing = 8.dp
     ) {
-        itemsList.onEachIndexed { index, item ->
+        itemsList.forEach { item ->
             FilterItem(
                 item,
-                index,
-                isClicked = index == clickedIndex,
+                isClicked = item == clickedItem,
                 onClick = {
-                    clickedIndex = it
+                    clickedItem = it
                     onItemSelected.invoke(it?.let { item })
                 }
             )
@@ -273,16 +262,15 @@ fun SingleSelectChipGrid(
 @Composable
 fun FilterItem(
     title: String,
-    index: Int,
     isClicked: Boolean,
-    onClick: (Int?) -> Unit
+    onClick: (String?) -> Unit
 ) {
     Card(
         modifier = Modifier
             .wrapContentWidth()
             .clip(RoundedCornerShape(16.dp))
             .clickable {
-                onClick.invoke(if (isClicked) null else index)
+                onClick.invoke(if (isClicked) null else title)
             },
         backgroundColor = if (isClicked) FilterChipClicked else MaterialTheme.colors.onSecondary,
         elevation = 0.dp
@@ -293,14 +281,6 @@ fun FilterItem(
             style = MaterialTheme.typography.h3,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
         )
-    }
-}
-
-@Composable
-fun TextBlock(title: String, text: String) {
-    Column(modifier = Modifier) {
-        Text(text = title, style = MaterialTheme.typography.h2)
-        Text(text = text, style = MaterialTheme.typography.body1)
     }
 }
 

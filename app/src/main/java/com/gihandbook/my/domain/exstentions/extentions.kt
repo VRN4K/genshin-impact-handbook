@@ -1,4 +1,4 @@
-package com.gihandbook.my.domain
+package com.gihandbook.my.domain.exstentions
 
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat

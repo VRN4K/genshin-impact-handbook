@@ -50,11 +50,19 @@ enum class Vision {
     Pyro
 }
 
-data class CharacterCardModel(
-    val name: String,
+abstract class CharacterCardModel(
+    open val name: String,
     val imageUrl: String,
     val imageUrlOnError: String,
-    val region: String,
-    val weaponType: WeaponType,
-    val element: Element
+    val region: String
 )
+
+class HeroCardModel(
+    val weaponType: WeaponType,
+    val element: Element,
+    name: String, imageUrl:
+    String,
+    imageUrlOnError: String,
+    region: String
+) : CharacterCardModel(name, imageUrl, imageUrlOnError, region)
+

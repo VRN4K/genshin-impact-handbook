@@ -10,6 +10,7 @@ import com.gihandbook.my.domain.model.CharacterCardModel
 import com.gihandbook.my.domain.model.CharacterUIModel
 import com.gihandbook.my.domain.model.Element
 import com.gihandbook.my.domain.model.EnemyCardModel
+import com.gihandbook.my.domain.model.HeroCardModel
 import javax.inject.Inject
 
 class CharacterInteractor @Inject constructor(
@@ -20,6 +21,8 @@ class CharacterInteractor @Inject constructor(
         return charactersNetRepository.getPlayableCharacterByName(name)
     }
 
+    override suspend fun getHeroesList(): List<HeroCardModel> {
+        val characters = mutableListOf<HeroCardModel>()
 
 
     override suspend fun getHeroesList(): List<CharacterCardModel> {

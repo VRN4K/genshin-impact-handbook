@@ -3,8 +3,13 @@ package com.gihandbook.my
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
@@ -20,6 +25,8 @@ import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
 import com.gihandbook.my.ui.screens.charactersscreen.CharacterCard
 import com.gihandbook.my.ui.screens.charactersscreen.CharactersScreenViewModel
 import com.gihandbook.my.ui.screens.charactersscreen.EnemyCard
+import com.gihandbook.my.domain.model.*
+import com.gihandbook.my.ui.screens.charactersscreen.*
 import com.gihandbook.my.ui.snippets.*
 import com.gihandbook.my.ui.theme.GIHandbookTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -79,16 +86,20 @@ fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
                 .fillMaxSize()
         ) {
             ShowCharacter(pagerState, viewModel)
-            if (isFilterShown) {
+            AnimatedVisibility(
+                visible = isFilterShown,
+                enter = fadeIn(animationSpec = tween(800)),
+                exit = fadeOut(animationSpec = tween(800))
+            ) {
                 if (pagerState == TabPagesCharacters.CHARACTERS) {
                     FilterHeroesBlock(
                         selectedCharactersWeaponType,
                         selectedCharactersVision,
                         onChipClick = { filterType, item ->
-                            if (filterType == FilterItemsType.weaponType) {
+                            if (filterType == FilterItemsType.WEAPON_TYPE) {
                                 selectedCharactersWeaponType = item
                             }
-                            if (filterType == FilterItemsType.vision) {
+                            if (filterType == FilterItemsType.VISION) {
                                 selectedCharactersVision = item
                             }
                             if (filterType == null) {
@@ -96,22 +107,34 @@ fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
                                 selectedCharactersVision = null
                             }
                             viewModel.onCharacterFilterChipClick(
-                                weaponType = WeaponType.values()
-                                    .find { it.title == selectedCharactersWeaponType },
-                                selectedCharactersVision
+                                FilterDataModel(
+                                    selectedTab = pagerState,
+                                    weaponType = selectedCharactersWeaponType?.let { WeaponType.valueOf(it.uppercase()) },
+                                    element = selectedCharactersVision?.let { Vision.valueOf(it) },
+                                    )
                             )
                         })
                 } else {
                     FilterEnemiesBlock(
                         selectedEnemiesVision.toList(),
                         onChipClick = { filterType, item ->
-                            if (filterType == FilterItemsType.vision) {
+                            if (filterType == FilterItemsType.VISION) {
                                 if (!selectedEnemiesVision.contains(item)) {
                                     selectedEnemiesVision.add(item!!)
-                                    viewModel.onEnemyFilterChipClick(selectedEnemiesVision.toMutableList())
+                                    viewModel.onCharacterFilterChipClick(
+                                        FilterDataModel(
+                                            selectedTab = pagerState,
+                                            filteredElementList = selectedEnemiesVision.toMutableList()
+                                        )
+                                    )
                                 } else {
                                     selectedEnemiesVision.remove(item)
-                                    viewModel.onEnemyFilterChipClick(selectedEnemiesVision.toMutableList())
+                                    viewModel.onCharacterFilterChipClick(
+                                        FilterDataModel(
+                                            selectedTab = pagerState,
+                                            filteredElementList = selectedEnemiesVision.toMutableList()
+                                        )
+                                    )
                                 }
                             }
                             if (filterType == null) {
@@ -122,7 +145,11 @@ fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
                     )
                 }
             }
-            if (isSearchShown) {
+            AnimatedVisibility(
+                visible = isSearchShown,
+                enter = fadeIn(animationSpec = tween(800)),
+                exit = fadeOut(animationSpec = tween(800))
+            ) {
                 SearchView(
                     onSearchButtonClick = { viewModel.onSearchButtonClick(it, pagerState) },
                     onClearButtonClick = { viewModel.onClearButtonClick(pagerState) })
@@ -132,7 +159,7 @@ fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
 }
 
 enum class FilterItemsType {
-    weaponType, vision
+    WEAPON_TYPE, VISION
 }
 
 @Composable
@@ -161,9 +188,28 @@ fun ShowCharacters(characters: List<*>, tabPagesCharacters: TabPagesCharacters) 
     ) {
         items(items = characters, itemContent = { item ->
             if (tabPagesCharacters == TabPagesCharacters.CHARACTERS) {
-                CharacterCard(character = item as CharacterCardModel)
+                CharacterCard(character = item as HeroCardModel) {
+                    ElementTitle(element = item.element)
+                    WeaponTitle(weaponType = item.weaponType)
+                }
             } else {
-                EnemyCard(enemy = item as EnemyCardModel)
+                CharacterCard(character = item as EnemyCardModel) {
+                    AnimatedVisibility(
+                        visible = item.element.isNotEmpty(),
+                        enter = fadeIn(animationSpec = tween(800)),
+                        exit = fadeOut(animationSpec = tween(800))
+                    ) {
+                        Row(modifier = Modifier.padding(4.dp)) {
+                            LazyRow(
+                                horizontalArrangement = Arrangement.spacedBy(1.dp)
+                            ) {
+                                items(items = item.element, itemContent = { element ->
+                                    ElementTitle(element = element)
+                                })
+                            }
+                        }
+                    }
+                }
             }
         })
     }
