@@ -17,7 +17,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.gihandbook.my.domain.model.*
 import com.gihandbook.my.ui.theme.ImagesBackgroundColorLight
 
-
 @Composable
 fun CharacterCard(character: CharacterCardModel, rowContent: @Composable () -> Unit) {
     Card(

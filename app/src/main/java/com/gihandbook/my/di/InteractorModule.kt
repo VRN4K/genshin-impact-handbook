@@ -1,6 +1,7 @@
 package com.gihandbook.my.di
 
 import android.content.Context
+import android.content.res.Resources
 import com.bumptech.glide.Glide
 import com.gihandbook.my.data.net.repositories.CharactersNetRepository
 import com.gihandbook.my.domain.datacontracts.ICharacterInteractor

@@ -3,9 +3,7 @@ package com.gihandbook.my.ui.screens.characterdetailscreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -15,12 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.gihandbook.my.R
 import com.gihandbook.my.domain.model.CharacterUIModel
+import com.gihandbook.my.ui.snippets.SkillsExpandableList
 import com.gihandbook.my.ui.snippets.TextBlock
 import com.gihandbook.my.ui.snippets.showContent
 
@@ -35,22 +34,21 @@ fun CharacterDetailsScreen(viewModel: CharacterDetailScreenViewModel = hiltViewM
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Column() {
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 showContent(
                     stateLiveData = viewModel.character,
-                    onContent = { showCharacterDetails(it) })
+                    onContent = { ShowCharacterDetails(it) })
             }
         }
     }
 }
 
 @Composable
-fun showCharacterDetails(character: CharacterUIModel) {
+fun ShowCharacterDetails(character: CharacterUIModel) {
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .fillMaxWidth()
     ) {
         AsyncImage(
             model = character.imageUrl,
@@ -82,12 +80,31 @@ fun showCharacterDetails(character: CharacterUIModel) {
             }
         )
         TextBlock(title = "About", text = character.description)
-        CharacterSmallInfoRow(title = "Talents") {
-            SmallVerticalCardWithText("Skill \nTalents")
-            SmallVerticalCardWithText("Passive \nTalents")
+        TextBlock(title = "Talents")
+        SkillsExpandableList("Skill Talents", character.skillTalents) {
+            character.skillTalents.forEach {
+                AsyncImage(
+                    model = it.talentImageUrlId,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .sizeIn(maxHeight = 30.dp)
+                        .padding(horizontal = 4.dp)
+                )
+            }
+        }
+        SkillsExpandableList("Passive Talents", character.passiveTalents) {
+            character.passiveTalents.forEach {
+                AsyncImage(
+                    model = it.talentImageUrlId,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .sizeIn(maxHeight = 30.dp)
+                        .padding(horizontal = 4.dp)
+                )
+            }
         }
     }
-
+    TextBlock(title = "Constellation")
 }
 
 @Composable
@@ -152,38 +169,16 @@ fun CharacterSmallInfoRow(title: String? = null, content: @Composable () -> Unit
         Text(
             text = title,
             style = MaterialTheme.typography.h2,
-            modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+            modifier = Modifier.padding(top = 16.dp)
         )
     }
     Row(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
+            .padding(top = 16.dp, bottom = 4.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         content()
-    }
-}
-
-@Composable
-fun SmallVerticalCardWithText(title: String) {
-    Card(
-        modifier = Modifier
-            .size(width = 150.dp, height = 150.dp)
-            .padding(horizontal = 20.dp),
-        shape = RoundedCornerShape(16.dp)
-    ) {
-        Box(
-            modifier = Modifier.padding(top = 16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.h2,
-                modifier = Modifier
-                    .padding(start = 4.dp),
-                textAlign = TextAlign.Center
-            )
-        }
     }
 }

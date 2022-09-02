@@ -1,7 +1,7 @@
 package com.gihandbook.my.di
 
 import android.content.Context
-import com.bumptech.glide.Glide
+import android.content.res.Resources
 import com.gihandbook.my.data.net.repositories.CharactersNetRepository
 import com.gihandbook.my.domain.datacontracts.ICharacterNetRepository
 import dagger.Module
@@ -15,6 +15,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class RepositoriesModule {
+
+    @Provides
+    @Singleton
+    fun provideResources(@ApplicationContext context: Context): Resources =
+        context.resources
 
     @Provides
     @Singleton

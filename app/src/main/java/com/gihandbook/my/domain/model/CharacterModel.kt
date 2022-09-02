@@ -3,7 +3,6 @@ package com.gihandbook.my.domain.model
 import com.gihandbook.my.R
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.util.*
 
 data class CharacterUIModel(
     val name: String,
@@ -11,10 +10,18 @@ data class CharacterUIModel(
     val vision: Element,
     val description: String,
     val rarity: Char,
-    val birthday: Date,
     val imageUrl: String,
     val imageSideUrl: String,
-    val imageUrlOnError: String
+    val imageUrlOnError: String,
+    val passiveTalents: List<CharacterTalent>,
+    val skillTalents: List<CharacterTalent>
+)
+
+class CharacterTalent(
+    val name: String,
+    val unlock: String,
+    val description: String,
+    val talentImageUrlId: String
 )
 
 data class Element(

@@ -10,6 +10,12 @@
     <string name="filter_title_weapon_type">Weapon type</string>
     <string name="filter_title_vision">Vision</string>
 
+    // Talent Images patterns
+    <string name="talent_elemental_skill">https://api.genshin.dev/characters/%s/talent-skill</string>
+    <string name="talent_normal_attack">https://api.genshin.dev/characters/%s/talent-na</string>
+    <string name="talent_elemental_burst">https://api.genshin.dev/characters/%s/talent-burst</string>
 
-
+    <string name="talent_1st_ascension_passive">https://api.genshin.dev/characters/%s/talent-passive-1</string>
+    <string name="talent_4st_ascension_passive">https://api.genshin.dev/characters/%s/talent-passive-2</string>
+    <string name="talent_utility_passive">https://api.genshin.dev/characters/%s/talent-passive-0</string>
 </resources>
