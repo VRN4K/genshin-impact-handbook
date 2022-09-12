@@ -107,9 +107,13 @@ fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
                             viewModel.onCharacterFilterChipClick(
                                 FilterDataModel(
                                     selectedTab = pagerState,
-                                    weaponType = selectedCharactersWeaponType?.let { WeaponType.valueOf(it.uppercase()) },
+                                    weaponType = selectedCharactersWeaponType?.let {
+                                        WeaponType.valueOf(
+                                            it.uppercase()
+                                        )
+                                    },
                                     element = selectedCharactersVision?.let { Vision.valueOf(it) },
-                                    )
+                                )
                             )
                         })
                 } else {

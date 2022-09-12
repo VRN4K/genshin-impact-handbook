@@ -11,17 +11,17 @@ import javax.inject.Inject
 @HiltViewModel
 class CharacterDetailScreenViewModel @Inject constructor(private val characterInteractor: ICharacterInteractor) :
     BaseViewModel() {
-    val name = "Albedo"
+    private val mockName = "Albedo"
     val character = StateLiveData<CharacterUIModel>()
 
     init {
         character.postLoading()
-        launchIO {
-            character.postComplete(characterInteractor.getHeroDetailInformation(name.lowercase()))
+        launchIO(handler) {
+            character.postComplete(characterInteractor.getHeroDetailInformation(mockName.lowercase()))
         }
     }
 
     fun onCloseButtonClick() {
-
+        TODO()
     }
 }

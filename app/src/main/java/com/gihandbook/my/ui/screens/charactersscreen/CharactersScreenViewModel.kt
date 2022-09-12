@@ -7,7 +7,6 @@ import com.gihandbook.my.domain.model.*
 import com.gihandbook.my.ui.base.BaseViewModel
 import com.gihandbook.my.ui.snippets.TabPagesCharacters
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
 import launchIO
 import javax.inject.Inject
 
@@ -19,13 +18,12 @@ class CharactersScreenViewModel @Inject constructor(private val characterInterac
     val characterState = StateLiveData<List<CharacterCardModel>>()
     val enemiesState = StateLiveData<List<CharacterCardModel>>()
 
-    init { getCharacters() }
+    init {
+        getCharacters()
+    }
 
     private fun getCharacters() {
-
-        launchIO(CoroutineExceptionHandler { _, exception ->
-            println("CoroutineExceptionHandler got $exception with suppressed ${exception.suppressed.contentToString()}")
-        }) {
+        launchIO(handler) {
             characterState.postLoading()
             enemiesState.postLoading()
             charactersFromServer = characterInteractor.getHeroesList()

@@ -1,7 +1,6 @@
 package com.gihandbook.my.data.net.model
 
 import android.content.res.Resources
-import androidx.compose.ui.res.stringResource
 import com.gihandbook.my.R
 import com.gihandbook.my.domain.model.*
 import kotlinx.serialization.Serializable
@@ -11,6 +10,7 @@ data class Character(
     val name: String,
     val vision: String,
     val weapon: WeaponType,
+    val constellation: String,
     val nation: String,
     val rarity: Char,
     val description: String,
@@ -18,7 +18,6 @@ data class Character(
     val passiveTalents: List<PassiveTalent>,
     val constellations: List<Constellations>
 )
-
 
 @Serializable
 data class SkillTalent(
@@ -50,12 +49,30 @@ fun Character.toUI(resources: Resources): CharacterUIModel {
         weaponType = this.weapon,
         vision = Element(
             this.vision,
-            "https://api.genshin.dev/elements/${this.vision.lowercase()}/icon"
+            resources.getString(
+                R.string.character_element_icon_image,
+                this.vision.lowercase()
+            )
         ),
         description = this.description,
-        imageUrl = "https://api.genshin.dev/characters/${name.lowercase()}/gacha-splash",
-        imageSideUrl = "https://api.genshin.dev/characters/${name.lowercase()}/icon-side",
-        imageUrlOnError = "https://api.genshin.dev/characters/${name.lowercase()}/portrait",
+        region = this.nation,
+        constellationTitle = this.constellation,
+        constellationImageUrl = resources.getString(
+            R.string.constellation_star_map,
+            this.name.lowercase()
+        ),
+        imageUrl = resources.getString(
+            R.string.character_gacha_splash_image,
+            this.name.lowercase()
+        ),
+        imageSideUrl = resources.getString(
+            R.string.character_side_image,
+            this.name.lowercase()
+        ),
+        imageUrlOnError = resources.getString(
+            R.string.character_portrait_image,
+            this.name.lowercase()
+        ),
         rarity = this.rarity,
         skillTalents = this.skillTalents.map {
             CharacterTalent(
@@ -72,6 +89,17 @@ fun Character.toUI(resources: Resources): CharacterUIModel {
                 it.description,
                 resources.getString(
                     getPassiveTalentByLevel(it.level)?.imageUrlId!!,
+                    this.name.lowercase()
+                )
+            )
+        },
+        constellations = this.constellations.map {
+            CharacterTalent(
+                it.name,
+                it.unlock,
+                it.description,
+                resources.getString(
+                    getConstellationsUrlByLevel(it.level),
                     this.name.lowercase()
                 )
             )
@@ -92,12 +120,35 @@ enum class PassiveSkillsType(val level: Int?, val imageUrlId: Int) {
     UTILITY_PASSIVE(null, R.string.talent_utility_passive)
 }
 
+enum class ConstellationsLevels(val level: Int, val imageUrlId: Int) {
+    FIRST_LEVEL(1, R.string.constellation_level_1),
+    SECOND_LEVEL(2, R.string.constellation_level_2),
+    THIRD_LEVEL(3, R.string.constellation_level_3),
+    FOURTH_LEVEL(4, R.string.constellation_level_4),
+    FIFTH_LEVEL(5, R.string.constellation_level_5),
+    SIXTH_LEVEL(6, R.string.constellation_level_6)
+}
+
 private fun getPassiveTalentByLevel(level: Int?): PassiveSkillsType? {
     return when (level) {
         PassiveSkillsType.FIRST_ASCENSION_PASSIVE.level -> PassiveSkillsType.FIRST_ASCENSION_PASSIVE
         PassiveSkillsType.FOURTH_ASCENSION_PASSIVE.level -> PassiveSkillsType.FOURTH_ASCENSION_PASSIVE
         PassiveSkillsType.UTILITY_PASSIVE.level -> PassiveSkillsType.UTILITY_PASSIVE
         else -> null
+    }
+}
+
+private fun getConstellationsUrlByLevel(level: Int): Int {
+    return when (level) {
+        ConstellationsLevels.FIRST_LEVEL.level -> ConstellationsLevels.FIRST_LEVEL.imageUrlId
+        ConstellationsLevels.SECOND_LEVEL.level -> ConstellationsLevels.SECOND_LEVEL.imageUrlId
+        ConstellationsLevels.THIRD_LEVEL.level -> ConstellationsLevels.THIRD_LEVEL.imageUrlId
+        ConstellationsLevels.FOURTH_LEVEL.level -> ConstellationsLevels.FOURTH_LEVEL.imageUrlId
+        ConstellationsLevels.FIFTH_LEVEL.level -> ConstellationsLevels.FIFTH_LEVEL.imageUrlId
+        ConstellationsLevels.SIXTH_LEVEL.level -> ConstellationsLevels.SIXTH_LEVEL.imageUrlId
+        else -> {
+            0
+        }
     }
 }
 

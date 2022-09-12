@@ -9,12 +9,16 @@ data class CharacterUIModel(
     val weaponType: WeaponType,
     val vision: Element,
     val description: String,
+    val region: String,
+    val constellationTitle: String,
+    val constellationImageUrl: String,
     val rarity: Char,
     val imageUrl: String,
     val imageSideUrl: String,
     val imageUrlOnError: String,
     val passiveTalents: List<CharacterTalent>,
-    val skillTalents: List<CharacterTalent>
+    val skillTalents: List<CharacterTalent>,
+    val constellations: List<CharacterTalent>
 )
 
 class CharacterTalent(

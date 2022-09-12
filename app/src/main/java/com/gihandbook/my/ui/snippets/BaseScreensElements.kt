@@ -1,12 +1,9 @@
 package com.gihandbook.my.ui.snippets
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -19,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -29,12 +25,8 @@ import com.gihandbook.my.R
 import com.gihandbook.my.domain.StateData
 import com.gihandbook.my.domain.StateLiveData
 import com.gihandbook.my.domain.model.CharacterTalent
-import com.gihandbook.my.domain.model.HeroCardModel
 import com.gihandbook.my.domain.model.Vision
 import com.gihandbook.my.domain.model.WeaponType
-import com.gihandbook.my.ui.screens.charactersscreen.CharacterCard
-import com.gihandbook.my.ui.screens.charactersscreen.ElementTitle
-import com.gihandbook.my.ui.screens.charactersscreen.WeaponTitle
 import com.gihandbook.my.ui.theme.FilterChipClicked
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
@@ -328,7 +320,9 @@ fun SkillsExpandableList(
             Text(
                 text = title,
                 style = MaterialTheme.typography.h2,
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
+                modifier = Modifier
+                    .padding(start = 12.dp)
+                    .padding(vertical = 16.dp)
             )
             Row(
                 modifier = Modifier.padding(horizontal = 16.dp)
