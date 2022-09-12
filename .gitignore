@@ -29,7 +29,7 @@ hs_err_pid*
 local.properties
 
 # Idea package and files
-.idea
+/.idea
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
