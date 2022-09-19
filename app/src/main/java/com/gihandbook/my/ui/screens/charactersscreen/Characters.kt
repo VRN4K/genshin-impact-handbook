@@ -17,7 +17,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.gihandbook.my.domain.model.*
 import com.gihandbook.my.ui.theme.ImagesBackgroundColorLight
 
-
 @Composable
 fun CharacterCard(character: CharacterCardModel, rowContent: @Composable () -> Unit) {
     Card(
@@ -28,8 +27,11 @@ fun CharacterCard(character: CharacterCardModel, rowContent: @Composable () -> U
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             AsyncImage(
-                model = character.imageUrl, contentDescription = null,
-                error = rememberAsyncImagePainter(model = character.imageUrlOnError),
+                model = character.imageUrl,
+                contentDescription = null,
+                error = rememberAsyncImagePainter(
+                    model = character.imageUrlOnError,
+                ),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(104.dp)
@@ -42,12 +44,12 @@ fun CharacterCard(character: CharacterCardModel, rowContent: @Composable () -> U
                 Text(
                     modifier = Modifier.padding(top = 4.dp, start = 4.dp),
                     text = character.name, color = MaterialTheme.colors.primary,
-                    style = MaterialTheme.typography.h1
+                    style = MaterialTheme.typography.h2
                 )
                 Text(
                     modifier = Modifier.padding(bottom = 4.dp, start = 4.dp),
                     text = character.region, color = MaterialTheme.colors.primary,
-                    style = MaterialTheme.typography.h2
+                    style = MaterialTheme.typography.body1
                 )
                 Row(modifier = Modifier.padding(4.dp)) {
                     rowContent.invoke()
@@ -69,7 +71,7 @@ fun ElementTitle(element: Element) {
         Text(
             modifier = Modifier.padding(start = 4.dp),
             text = element.name, color = MaterialTheme.colors.primary,
-            style = MaterialTheme.typography.h2
+            style = MaterialTheme.typography.body1
         )
     }
 }
@@ -87,7 +89,7 @@ fun WeaponTitle(weaponType: WeaponType) {
         Text(
             modifier = Modifier.padding(start = 4.dp),
             text = weaponType.title, color = MaterialTheme.colors.primary,
-            style = MaterialTheme.typography.h2
+            style = MaterialTheme.typography.body1
         )
     }
 }

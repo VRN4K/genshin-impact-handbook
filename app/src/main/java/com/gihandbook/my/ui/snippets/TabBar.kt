@@ -58,7 +58,7 @@ fun AppBarWithPager(
                 }
                 Text(
                     text = stringResource(id = title),
-                    style = MaterialTheme.typography.h1,
+                    style = MaterialTheme.typography.h2,
                     color = MaterialTheme.colors.primary,
                     modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
                 )
@@ -89,7 +89,7 @@ fun TabBar(selectedTabIndex: Int, onSelectedTab: (TabPagesCharacters) -> Unit) {
                 text = {
                     Text(
                         text = stringResource(id = tabPagesCharacters.tabTitle),
-                        style = MaterialTheme.typography.h1
+                        style = MaterialTheme.typography.h2
                     )
                 }
             )

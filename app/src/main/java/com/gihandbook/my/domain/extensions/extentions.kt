@@ -1,4 +1,4 @@
-package com.gihandbook.my.domain.exstentions
+package com.gihandbook.my.domain.extensions
 
 fun <T> List<T>.contains(list: List<T>): Boolean {
     var isContains = false

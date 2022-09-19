@@ -1,18 +1,20 @@
 package com.gihandbook.my.domain.interactors
 
+import android.content.res.Resources
+import com.gihandbook.my.R
 import com.gihandbook.my.data.net.model.Character
 import com.gihandbook.my.data.net.model.Enemy
 import com.gihandbook.my.data.net.model.toCardModel
 import com.gihandbook.my.domain.datacontracts.ICharacterInteractor
 import com.gihandbook.my.domain.datacontracts.ICharacterNetRepository
-import com.gihandbook.my.domain.model.CharacterCardModel
 import com.gihandbook.my.domain.model.Element
 import com.gihandbook.my.domain.model.EnemyCardModel
 import com.gihandbook.my.domain.model.HeroCardModel
 import javax.inject.Inject
 
 class CharacterInteractor @Inject constructor(
-    private val charactersNetRepository: ICharacterNetRepository
+    private val charactersNetRepository: ICharacterNetRepository,
+    private val resources: Resources
 ) : ICharacterInteractor {
 
     override suspend fun getHeroByName(name: String): Character {
@@ -24,12 +26,23 @@ class CharacterInteractor @Inject constructor(
 
         charactersNetRepository.getPlayableCharacters().onEach { name ->
             val character = charactersNetRepository.getPlayableCharacterByName(name)
-
+            println(name)
             characters.add(
                 character.toCardModel(
-                    "https://api.genshin.dev/characters/$name/icon-big",
-                    "https://api.genshin.dev/characters/$name/icon",
-                    "https://api.genshin.dev/elements/${character.vision.lowercase()}/icon"
+                    resources.getString(
+                        R.string.character_card_image,
+                        name.lowercase()
+                    ),
+                    resources.getString(
+                        R.string.character_card_image_on_error,
+                        name.lowercase()
+                    ).also {
+                        println(it)
+                    },
+                    resources.getString(
+                        R.string.character_element_icon_image,
+                        character.vision.lowercase()
+                    )
                 )
             )
         }
@@ -46,11 +59,14 @@ class CharacterInteractor @Inject constructor(
             val enemy = charactersNetRepository.getEnemyByName(name)
             enemies.add(
                 enemy.toCardModel(
-                    "https://api.genshin.dev/enemies/$name/icon",
+                    resources.getString(
+                        R.string.character_enemy_card_image,
+                        name.lowercase()
+                    ),
                     enemy.elements?.map {
                         Element(
                             it,
-                            "https://api.genshin.dev/elements/${it.lowercase()}/icon"
+                            resources.getString(R.string.character_element_icon, it.lowercase())
                         )
                     } ?: emptyList()
                 )

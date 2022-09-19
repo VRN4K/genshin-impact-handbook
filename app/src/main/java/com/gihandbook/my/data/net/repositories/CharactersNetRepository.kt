@@ -27,13 +27,4 @@ class CharactersNetRepository @Inject constructor(
     override suspend fun getEnemyByName(enemyName: String): Enemy {
         return httpClient.get("/enemies/$enemyName").body()
     }
-
-    override suspend fun getCharacterElementIcon(element: String) :String {
-        return httpClient.get("/elements/${element.lowercase()}/icon").body()
-    }
-
-    override suspend fun getCharacterIcon(heroName: String) {
-        val file = File("character.png")
-        httpClient.get("/characters/$heroName/icon-big")
-    }
 }

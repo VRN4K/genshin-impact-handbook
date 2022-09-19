@@ -48,8 +48,13 @@ fun SearchView(
             TextField(
                 modifier = Modifier.weight(0.1f),
                 value = query, onValueChange = { query = it },
-                textStyle = MaterialTheme.typography.h2,
-                placeholder = { Text("Text for searching", style = MaterialTheme.typography.h2) },
+                textStyle = MaterialTheme.typography.h3,
+                placeholder = {
+                    Text(
+                        stringResource(id = R.string.search_searchview_text),
+                        style = MaterialTheme.typography.h2
+                    )
+                },
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent
                 ),
@@ -126,7 +131,10 @@ fun FilterHeroesBlock(
                     .padding(top = 8.dp)
                     .padding(horizontal = 16.dp)
             ) {
-                Text(text = "Reset", style = MaterialTheme.typography.h2)
+                Text(
+                    text = stringResource(id = R.string.filter_reset_button_title),
+                    style = MaterialTheme.typography.h3
+                )
             }
         }
     }
@@ -172,7 +180,10 @@ fun FilterEnemiesBlock(
                     .padding(top = 8.dp)
                     .padding(horizontal = 16.dp)
             ) {
-                Text(text = "Reset", style = MaterialTheme.typography.h2)
+                Text(
+                    text = stringResource(id = R.string.filter_reset_button_title),
+                    style = MaterialTheme.typography.h3
+                )
             }
         }
     }
@@ -193,7 +204,7 @@ fun MultiSelectChipGrid(
 
     Text(
         text = gridTitle,
-        style = MaterialTheme.typography.h1,
+        style = MaterialTheme.typography.h2,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
     )
 
@@ -235,7 +246,7 @@ fun SingleSelectChipGrid(
 
     Text(
         text = gridTitle,
-        style = MaterialTheme.typography.h1,
+        style = MaterialTheme.typography.h2,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
     )
     FlowRow(
@@ -278,7 +289,7 @@ fun FilterItem(
         Text(
             text = title,
             color = if (isClicked) Color.White else MaterialTheme.colors.secondary,
-            style = MaterialTheme.typography.h3,
+            style = MaterialTheme.typography.h4,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
         )
     }
@@ -293,7 +304,7 @@ fun ShowLoading() {
 fun ShowNotFoundText() {
     Text(
         text = stringResource(id = R.string.search_character_not_found),
-        style = MaterialTheme.typography.h1, color = MaterialTheme.colors.primary
+        style = MaterialTheme.typography.h2, color = MaterialTheme.colors.primary
     )
 }
 

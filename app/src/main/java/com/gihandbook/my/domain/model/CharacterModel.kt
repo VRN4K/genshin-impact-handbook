@@ -47,8 +47,8 @@ abstract class CharacterCardModel(
 class HeroCardModel(
     val weaponType: WeaponType,
     val element: Element,
-    name: String, imageUrl:
-    String,
+    name: String,
+    imageUrl: String,
     imageUrlOnError: String,
     region: String
 ) : CharacterCardModel(name, imageUrl, imageUrlOnError, region)

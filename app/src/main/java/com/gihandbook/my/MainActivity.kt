@@ -88,65 +88,91 @@ fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
                         selectedCharactersWeaponType,
                         selectedCharactersVision,
                         onChipClick = { filterType, item ->
-                            if (filterType == FilterItemsType.WEAPON_TYPE) {
-                                selectedCharactersWeaponType = item
+                            when (filterType) {
+                                FilterItemsType.WEAPON_TYPE -> selectedCharactersWeaponType = item
+                                FilterItemsType.VISION -> selectedCharactersVision = item
+                                else -> selectedCharactersWeaponType = null.also {
+                                    selectedCharactersVision = it
+                                }
                             }
-                            if (filterType == FilterItemsType.VISION) {
-                                selectedCharactersVision = item
-                            }
-                            if (filterType == null) {
-                                selectedCharactersWeaponType = null
-                                selectedCharactersVision = null
-                            }
+
                             viewModel.onCharacterFilterChipClick(
                                 FilterDataModel(
                                     selectedTab = pagerState,
-                                    weaponType = selectedCharactersWeaponType?.let { WeaponType.valueOf(it.uppercase()) },
+                                    weaponType = selectedCharactersWeaponType?.let {
+                                        WeaponType.valueOf(it.uppercase())
+                                    },
                                     element = selectedCharactersVision?.let { Vision.valueOf(it) },
-                                    )
+                                )
                             )
                         })
                 } else {
-                    FilterEnemiesBlock(
-                        selectedEnemiesVision.toList(),
-                        onChipClick = { filterType, item ->
-                            if (filterType == FilterItemsType.VISION) {
-                                if (!selectedEnemiesVision.contains(item)) {
-                                    selectedEnemiesVision.add(item!!)
-                                    viewModel.onCharacterFilterChipClick(
-                                        FilterDataModel(
-                                            selectedTab = pagerState,
-                                            filteredElementList = selectedEnemiesVision.toMutableList()
-                                        )
-                                    )
-                                } else {
-                                    selectedEnemiesVision.remove(item)
-                                    viewModel.onCharacterFilterChipClick(
-                                        FilterDataModel(
-                                            selectedTab = pagerState,
-                                            filteredElementList = selectedEnemiesVision.toMutableList()
-                                        )
-                                    )
-                                }
-                            }
-                            if (filterType == null) {
-                                selectedEnemiesVision.clear()
-                                viewModel.onClearButtonClick(pagerState)
-                            }
-                        }
+                    ShowEnemiesFilterBlock(
+                        pagerState,
+                        viewModel,
+                        selectedEnemiesVision
                     )
                 }
             }
-            AnimatedVisibility(
-                visible = isSearchShown,
-                enter = fadeIn(animationSpec = tween(800)),
-                exit = fadeOut(animationSpec = tween(800))
-            ) {
-                SearchView(
-                    onSearchButtonClick = { viewModel.onSearchButtonClick(it, pagerState) },
-                    onClearButtonClick = { viewModel.onClearButtonClick(pagerState) })
+            ShowSearchView(
+                isShow = isSearchShown,
+                onSearchButtonClick = { viewModel.onSearchButtonClick(it, pagerState) },
+                onClearButtonClick = { viewModel.onClearButtonClick(pagerState) }
+            )
+        }
+    }
+}
+
+@Composable
+fun ShowEnemiesFilterBlock(
+    tabPagesCharacters: TabPagesCharacters,
+    viewModel: CharactersScreenViewModel,
+    selectedEnemiesVision: MutableList<String>
+) {
+    FilterEnemiesBlock(
+        selectedEnemiesVision.toList(),
+        onChipClick = { filterType, item ->
+            if (filterType == FilterItemsType.VISION) {
+                if (!selectedEnemiesVision.contains(item)) {
+                    selectedEnemiesVision.add(item!!)
+                    viewModel.onCharacterFilterChipClick(
+                        FilterDataModel(
+                            selectedTab = tabPagesCharacters,
+                            filteredElementList = selectedEnemiesVision.toMutableList()
+                        )
+                    )
+                } else {
+                    selectedEnemiesVision.remove(item)
+                    viewModel.onCharacterFilterChipClick(
+                        FilterDataModel(
+                            selectedTab = tabPagesCharacters,
+                            filteredElementList = selectedEnemiesVision.toMutableList()
+                        )
+                    )
+                }
+            }
+            if (filterType == null) {
+                selectedEnemiesVision.clear()
+                viewModel.onClearButtonClick(tabPagesCharacters)
             }
         }
+    )
+}
+
+@Composable
+fun ShowSearchView(
+    isShow: Boolean,
+    onSearchButtonClick: (searchText: String) -> Unit,
+    onClearButtonClick: () -> Unit
+) {
+    AnimatedVisibility(
+        visible = isShow,
+        enter = fadeIn(animationSpec = tween(800)),
+        exit = fadeOut(animationSpec = tween(800))
+    ) {
+        SearchView(
+            onSearchButtonClick = { onSearchButtonClick(it) },
+            onClearButtonClick = { onClearButtonClick() })
     }
 }
 

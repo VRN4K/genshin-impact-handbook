@@ -1,13 +1,12 @@
 package com.gihandbook.my.ui.screens.charactersscreen
 
 import com.gihandbook.my.domain.StateLiveData
-import com.gihandbook.my.domain.exstentions.contains
+import com.gihandbook.my.domain.extensions.contains
 import com.gihandbook.my.domain.datacontracts.ICharacterInteractor
 import com.gihandbook.my.domain.model.*
 import com.gihandbook.my.ui.base.BaseViewModel
 import com.gihandbook.my.ui.snippets.TabPagesCharacters
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
 import launchIO
 import javax.inject.Inject
 
@@ -25,13 +24,11 @@ class CharactersScreenViewModel @Inject constructor(private val characterInterac
 
     private fun getCharacters() {
 
-        launchIO(CoroutineExceptionHandler { _, exception ->
-            println("CoroutineExceptionHandler got $exception with suppressed ${exception.suppressed.contentToString()}")
-        }) {
+        launchIO(handler) {
             characterState.postLoading()
             enemiesState.postLoading()
             charactersFromServer = characterInteractor.getHeroesList()
-            launchIO {
+            launchIO(handler) {
                 enemiesFromServer = characterInteractor.getEnemiesList()
                 enemiesState.postComplete(enemiesFromServer)
             }

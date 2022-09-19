@@ -8,7 +8,4 @@ interface ICharacterNetRepository {
     suspend fun getEnemies(): List<String>
     suspend fun getPlayableCharacterByName(heroName: String): Character
     suspend fun getEnemyByName(enemyName: String): Enemy
-
-    suspend fun getCharacterElementIcon(element: String): String
-    suspend fun getCharacterIcon(heroName: String)
 }
