@@ -37,8 +37,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GIHandbookTheme {
-                //CharactersScreen()
-                CharacterDetailsScreen()
+                CharactersScreen()
+                //CharacterDetailsScreen()
             }
         }
     }

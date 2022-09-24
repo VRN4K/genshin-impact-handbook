@@ -24,7 +24,7 @@ data class SkillTalent(
     var name: String,
     var unlock: String,
     var description: String,
-    var type: TalentsType
+    var type: TalentsType? = null
 )
 
 @Serializable
@@ -79,7 +79,7 @@ fun Character.toUI(resources: Resources): CharacterUIModel {
                 it.name,
                 it.unlock,
                 it.description,
-                resources.getString(it.type.imageUrlId, this.name.lowercase())
+                resources.getString(it.type!!.imageUrlId, this.name.lowercase())
             )
         },
         passiveTalents = this.passiveTalents.map {
