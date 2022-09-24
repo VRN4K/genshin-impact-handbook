@@ -18,6 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.gihandbook.my.domain.model.EnemyCardModel
+import com.gihandbook.my.domain.model.WeaponType
+import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
+import com.gihandbook.my.ui.screens.charactersscreen.CharacterCard
+import com.gihandbook.my.ui.screens.charactersscreen.CharactersScreenViewModel
 import com.gihandbook.my.domain.model.*
 import com.gihandbook.my.ui.screens.charactersscreen.*
 import com.gihandbook.my.ui.snippets.*
@@ -32,7 +37,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             GIHandbookTheme {
-                CharactersScreen()
+                //CharactersScreen()
+                CharacterDetailsScreen()
             }
         }
     }
@@ -197,7 +203,6 @@ fun ShowCharacter(currentTab: TabPagesCharacters, viewModel: CharactersScreenVie
         }
     }
 }
-
 
 @Composable
 fun ShowCharacters(characters: List<*>, tabPagesCharacters: TabPagesCharacters) {

@@ -23,7 +23,6 @@ class CharactersScreenViewModel @Inject constructor(private val characterInterac
     }
 
     private fun getCharacters() {
-
         launchIO(handler) {
             characterState.postLoading()
             enemiesState.postLoading()

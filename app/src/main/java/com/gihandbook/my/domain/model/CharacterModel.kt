@@ -4,6 +4,30 @@ import com.gihandbook.my.R
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+data class CharacterUIModel(
+    val name: String,
+    val weaponType: WeaponType,
+    val vision: Element,
+    val description: String,
+    val region: String,
+    val constellationTitle: String,
+    val constellationImageUrl: String,
+    val rarity: Char,
+    val imageUrl: String,
+    val imageSideUrl: String,
+    val imageUrlOnError: String,
+    val passiveTalents: List<CharacterTalent>,
+    val skillTalents: List<CharacterTalent>,
+    val constellations: List<CharacterTalent>
+)
+
+class CharacterTalent(
+    val name: String,
+    val unlock: String,
+    val description: String,
+    val talentImageUrlId: String
+)
+
 data class Element(
     val name: String,
     val iconUrl: String

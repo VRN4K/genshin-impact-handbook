@@ -1,5 +1,6 @@
 package com.gihandbook.my.ui.snippets
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,10 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.gihandbook.my.FilterItemsType
 import com.gihandbook.my.R
 import com.gihandbook.my.domain.StateData
 import com.gihandbook.my.domain.StateLiveData
+import com.gihandbook.my.domain.model.CharacterTalent
 import com.gihandbook.my.domain.model.Vision
 import com.gihandbook.my.domain.model.WeaponType
 import com.gihandbook.my.ui.theme.FilterChipClicked
@@ -291,6 +294,114 @@ fun FilterItem(
             color = if (isClicked) Color.White else MaterialTheme.colors.secondary,
             style = MaterialTheme.typography.h4,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+        )
+    }
+}
+
+@Composable
+fun TextBlock(title: String, text: String? = null) {
+    Column(modifier = Modifier.padding(top = 10.dp)) {
+        Text(text = title, style = MaterialTheme.typography.h2)
+        text?.let { Text(text = it, style = MaterialTheme.typography.body1) }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@Composable
+fun SkillsExpandableList(
+    title: String,
+    itemsList: List<CharacterTalent>,
+    rowContent: @Composable () -> Unit?
+) {
+    var isClicked by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        shape = RoundedCornerShape(12.dp),
+        backgroundColor = MaterialTheme.colors.onPrimary,
+        onClick = { isClicked = !isClicked },
+        elevation = 2.dp
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.h2,
+                modifier = Modifier
+                    .padding(start = 12.dp)
+                    .padding(vertical = 16.dp)
+            )
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
+                rowContent.invoke()
+            }
+        }
+    }
+
+    AnimatedVisibility(
+        visible = isClicked,
+        enter = expandVertically(),
+        exit = shrinkVertically() + fadeOut()
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            shape = RoundedCornerShape(12.dp),
+            backgroundColor = MaterialTheme.colors.onPrimary,
+            elevation = 0.dp
+        ) {
+            Column(modifier = Modifier.padding(8.dp)) {
+                itemsList.forEach {
+                    SkillsExpandableListItem(it)
+                    if (it != itemsList.last()) {
+                        Divider(
+                            modifier = Modifier.padding(
+                                vertical = 4.dp,
+                                horizontal = 8.dp
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun SkillsExpandableListItem(characterTalent: CharacterTalent) {
+    Column(modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(text = characterTalent.name, style = MaterialTheme.typography.h2)
+                Text(
+                    text = characterTalent.unlock,
+                    style = MaterialTheme.typography.h4,
+                    color = MaterialTheme.colors.secondary,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            AsyncImage(
+                model = characterTalent.talentImageUrlId,
+                contentDescription = null,
+                modifier = Modifier
+                    .sizeIn(maxHeight = 30.dp)
+                    .padding(horizontal = 4.dp)
+            )
+        }
+        Text(
+            text = characterTalent.description,
+            style = MaterialTheme.typography.body1
         )
     }
 }

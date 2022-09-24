@@ -5,8 +5,11 @@ import com.gihandbook.my.R
 import com.gihandbook.my.data.net.model.Character
 import com.gihandbook.my.data.net.model.Enemy
 import com.gihandbook.my.data.net.model.toCardModel
+import com.gihandbook.my.data.net.model.toUI
 import com.gihandbook.my.domain.datacontracts.ICharacterInteractor
 import com.gihandbook.my.domain.datacontracts.ICharacterNetRepository
+import com.gihandbook.my.domain.model.CharacterCardModel
+import com.gihandbook.my.domain.model.CharacterUIModel
 import com.gihandbook.my.domain.model.Element
 import com.gihandbook.my.domain.model.EnemyCardModel
 import com.gihandbook.my.domain.model.HeroCardModel
@@ -21,8 +24,8 @@ class CharacterInteractor @Inject constructor(
         return charactersNetRepository.getPlayableCharacterByName(name)
     }
 
-    override suspend fun getHeroesList(): List<HeroCardModel> {
-        val characters = mutableListOf<HeroCardModel>()
+    override suspend fun getHeroesList(): List<CharacterCardModel> {
+        val characters = mutableListOf<CharacterCardModel>()
 
         charactersNetRepository.getPlayableCharacters().onEach { name ->
             val character = charactersNetRepository.getPlayableCharacterByName(name)
@@ -47,6 +50,10 @@ class CharacterInteractor @Inject constructor(
             )
         }
         return characters
+    }
+
+    override suspend fun getHeroDetailInformation(name: String): CharacterUIModel {
+        return charactersNetRepository.getPlayableCharacterByName(name).toUI(resources)
     }
 
     override suspend fun getEnemyByName(name: String): Enemy {
