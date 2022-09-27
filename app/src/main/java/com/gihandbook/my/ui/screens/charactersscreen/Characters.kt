@@ -2,6 +2,7 @@ package com.gihandbook.my.ui.screens.charactersscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -18,9 +19,15 @@ import com.gihandbook.my.domain.model.*
 import com.gihandbook.my.ui.theme.ImagesBackgroundColorLight
 
 @Composable
-fun CharacterCard(character: CharacterCardModel, rowContent: @Composable () -> Unit) {
+fun CharacterCard(
+    character: CharacterCardModel,
+    onCardClick: () -> Unit,
+    rowContent: @Composable () -> Unit,
+) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onCardClick.invoke() },
         shape = RoundedCornerShape(12.dp),
         backgroundColor = MaterialTheme.colors.onPrimary,
         elevation = 2.dp

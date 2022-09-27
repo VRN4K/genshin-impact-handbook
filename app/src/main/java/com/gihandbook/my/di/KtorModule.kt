@@ -5,8 +5,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
+import io.ktor.client.engine.android.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -17,18 +19,21 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class KtorModule {
     companion object {
-        const val BASE_URL = "https://api.genshin.dev/"
+        const val BASE_URL = "https://api.genshin.dev"
     }
 
     @OptIn(ExperimentalSerializationApi::class)
     @Provides
     @Singleton
-    fun provideKtorClient(): HttpClient = HttpClient {
+    fun provideKtorClient(): HttpClient = HttpClient(Android) {
         developmentMode = true
-        defaultRequest {
-            url(BASE_URL)
-            contentType(ContentType.Application.Json)
+        install(Logging) {
+            level = LogLevel.ALL
         }
+//        defaultRequest {
+//            url(BASE_URL)
+//            contentType(ContentType.Application.Json)
+//        }
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true

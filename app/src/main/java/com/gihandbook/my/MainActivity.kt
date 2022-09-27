@@ -18,13 +18,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.gihandbook.my.domain.model.EnemyCardModel
 import com.gihandbook.my.domain.model.WeaponType
 import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
 import com.gihandbook.my.ui.screens.charactersscreen.CharacterCard
 import com.gihandbook.my.ui.screens.charactersscreen.CharactersScreenViewModel
 import com.gihandbook.my.domain.model.*
+import com.gihandbook.my.ui.screens.Screens
 import com.gihandbook.my.ui.screens.charactersscreen.*
+import com.gihandbook.my.ui.screens.navigation.NavGraph
 import com.gihandbook.my.ui.snippets.*
 import com.gihandbook.my.ui.theme.GIHandbookTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -36,9 +41,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             GIHandbookTheme {
-                CharactersScreen()
-                //CharacterDetailsScreen()
+                NavGraph(navController)
             }
         }
     }
@@ -187,7 +192,10 @@ enum class FilterItemsType {
 }
 
 @Composable
-fun ShowCharacter(currentTab: TabPagesCharacters, viewModel: CharactersScreenViewModel) {
+fun ShowCharacter(
+    currentTab: TabPagesCharacters,
+    viewModel: CharactersScreenViewModel
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -205,19 +213,27 @@ fun ShowCharacter(currentTab: TabPagesCharacters, viewModel: CharactersScreenVie
 }
 
 @Composable
-fun ShowCharacters(characters: List<*>, tabPagesCharacters: TabPagesCharacters) {
+fun ShowCharacters(
+    characters: List<*>,
+    tabPagesCharacters: TabPagesCharacters
+) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 3.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(items = characters, itemContent = { item ->
             if (tabPagesCharacters == TabPagesCharacters.CHARACTERS) {
-                CharacterCard(character = item as HeroCardModel) {
+                CharacterCard(character = item as HeroCardModel, onCardClick = {
+                    println(item.name)
+                }) {
                     ElementTitle(element = item.element)
                     WeaponTitle(weaponType = item.weaponType)
                 }
             } else {
-                CharacterCard(character = item as EnemyCardModel) {
+                CharacterCard(character = item as EnemyCardModel,
+                    onCardClick = {
+                        println(item.name)
+                    }) {
                     AnimatedVisibility(
                         visible = item.element.isNotEmpty(),
                         enter = fadeIn(animationSpec = tween(800)),

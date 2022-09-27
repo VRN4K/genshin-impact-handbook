@@ -1,6 +1,10 @@
 package com.gihandbook.my.data.net.model
 
+import android.content.Context
 import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.Color
+import com.bumptech.glide.Glide
 import com.gihandbook.my.R
 import com.gihandbook.my.domain.model.*
 import kotlinx.serialization.Serializable
@@ -43,13 +47,13 @@ data class Constellations(
     var level: Int,
 )
 
-fun Character.toUI(resources: Resources): CharacterUIModel {
+fun Character.toUI(context: Context, bitmap: Bitmap? = null): CharacterUIModel {
     return CharacterUIModel(
         name = this.name,
         weaponType = this.weapon,
         vision = Element(
             this.vision,
-            resources.getString(
+            context.resources.getString(
                 R.string.character_element_icon_image,
                 this.vision.lowercase()
             )
@@ -57,19 +61,19 @@ fun Character.toUI(resources: Resources): CharacterUIModel {
         description = this.description,
         region = this.nation,
         constellationTitle = this.constellation,
-        constellationImageUrl = resources.getString(
+        constellationImageUrl = context.resources.getString(
             R.string.constellation_star_map,
             this.name.lowercase()
         ),
-        imageUrl = resources.getString(
+        imageUrl = context.resources.getString(
             R.string.character_gacha_splash_image,
             this.name.lowercase()
         ),
-        imageSideUrl = resources.getString(
+        imageSideUrl = context.resources.getString(
             R.string.character_side_image,
             this.name.lowercase()
         ),
-        imageUrlOnError = resources.getString(
+        imageUrlOnError = context.resources.getString(
             R.string.character_portrait_image,
             this.name.lowercase()
         ),
@@ -79,7 +83,7 @@ fun Character.toUI(resources: Resources): CharacterUIModel {
                 it.name,
                 it.unlock,
                 it.description,
-                resources.getString(it.type!!.imageUrlId, this.name.lowercase())
+                context.resources.getString(it.type!!.imageUrlId, this.name.lowercase())
             )
         },
         passiveTalents = this.passiveTalents.map {
@@ -87,7 +91,7 @@ fun Character.toUI(resources: Resources): CharacterUIModel {
                 it.name,
                 it.unlock,
                 it.description,
-                resources.getString(
+                context.resources.getString(
                     getPassiveTalentByLevel(it.level)?.imageUrlId!!,
                     this.name.lowercase()
                 )
@@ -98,12 +102,13 @@ fun Character.toUI(resources: Resources): CharacterUIModel {
                 it.name,
                 it.unlock,
                 it.description,
-                resources.getString(
+                context.resources.getString(
                     getConstellationsUrlByLevel(it.level),
                     this.name.lowercase()
                 )
             )
-        }
+        },
+        color = bitmap
     )
 }
 

@@ -16,11 +16,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import com.gihandbook.my.R
 import com.gihandbook.my.domain.model.CharacterUIModel
@@ -29,7 +31,10 @@ import com.gihandbook.my.ui.snippets.TextBlock
 import com.gihandbook.my.ui.snippets.showContent
 
 @Composable
-fun CharacterDetailsScreen(viewModel: CharacterDetailScreenViewModel = hiltViewModel()) {
+fun CharacterDetailsScreen(
+    onBackButtonClick: () -> Unit,
+    viewModel: CharacterDetailScreenViewModel = hiltViewModel()
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) { insets ->
@@ -42,7 +47,9 @@ fun CharacterDetailsScreen(viewModel: CharacterDetailScreenViewModel = hiltViewM
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 showContent(
                     stateLiveData = viewModel.character,
-                    onContent = { ShowCharacterDetails(it) })
+                    onContent = {
+                        ShowCharacterDetails(it)
+                    })
             }
         }
     }
@@ -50,12 +57,14 @@ fun CharacterDetailsScreen(viewModel: CharacterDetailScreenViewModel = hiltViewM
 
 @Composable
 fun ShowCharacterDetails(character: CharacterUIModel) {
+    val palette = character.color?.let { Palette.from(it).generate() }
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
             .fillMaxWidth()
     ) {
+
         AsyncImage(
             model = character.imageUrl,
             contentDescription = null,
@@ -81,7 +90,8 @@ fun ShowCharacterDetails(character: CharacterUIModel) {
                 InfoItemWithIcon(
                     icon = R.drawable.star,
                     itemValue = character.rarity.toString(),
-                    itemType = stringResource(id = R.string.character_rarity_title)
+                    itemType = stringResource(id = R.string.character_rarity_title),
+                    iconColor = palette?.let { Color(it.getLightVibrantColor(MaterialTheme.colors.onPrimary.toArgb())) }
                 )
             }
         )
@@ -188,7 +198,8 @@ fun InfoItemWithIcon(
     icon: Int? = null,
     iconUrl: String? = null,
     itemValue: String,
-    itemType: String
+    itemType: String,
+    iconColor: Color? = null
 ) {
     Row(
         modifier = Modifier.padding(),
@@ -198,7 +209,8 @@ fun InfoItemWithIcon(
             Image(
                 painter = painterResource(id = it),
                 contentDescription = null,
-                modifier = Modifier.size(30.dp)
+                modifier = Modifier.size(30.dp),
+                colorFilter = iconColor?.let { it1 -> ColorFilter.tint(it1) }
             )
         }
 

@@ -1,5 +1,7 @@
 package com.gihandbook.my.domain.model
 
+import android.graphics.Bitmap
+import android.graphics.Color
 import com.gihandbook.my.R
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -18,7 +20,8 @@ data class CharacterUIModel(
     val imageUrlOnError: String,
     val passiveTalents: List<CharacterTalent>,
     val skillTalents: List<CharacterTalent>,
-    val constellations: List<CharacterTalent>
+    val constellations: List<CharacterTalent>,
+    val color: Bitmap? = null
 )
 
 class CharacterTalent(

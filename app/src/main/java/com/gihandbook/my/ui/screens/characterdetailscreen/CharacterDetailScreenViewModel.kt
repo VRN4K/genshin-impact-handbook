@@ -11,7 +11,12 @@ import javax.inject.Inject
 @HiltViewModel
 class CharacterDetailScreenViewModel @Inject constructor(private val characterInteractor: ICharacterInteractor) :
     BaseViewModel() {
-    private val mockName = "Albedo"
+
+    fun setInitSettings(name: String) {
+
+    }
+
+    private val mockName = "Razor"
     val character = StateLiveData<CharacterUIModel>()
 
     init {

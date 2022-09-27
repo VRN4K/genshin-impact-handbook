@@ -19,6 +19,11 @@ class RepositoriesModule {
 
     @Provides
     @Singleton
+    fun provideContext(@ApplicationContext context: Context): Context =
+        context
+
+    @Provides
+    @Singleton
     fun provideResources(@ApplicationContext context: Context): Resources =
         context.resources
 

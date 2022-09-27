@@ -1,6 +1,7 @@
 package com.gihandbook.my.domain.interactors
 
-import android.content.res.Resources
+import android.content.Context
+import com.bumptech.glide.Glide
 import com.gihandbook.my.R
 import com.gihandbook.my.data.net.model.Character
 import com.gihandbook.my.data.net.model.Enemy
@@ -12,12 +13,11 @@ import com.gihandbook.my.domain.model.CharacterCardModel
 import com.gihandbook.my.domain.model.CharacterUIModel
 import com.gihandbook.my.domain.model.Element
 import com.gihandbook.my.domain.model.EnemyCardModel
-import com.gihandbook.my.domain.model.HeroCardModel
 import javax.inject.Inject
 
 class CharacterInteractor @Inject constructor(
     private val charactersNetRepository: ICharacterNetRepository,
-    private val resources: Resources
+    private val context: Context
 ) : ICharacterInteractor {
 
     override suspend fun getHeroByName(name: String): Character {
@@ -28,21 +28,19 @@ class CharacterInteractor @Inject constructor(
         val characters = mutableListOf<CharacterCardModel>()
 
         charactersNetRepository.getPlayableCharacters().onEach { name ->
-            val character = charactersNetRepository.getPlayableCharacterByName(name)
             println(name)
+            val character = charactersNetRepository.getPlayableCharacterByName(name)
             characters.add(
                 character.toCardModel(
-                    resources.getString(
+                    context.resources.getString(
                         R.string.character_card_image,
                         name.lowercase()
                     ),
-                    resources.getString(
+                    context.resources.getString(
                         R.string.character_card_image_on_error,
                         name.lowercase()
-                    ).also {
-                        println(it)
-                    },
-                    resources.getString(
+                    ),
+                    context.resources.getString(
                         R.string.character_element_icon_image,
                         character.vision.lowercase()
                     )
@@ -53,7 +51,14 @@ class CharacterInteractor @Inject constructor(
     }
 
     override suspend fun getHeroDetailInformation(name: String): CharacterUIModel {
-        return charactersNetRepository.getPlayableCharacterByName(name).toUI(resources)
+        val character = charactersNetRepository.getPlayableCharacterByName(name)
+        val bitmap = Glide.with(context).asBitmap().load(
+            context.resources.getString(
+                R.string.character_element_icon_image,
+                character.vision.lowercase()
+            )
+        ).submit().get()
+        return character.toUI(context, bitmap)
     }
 
     override suspend fun getEnemyByName(name: String): Enemy {
@@ -66,14 +71,17 @@ class CharacterInteractor @Inject constructor(
             val enemy = charactersNetRepository.getEnemyByName(name)
             enemies.add(
                 enemy.toCardModel(
-                    resources.getString(
+                    context.resources.getString(
                         R.string.character_enemy_card_image,
                         name.lowercase()
                     ),
                     enemy.elements?.map {
                         Element(
                             it,
-                            resources.getString(R.string.character_element_icon, it.lowercase())
+                            context.resources.getString(
+                                R.string.character_element_icon,
+                                it.lowercase()
+                            )
                         )
                     } ?: emptyList()
                 )

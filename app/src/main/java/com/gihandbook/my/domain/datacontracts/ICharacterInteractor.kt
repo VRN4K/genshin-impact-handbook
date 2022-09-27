@@ -5,7 +5,6 @@ import com.gihandbook.my.data.net.model.Enemy
 import com.gihandbook.my.domain.model.CharacterCardModel
 import com.gihandbook.my.domain.model.CharacterUIModel
 import com.gihandbook.my.domain.model.EnemyCardModel
-import com.gihandbook.my.domain.model.HeroCardModel
 
 interface ICharacterInteractor {
     suspend fun getHeroByName(name: String): Character
