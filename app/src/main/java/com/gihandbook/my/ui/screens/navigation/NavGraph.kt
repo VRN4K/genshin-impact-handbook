@@ -5,18 +5,22 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.gihandbook.my.CharactersScreen
 import com.gihandbook.my.ui.screens.Screens
 import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
+import com.google.accompanist.pager.ExperimentalPagerApi
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
-fun NavGraph(navController: NavHostController) {
-
-    val actions = remember(navController) { NavigationActions(navController) }
+fun NavGraph(navController: NavHostController, navigationActions: NavigationActions) {
 
     NavHost(navController = navController, startDestination = Screens.Home.route) {
+        composable(Screens.Home.route) {
+            CharactersScreen()
+        }
         composable(Screens.Character.route) {
             CharacterDetailsScreen(onBackButtonClick = {
-                actions.backTo()
+                navigationActions.backTo()
             })
         }
 

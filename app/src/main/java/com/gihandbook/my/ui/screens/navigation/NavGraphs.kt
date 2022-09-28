@@ -8,21 +8,21 @@ import com.gihandbook.my.ui.screens.Screens
 import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
-@OptIn(ExperimentalPagerApi::class)
-fun NavGraphBuilder.homeNavGraph() {
-    navigation(route = "characters_screen", startDestination = Screens.Home.route) {
-        composable(Screens.Home.route) {
-            CharactersScreen()
-        }
-    }
-}
-
-fun NavGraphBuilder.characterNavGraph(actions: NavigationActions) {
-    navigation(route = "character_details_screen", startDestination = Screens.Character.route) {
-        composable(Screens.Home.route) {
-            CharacterDetailsScreen(onBackButtonClick = {
-                actions.newRootScreen(Screens.Home.route)
-            })
-        }
-    }
-}
+//@OptIn(ExperimentalPagerApi::class)
+//fun NavGraphBuilder.homeNavGraph() {
+//    navigation(route = "characters_screen", startDestination = Screens.Home.route) {
+//        composable(Screens.Home.route) {
+//            CharactersScreen()
+//        }
+//    }
+//}
+//
+//fun NavGraphBuilder.characterNavGraph(actions: NavigationActions) {
+//    navigation(route = "character_details_screen", startDestination = Screens.Character.route) {
+//        composable(Screens.Home.route) {
+//            CharacterDetailsScreen(onBackButtonClick = {
+//                actions.newRootScreen(Screens.Home.route)
+//            })
+//        }
+//    }
+//}

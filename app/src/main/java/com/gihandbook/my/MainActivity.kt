@@ -7,11 +7,14 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.gihandbook.my.domain.model.EnemyCardModel
@@ -35,21 +39,37 @@ import com.gihandbook.my.ui.snippets.*
 import com.gihandbook.my.ui.theme.GIHandbookTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 @ExperimentalPagerApi
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var navController: NavHostController
+
+    @Inject
+    lateinit var actions: NavigationActions
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
             GIHandbookTheme {
-                NavGraph(navController)
+                MainScreen(navController,actions)
             }
         }
     }
 }
 
+@Composable
+fun MainScreen(navHostController: NavHostController,actions: NavigationActions) {
+    Surface(modifier = Modifier.background(MaterialTheme.colors.background).fillMaxSize()) {
+        Scaffold() { paddingValues ->
+            Column(modifier = Modifier.padding(paddingValues)) {
+                NavGraph(navHostController, actions)
+            }
+        }
+    }
+}
 @ExperimentalPagerApi
 @Preview(showBackground = true)
 @Composable

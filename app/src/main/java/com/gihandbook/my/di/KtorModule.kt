@@ -2,6 +2,7 @@ package com.gihandbook.my.di
 
 import android.content.Context
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.gihandbook.my.ui.screens.navigation.NavigationActions
 import dagger.Module
 import dagger.Provides
@@ -27,11 +28,11 @@ class KtorModule {
     }
 
     @Provides
-    fun provideNavController(@ApplicationContext context: Context): NavController =
-        NavController(context)
+    fun provideNavHostController(@ApplicationContext context: Context): NavHostController =
+        NavHostController(context)
 
     @Provides
-    fun provideActions(navController: NavController): NavigationActions =
+    fun provideActions(navController: NavHostController): NavigationActions =
         NavigationActions(navController)
 
     @OptIn(ExperimentalSerializationApi::class)
