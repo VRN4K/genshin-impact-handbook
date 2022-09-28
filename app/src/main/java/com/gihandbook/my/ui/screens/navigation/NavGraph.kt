@@ -9,10 +9,13 @@ import com.gihandbook.my.CharactersScreen
 import com.gihandbook.my.ui.screens.Screens
 import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
+import javax.inject.Inject
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun NavGraph(navController: NavHostController, navigationActions: NavigationActions) {
+fun NavGraph(navController: NavHostController) {
+
+    val actions = NavigationActions(navController)
 
     NavHost(navController = navController, startDestination = Screens.Home.route) {
         composable(Screens.Home.route) {
@@ -20,7 +23,7 @@ fun NavGraph(navController: NavHostController, navigationActions: NavigationActi
         }
         composable(Screens.Character.route) {
             CharacterDetailsScreen(onBackButtonClick = {
-                navigationActions.backTo()
+                actions.backTo()
             })
         }
 

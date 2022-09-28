@@ -47,25 +47,25 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var navController: NavHostController
 
-    @Inject
-    lateinit var actions: NavigationActions
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             GIHandbookTheme {
-                MainScreen(navController,actions)
+                MainScreen()
             }
         }
     }
 }
 
 @Composable
-fun MainScreen(navHostController: NavHostController,actions: NavigationActions) {
-    Surface(modifier = Modifier.background(MaterialTheme.colors.background).fillMaxSize()) {
+fun MainScreen() {
+    val navHostController = rememberNavController()
+    Surface(modifier = Modifier
+        .background(MaterialTheme.colors.background)
+        .fillMaxSize()) {
         Scaffold() { paddingValues ->
             Column(modifier = Modifier.padding(paddingValues)) {
-                NavGraph(navHostController, actions)
+                NavGraph(navHostController)
             }
         }
     }
