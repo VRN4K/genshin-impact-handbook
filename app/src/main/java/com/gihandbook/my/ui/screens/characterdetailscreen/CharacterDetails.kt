@@ -23,10 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.gihandbook.my.R
+import com.gihandbook.my.domain.model.CharacterTalent
 import com.gihandbook.my.domain.model.CharacterUIModel
-import com.gihandbook.my.ui.snippets.SkillsExpandableList
-import com.gihandbook.my.ui.snippets.TextBlock
-import com.gihandbook.my.ui.snippets.showContent
+import com.gihandbook.my.ui.snippets.*
 
 @Composable
 fun CharacterDetailsScreen(viewModel: CharacterDetailScreenViewModel = hiltViewModel()) {
@@ -94,50 +93,39 @@ fun ShowCharacterDetails(character: CharacterUIModel) {
             text = character.description
         )
         TextBlock(title = stringResource(id = R.string.talents_title))
-        SkillsExpandableList(
+        ExpandableListWithIconsRow(
             stringResource(id = R.string.talent_skills_title),
-            character.skillTalents
-        ) {
-            character.skillTalents.forEach {
-                AsyncImage(
-                    model = it.talentImageUrlId,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(36.dp)
-                        .padding(horizontal = 4.dp)
-                )
+            character.skillTalents,
+            rowContent = {
+                character.skillTalents.forEach { talent -> ExpandableListIcon(talent.talentImageUrlId) }
+            },
+            bodyContent = { talent ->
+                SkillsExpandableListItem(characterTalent = talent as CharacterTalent)
             }
-        }
-        SkillsExpandableList(
+        )
+
+        ExpandableListWithIconsRow(
             stringResource(id = R.string.talent_passive_title),
-            character.passiveTalents
-        ) {
-            character.passiveTalents.forEach {
-                AsyncImage(
-                    model = it.talentImageUrlId,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(36.dp)
-                        .padding(horizontal = 4.dp)
-                )
+            character.passiveTalents,
+            rowContent = {
+                character.passiveTalents.forEach { talent -> ExpandableListIcon(talent.talentImageUrlId) }
+            },
+            bodyContent = { talent ->
+                SkillsExpandableListItem(characterTalent = talent as CharacterTalent)
             }
-        }
+        )
         TextBlock(title = stringResource(id = R.string.constellation_title))
         ImageCard(character.constellationImageUrl, character.constellationTitle)
-        SkillsExpandableList(
+        ExpandableListWithIconsRow(
             stringResource(id = R.string.constellations_title),
-            character.constellations
-        ) {
-            character.constellations.forEach {
-                AsyncImage(
-                    model = it.talentImageUrlId,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(36.dp)
-                        .padding(horizontal = 4.dp)
-                )
+            character.constellations,
+            rowContent = {
+                character.constellations.forEach { constellation -> ExpandableListIcon(constellation.talentImageUrlId) }
+            },
+            bodyContent = { constellation ->
+                SkillsExpandableListItem(characterTalent = constellation as CharacterTalent)
             }
-        }
+        )
     }
 }
 
@@ -221,16 +209,18 @@ fun InfoItemWithIcon(
 }
 
 @Composable
-fun IconWithText(title: String, icon: String) {
+fun IconWithText(title: String, icon: String?) {
     Row(
         modifier = Modifier.padding(top = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AsyncImage(
-            model = icon, contentDescription = null,
-            modifier = Modifier.size(48.dp),
-            colorFilter = ColorFilter.tint(Color.Black)
-        )
+        icon?.let {
+            AsyncImage(
+                model = icon, contentDescription = null,
+                modifier = Modifier.size(48.dp),
+                colorFilter = ColorFilter.tint(Color.Black)
+            )
+        }
         Text(
             text = title,
             style = MaterialTheme.typography.h1,

@@ -18,13 +18,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import com.gihandbook.my.domain.model.EnemyCardModel
 import com.gihandbook.my.domain.model.WeaponType
-import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
 import com.gihandbook.my.ui.screens.charactersscreen.CharacterCard
 import com.gihandbook.my.ui.screens.charactersscreen.CharactersScreenViewModel
 import com.gihandbook.my.domain.model.*
+import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
 import com.gihandbook.my.ui.screens.charactersscreen.*
+import com.gihandbook.my.ui.screens.enemydetailsscreen.EnemyDetailsScreen
 import com.gihandbook.my.ui.snippets.*
 import com.gihandbook.my.ui.theme.GIHandbookTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -36,9 +38,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             GIHandbookTheme {
-                CharactersScreen()
+                // NavGraph(navController)
                 //CharacterDetailsScreen()
+                EnemyDetailsScreen()
             }
         }
     }

@@ -30,7 +30,8 @@ class CharacterTalent(
 
 data class Element(
     val name: String,
-    val iconUrl: String
+    val iconUrl: String,
+    val description: String? = null
 )
 
 @Serializable

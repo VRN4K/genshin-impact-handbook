@@ -2,17 +2,10 @@ package com.gihandbook.my.domain.interactors
 
 import android.content.res.Resources
 import com.gihandbook.my.R
-import com.gihandbook.my.data.net.model.Character
-import com.gihandbook.my.data.net.model.Enemy
-import com.gihandbook.my.data.net.model.toCardModel
-import com.gihandbook.my.data.net.model.toUI
+import com.gihandbook.my.data.net.model.*
 import com.gihandbook.my.domain.datacontracts.ICharacterInteractor
 import com.gihandbook.my.domain.datacontracts.ICharacterNetRepository
-import com.gihandbook.my.domain.model.CharacterCardModel
-import com.gihandbook.my.domain.model.CharacterUIModel
-import com.gihandbook.my.domain.model.Element
-import com.gihandbook.my.domain.model.EnemyCardModel
-import com.gihandbook.my.domain.model.HeroCardModel
+import com.gihandbook.my.domain.model.*
 import javax.inject.Inject
 
 class CharacterInteractor @Inject constructor(
@@ -29,7 +22,6 @@ class CharacterInteractor @Inject constructor(
 
         charactersNetRepository.getPlayableCharacters().onEach { name ->
             val character = charactersNetRepository.getPlayableCharacterByName(name)
-            println(name)
             characters.add(
                 character.toCardModel(
                     resources.getString(
@@ -39,9 +31,7 @@ class CharacterInteractor @Inject constructor(
                     resources.getString(
                         R.string.character_card_image_on_error,
                         name.lowercase()
-                    ).also {
-                        println(it)
-                    },
+                    ),
                     resources.getString(
                         R.string.character_element_icon_image,
                         character.vision.lowercase()
@@ -54,6 +44,10 @@ class CharacterInteractor @Inject constructor(
 
     override suspend fun getHeroDetailInformation(name: String): CharacterUIModel {
         return charactersNetRepository.getPlayableCharacterByName(name).toUI(resources)
+    }
+
+    override suspend fun getEnemyDetailInformation(name: String): EnemyUIModel {
+        return charactersNetRepository.getEnemyByName(name).toUIModel(resources)
     }
 
     override suspend fun getEnemyByName(name: String): Enemy {
