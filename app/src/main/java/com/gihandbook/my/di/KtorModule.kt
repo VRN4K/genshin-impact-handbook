@@ -1,8 +1,12 @@
 package com.gihandbook.my.di
 
+import android.content.Context
+import androidx.navigation.NavController
+import com.gihandbook.my.ui.screens.navigation.NavigationActions
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
@@ -21,6 +25,14 @@ class KtorModule {
     companion object {
         const val BASE_URL = "https://api.genshin.dev"
     }
+
+    @Provides
+    fun provideNavController(@ApplicationContext context: Context): NavController =
+        NavController(context)
+
+    @Provides
+    fun provideActions(navController: NavController): NavigationActions =
+        NavigationActions(navController)
 
     @OptIn(ExperimentalSerializationApi::class)
     @Provides

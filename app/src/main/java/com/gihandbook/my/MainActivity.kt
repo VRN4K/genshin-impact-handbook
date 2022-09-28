@@ -30,6 +30,7 @@ import com.gihandbook.my.domain.model.*
 import com.gihandbook.my.ui.screens.Screens
 import com.gihandbook.my.ui.screens.charactersscreen.*
 import com.gihandbook.my.ui.screens.navigation.NavGraph
+import com.gihandbook.my.ui.screens.navigation.NavigationActions
 import com.gihandbook.my.ui.snippets.*
 import com.gihandbook.my.ui.theme.GIHandbookTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -41,7 +42,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
+
             GIHandbookTheme {
                 NavGraph(navController)
             }
@@ -203,11 +204,11 @@ fun ShowCharacter(
         if (currentTab == TabPagesCharacters.CHARACTERS) {
             showContent(
                 stateLiveData = viewModel.characterState,
-                onContent = { ShowCharacters(it, currentTab) })
+                onContent = { ShowCharacters(it, currentTab, viewModel.navigationActions) })
         } else {
             showContent(
                 stateLiveData = viewModel.enemiesState,
-                onContent = { ShowCharacters(it, currentTab) })
+                onContent = { ShowCharacters(it, currentTab, viewModel.navigationActions) })
         }
     }
 }
@@ -215,7 +216,7 @@ fun ShowCharacter(
 @Composable
 fun ShowCharacters(
     characters: List<*>,
-    tabPagesCharacters: TabPagesCharacters
+    tabPagesCharacters: TabPagesCharacters, navigationActions: NavigationActions
 ) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 3.dp),
