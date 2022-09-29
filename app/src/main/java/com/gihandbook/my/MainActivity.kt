@@ -44,8 +44,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 @ExperimentalPagerApi
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var navController: NavHostController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,9 +58,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
     val navHostController = rememberNavController()
-    Surface(modifier = Modifier
-        .background(MaterialTheme.colors.background)
-        .fillMaxSize()) {
+    Surface(
+        modifier = Modifier
+            .background(MaterialTheme.colors.background)
+            .fillMaxSize()
+    ) {
         Scaffold() { paddingValues ->
             Column(modifier = Modifier.padding(paddingValues)) {
                 NavGraph(navHostController)
@@ -70,10 +70,13 @@ fun MainScreen() {
         }
     }
 }
+
 @ExperimentalPagerApi
-@Preview(showBackground = true)
 @Composable
-fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
+fun CharactersScreen(
+    viewModel: CharactersScreenViewModel = hiltViewModel(),
+    actions: NavigationActions
+) {
     var pagerState by remember { mutableStateOf(TabPagesCharacters.CHARACTERS) }
     var isFilterShown by remember { mutableStateOf(false) }
     var isSearchShown by remember { mutableStateOf(false) }
@@ -109,7 +112,7 @@ fun CharactersScreen(viewModel: CharactersScreenViewModel = hiltViewModel()) {
                 .padding(insets)
                 .fillMaxSize()
         ) {
-            ShowCharacter(pagerState, viewModel)
+            ShowCharacter(pagerState, viewModel, actions)
             AnimatedVisibility(
                 visible = isFilterShown,
                 enter = fadeIn(animationSpec = tween(800)),
@@ -215,7 +218,8 @@ enum class FilterItemsType {
 @Composable
 fun ShowCharacter(
     currentTab: TabPagesCharacters,
-    viewModel: CharactersScreenViewModel
+    viewModel: CharactersScreenViewModel,
+    actions: NavigationActions
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -224,11 +228,11 @@ fun ShowCharacter(
         if (currentTab == TabPagesCharacters.CHARACTERS) {
             showContent(
                 stateLiveData = viewModel.characterState,
-                onContent = { ShowCharacters(it, currentTab, viewModel.navigationActions) })
+                onContent = { ShowCharacters(it, currentTab, actions) })
         } else {
             showContent(
                 stateLiveData = viewModel.enemiesState,
-                onContent = { ShowCharacters(it, currentTab, viewModel.navigationActions) })
+                onContent = { ShowCharacters(it, currentTab, actions) })
         }
     }
 }
@@ -236,7 +240,8 @@ fun ShowCharacter(
 @Composable
 fun ShowCharacters(
     characters: List<*>,
-    tabPagesCharacters: TabPagesCharacters, navigationActions: NavigationActions
+    tabPagesCharacters: TabPagesCharacters,
+    actions: NavigationActions
 ) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 3.dp),
@@ -245,7 +250,11 @@ fun ShowCharacters(
         items(items = characters, itemContent = { item ->
             if (tabPagesCharacters == TabPagesCharacters.CHARACTERS) {
                 CharacterCard(character = item as HeroCardModel, onCardClick = {
-                    println(item.name)
+//                    actions.navigateTo(
+//                        Screens.Character.setName(
+//                            item.name.lowercase().replace(" ", "-")
+//                        )
+//                    )
                 }) {
                     ElementTitle(element = item.element)
                     WeaponTitle(weaponType = item.weaponType)

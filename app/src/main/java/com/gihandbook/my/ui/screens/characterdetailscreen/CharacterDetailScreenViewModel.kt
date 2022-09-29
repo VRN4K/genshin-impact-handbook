@@ -13,18 +13,15 @@ class CharacterDetailScreenViewModel @Inject constructor(private val characterIn
     BaseViewModel() {
 
     fun setInitSettings(name: String) {
-
+        launchIO(handler) {
+            character.postComplete(characterInteractor.getHeroDetailInformation(name))
+        }
     }
 
     private val mockName = "Razor"
     val character = StateLiveData<CharacterUIModel>()
 
-    init {
-        character.postLoading()
-        launchIO(handler) {
-            character.postComplete(characterInteractor.getHeroDetailInformation(mockName.lowercase()))
-        }
-    }
+    init { character.postLoading() }
 
     fun onCloseButtonClick() {
         TODO()

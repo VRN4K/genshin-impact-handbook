@@ -5,7 +5,6 @@ import com.gihandbook.my.domain.extensions.contains
 import com.gihandbook.my.domain.datacontracts.ICharacterInteractor
 import com.gihandbook.my.domain.model.*
 import com.gihandbook.my.ui.base.BaseViewModel
-import com.gihandbook.my.ui.screens.navigation.NavigationActions
 import com.gihandbook.my.ui.snippets.TabPagesCharacters
 import dagger.hilt.android.lifecycle.HiltViewModel
 import launchIO
@@ -13,8 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CharactersScreenViewModel @Inject constructor(
-    private val characterInteractor: ICharacterInteractor,
-    val navigationActions: NavigationActions
+    private val characterInteractor: ICharacterInteractor
 ) :
     BaseViewModel() {
     private var charactersFromServer = emptyList<CharacterCardModel>()

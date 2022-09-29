@@ -27,13 +27,6 @@ class KtorModule {
         const val BASE_URL = "https://api.genshin.dev"
     }
 
-    @Provides
-    fun provideNavHostController(@ApplicationContext context: Context): NavHostController =
-        NavHostController(context)
-
-    @Provides
-    fun provideActions(navController: NavHostController): NavigationActions =
-        NavigationActions(navController)
 
     @OptIn(ExperimentalSerializationApi::class)
     @Provides
@@ -43,10 +36,7 @@ class KtorModule {
         install(Logging) {
             level = LogLevel.ALL
         }
-//        defaultRequest {
-//            url(BASE_URL)
-//            contentType(ContentType.Application.Json)
-//        }
+
         install(ContentNegotiation) {
             json(Json {
                 ignoreUnknownKeys = true

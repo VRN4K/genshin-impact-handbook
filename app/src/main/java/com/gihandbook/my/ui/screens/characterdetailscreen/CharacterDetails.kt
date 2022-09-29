@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import com.gihandbook.my.R
@@ -32,9 +33,11 @@ import com.gihandbook.my.ui.snippets.showContent
 
 @Composable
 fun CharacterDetailsScreen(
+    characterName: String,
     onBackButtonClick: () -> Unit,
     viewModel: CharacterDetailScreenViewModel = hiltViewModel()
 ) {
+    viewModel.setInitSettings(characterName)
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) { insets ->

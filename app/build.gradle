@@ -61,7 +61,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_ui_version"
     implementation "com.google.accompanist:accompanist-flowlayout:0.14.0"
-
+    implementation 'org.slf4j:slf4j-simple:1.7.30'
 
     implementation('androidx.palette:palette-ktx:1.0.0')
     //Navigation
