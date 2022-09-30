@@ -27,7 +27,7 @@ class CharacterTalent(
     val name: String,
     val unlock: String,
     val description: String,
-    val talentImageUrlId: String
+    val talentImageUrlId: String? = null
 )
 
 data class Element(
@@ -80,4 +80,3 @@ class HeroCardModel(
     imageUrlOnError: String,
     region: String
 ) : CharacterCardModel(id, name, imageUrl, imageUrlOnError, region)
-

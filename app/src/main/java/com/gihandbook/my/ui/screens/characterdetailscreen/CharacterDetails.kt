@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import com.gihandbook.my.R
 import com.gihandbook.my.domain.model.CharacterUIModel
 import com.gihandbook.my.ui.snippets.SkillsExpandableList
@@ -32,6 +33,7 @@ import com.gihandbook.my.ui.snippets.showContent
 @Composable
 fun CharacterDetailsScreen(
     characterName: String,
+    onBackButtonClick: () -> Unit,
     viewModel: CharacterDetailScreenViewModel = hiltViewModel()
 ) {
     viewModel.setInitSettings(characterName)
@@ -65,6 +67,7 @@ fun ShowCharacterDetails(character: CharacterUIModel) {
 
         AsyncImage(
             model = character.imageUrl,
+            error = rememberAsyncImagePainter(model = character.imageUrlOnError),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
@@ -107,13 +110,15 @@ fun ShowCharacterDetails(character: CharacterUIModel) {
             character.skillTalents
         ) {
             character.skillTalents.forEach {
-                AsyncImage(
-                    model = it.talentImageUrlId,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(36.dp)
-                        .padding(horizontal = 4.dp)
-                )
+                it.talentImageUrlId?.let { url ->
+                    AsyncImage(
+                        model = url,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(36.dp)
+                            .padding(horizontal = 4.dp)
+                    )
+                }
             }
         }
         SkillsExpandableList(

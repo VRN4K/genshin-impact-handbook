@@ -35,17 +35,12 @@ class CharacterInteractor @Inject constructor(
 
         charactersNetRepository.getPlayableCharacters().onEach { name ->
             val character = charactersNetRepository.getPlayableCharacterByName(name)
+
             characters.add(
                 character.toCardModel(
                     name,
-                    resources.getString(
-                        R.string.character_card_image,
-                        name
-                    ),
-                    resources.getString(
-                        R.string.character_card_image_on_error,
-                        name
-                    ),
+                    resources.getString(R.string.character_card_image, name),
+                    resources.getString(R.string.character_card_image_on_error, name),
                     resources.getString(
                         R.string.character_element_icon_image,
                         character.vision.lowercase()
@@ -72,26 +67,25 @@ class CharacterInteractor @Inject constructor(
 
     override suspend fun getEnemiesList(): List<EnemyCardModel> {
         val enemies = mutableListOf<EnemyCardModel>()
+
         charactersNetRepository.getEnemies().onEach { name ->
             val enemy = charactersNetRepository.getEnemyByName(name)
-            enemies.add(
-                enemy.toCardModel(
-                    name,
-                    resources.getString(
-                        R.string.character_enemy_card_image,
-                        name
-                    ),
-                    enemy.elements?.map {
-                        Element(
-                            it,
-                            resources.getString(
-                                R.string.character_element_icon,
-                                it.lowercase()
-                            )
+
+            enemies.add(enemy.toCardModel(
+                name,
+                resources.getString(
+                    R.string.character_enemy_card_image,
+                    name
+                ),
+                enemy.elements?.map {
+                    Element(
+                        it, resources.getString(
+                            R.string.character_element_icon,
+                            it.lowercase()
                         )
-                    } ?: emptyList()
-                )
-            )
+                    )
+                } ?: emptyList()
+            ))
         }
         return enemies
     }

@@ -262,7 +262,7 @@ fun ShowCharacters(
             } else {
                 CharacterCard(character = item as EnemyCardModel,
                     onCardClick = {
-                        println(item.name)
+                        TODO()
                     }) {
                     AnimatedVisibility(
                         visible = item.element.isNotEmpty(),
