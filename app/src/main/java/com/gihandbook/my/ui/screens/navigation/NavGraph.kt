@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.gihandbook.my.CharactersScreen
 import com.gihandbook.my.ui.screens.QueryParams
 import com.gihandbook.my.ui.screens.Screens
@@ -23,10 +24,10 @@ fun NavGraph(navController: NavHostController) {
         }
         composable(
             Screens.Character.route,
-            arguments = createNavArgument(Pair(QueryParams.CHARACTER_NAME, String::class.java))
+            arguments = createNavArgument(Pair(QueryParams.CHARACTER_NAME, ""))
         ) { backStackEntry ->
             CharacterDetailsScreen(
-                backStackEntry.getArgument(Pair(QueryParams.CHARACTER_NAME, String::class.java)),
+                backStackEntry.getArg(QueryParams.CHARACTER_NAME).toString(),
                 onBackButtonClick = {
                     actions.backTo()
                 })

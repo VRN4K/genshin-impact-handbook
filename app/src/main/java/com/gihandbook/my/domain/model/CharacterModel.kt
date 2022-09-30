@@ -1,7 +1,7 @@
 package com.gihandbook.my.domain.model
 
 import android.graphics.Bitmap
-import android.graphics.Color
+import androidx.palette.graphics.Palette
 import com.gihandbook.my.R
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -21,7 +21,7 @@ data class CharacterUIModel(
     val passiveTalents: List<CharacterTalent>,
     val skillTalents: List<CharacterTalent>,
     val constellations: List<CharacterTalent>,
-    val color: Bitmap? = null
+    val colorPalette: Palette
 )
 
 class CharacterTalent(
@@ -65,6 +65,7 @@ enum class Vision {
 }
 
 abstract class CharacterCardModel(
+    val id: String,
     open val name: String,
     val imageUrl: String,
     val imageUrlOnError: String,
@@ -74,9 +75,10 @@ abstract class CharacterCardModel(
 class HeroCardModel(
     val weaponType: WeaponType,
     val element: Element,
+    id: String,
     name: String,
     imageUrl: String,
     imageUrlOnError: String,
     region: String
-) : CharacterCardModel(name, imageUrl, imageUrlOnError, region)
+) : CharacterCardModel(id, name, imageUrl, imageUrlOnError, region)
 

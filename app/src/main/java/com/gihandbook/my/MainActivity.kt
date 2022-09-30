@@ -250,11 +250,11 @@ fun ShowCharacters(
         items(items = characters, itemContent = { item ->
             if (tabPagesCharacters == TabPagesCharacters.CHARACTERS) {
                 CharacterCard(character = item as HeroCardModel, onCardClick = {
-//                    actions.navigateTo(
-//                        Screens.Character.setName(
-//                            item.name.lowercase().replace(" ", "-")
-//                        )
-//                    )
+                    actions.navigateTo(
+                        Screens.Character.setName(
+                            item.id
+                        )
+                    )
                 }) {
                     ElementTitle(element = item.element)
                     WeaponTitle(weaponType = item.weaponType)

@@ -11,6 +11,9 @@ import javax.inject.Inject
 @HiltViewModel
 class CharacterDetailScreenViewModel @Inject constructor(private val characterInteractor: ICharacterInteractor) :
     BaseViewModel() {
+    val character = StateLiveData<CharacterUIModel>()
+
+    init { character.postLoading() }
 
     fun setInitSettings(name: String) {
         launchIO(handler) {
@@ -18,12 +21,4 @@ class CharacterDetailScreenViewModel @Inject constructor(private val characterIn
         }
     }
 
-    private val mockName = "Razor"
-    val character = StateLiveData<CharacterUIModel>()
-
-    init { character.postLoading() }
-
-    fun onCloseButtonClick() {
-        TODO()
-    }
 }

@@ -11,8 +11,9 @@ class Enemy(
     val elements: List<String>?
 )
 
-fun Enemy.toCardModel(imageUrl: String, elements: List<Element>): EnemyCardModel {
+fun Enemy.toCardModel(id: String, imageUrl: String, elements: List<Element>): EnemyCardModel {
     return EnemyCardModel(
+        id = id,
         element = elements,
         imageUrlOnError = "",
         name = let { name } ?: "Unknown",

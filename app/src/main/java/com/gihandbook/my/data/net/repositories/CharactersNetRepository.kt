@@ -14,9 +14,6 @@ class CharactersNetRepository @Inject constructor(
     private val httpClient: HttpClient
 ) : ICharacterNetRepository {
     override suspend fun getPlayableCharacters(): List<String> {
-
-        //println(httpClient.get("https://www.googleapis.com/books/v1/volumes").bodyAsText())
-
         return httpClient.get("https://api.genshin.dev/characters").body()
     }
 

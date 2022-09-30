@@ -60,7 +60,6 @@ fun CharacterDetailsScreen(
 
 @Composable
 fun ShowCharacterDetails(character: CharacterUIModel) {
-    val palette = character.color?.let { Palette.from(it).generate() }
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -94,7 +93,7 @@ fun ShowCharacterDetails(character: CharacterUIModel) {
                     icon = R.drawable.star,
                     itemValue = character.rarity.toString(),
                     itemType = stringResource(id = R.string.character_rarity_title),
-                    iconColor = palette?.let { Color(it.getLightVibrantColor(MaterialTheme.colors.onPrimary.toArgb())) }
+                    iconColor = Color(character.colorPalette.getDominantColor(MaterialTheme.colors.onPrimary.toArgb()))
                 )
             }
         )

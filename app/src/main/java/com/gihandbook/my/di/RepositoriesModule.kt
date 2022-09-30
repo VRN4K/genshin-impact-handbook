@@ -29,6 +29,10 @@ class RepositoriesModule {
 
     @Provides
     @Singleton
+    fun provideGlide(@ApplicationContext context: Context) = Glide.with(context)
+
+    @Provides
+    @Singleton
     fun provideCharactersRepository(httpClient: HttpClient): ICharacterNetRepository =
         CharactersNetRepository(httpClient)
 

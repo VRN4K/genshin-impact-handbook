@@ -1,10 +1,7 @@
 package com.gihandbook.my.data.net.model
 
-import android.content.Context
 import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.Color
-import com.bumptech.glide.Glide
+import androidx.palette.graphics.Palette
 import com.gihandbook.my.R
 import com.gihandbook.my.domain.model.*
 import kotlinx.serialization.Serializable
@@ -47,13 +44,13 @@ data class Constellations(
     var level: Int,
 )
 
-fun Character.toUI(context: Context, bitmap: Bitmap? = null): CharacterUIModel {
+fun Character.toUI(resources: Resources, palette: Palette): CharacterUIModel {
     return CharacterUIModel(
         name = this.name,
         weaponType = this.weapon,
         vision = Element(
             this.vision,
-            context.resources.getString(
+            resources.getString(
                 R.string.character_element_icon_image,
                 this.vision.lowercase()
             )
@@ -61,19 +58,19 @@ fun Character.toUI(context: Context, bitmap: Bitmap? = null): CharacterUIModel {
         description = this.description,
         region = this.nation,
         constellationTitle = this.constellation,
-        constellationImageUrl = context.resources.getString(
+        constellationImageUrl = resources.getString(
             R.string.constellation_star_map,
             this.name.lowercase()
         ),
-        imageUrl = context.resources.getString(
+        imageUrl = resources.getString(
             R.string.character_gacha_splash_image,
             this.name.lowercase()
         ),
-        imageSideUrl = context.resources.getString(
+        imageSideUrl = resources.getString(
             R.string.character_side_image,
             this.name.lowercase()
         ),
-        imageUrlOnError = context.resources.getString(
+        imageUrlOnError = resources.getString(
             R.string.character_portrait_image,
             this.name.lowercase()
         ),
@@ -83,7 +80,7 @@ fun Character.toUI(context: Context, bitmap: Bitmap? = null): CharacterUIModel {
                 it.name,
                 it.unlock,
                 it.description,
-                context.resources.getString(it.type!!.imageUrlId, this.name.lowercase())
+                resources.getString(it.type!!.imageUrlId, this.name.lowercase())
             )
         },
         passiveTalents = this.passiveTalents.map {
@@ -91,7 +88,7 @@ fun Character.toUI(context: Context, bitmap: Bitmap? = null): CharacterUIModel {
                 it.name,
                 it.unlock,
                 it.description,
-                context.resources.getString(
+                resources.getString(
                     getPassiveTalentByLevel(it.level)?.imageUrlId!!,
                     this.name.lowercase()
                 )
@@ -102,13 +99,13 @@ fun Character.toUI(context: Context, bitmap: Bitmap? = null): CharacterUIModel {
                 it.name,
                 it.unlock,
                 it.description,
-                context.resources.getString(
+                resources.getString(
                     getConstellationsUrlByLevel(it.level),
                     this.name.lowercase()
                 )
             )
         },
-        color = bitmap
+        colorPalette = palette
     )
 }
 
@@ -158,6 +155,7 @@ private fun getConstellationsUrlByLevel(level: Int): Int {
 }
 
 fun Character.toCardModel(
+    id: String,
     imageUrl: String,
     imageUrlOnError: String,
     elementImageUrl: String
@@ -165,6 +163,7 @@ fun Character.toCardModel(
     return HeroCardModel(
         weapon,
         Element(vision, elementImageUrl),
+        id,
         name,
         imageUrl,
         imageUrlOnError,

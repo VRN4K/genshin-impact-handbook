@@ -27,7 +27,6 @@ class KtorModule {
         const val BASE_URL = "https://api.genshin.dev"
     }
 
-
     @OptIn(ExperimentalSerializationApi::class)
     @Provides
     @Singleton
