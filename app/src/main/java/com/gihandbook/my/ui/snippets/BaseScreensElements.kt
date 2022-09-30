@@ -408,7 +408,7 @@ fun SkillsExpandableListItem(characterTalent: CharacterTalent) {
 
 @Composable
 fun ShowLoading() {
-    CircularProgressIndicator(color = Color.Black, modifier = Modifier)
+    CircularProgressIndicator(color = MaterialTheme.colors.primary, modifier = Modifier)
 }
 
 @Composable

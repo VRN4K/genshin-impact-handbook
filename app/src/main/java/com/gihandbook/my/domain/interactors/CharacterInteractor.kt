@@ -63,7 +63,7 @@ class CharacterInteractor @Inject constructor(
             resources.getString(R.string.character_element_icon_image, character.vision.lowercase())
         ).submit().get()
 
-        return character.toUI(resources, Palette.from(elementBitmap).generate())
+        return character.toUI(name, resources, Palette.from(elementBitmap).generate())
     }
 
     override suspend fun getEnemyByName(name: String): Enemy {

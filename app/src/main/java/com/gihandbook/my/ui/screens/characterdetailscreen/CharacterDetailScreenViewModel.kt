@@ -20,5 +20,4 @@ class CharacterDetailScreenViewModel @Inject constructor(private val characterIn
             character.postComplete(characterInteractor.getHeroDetailInformation(name))
         }
     }
-
 }

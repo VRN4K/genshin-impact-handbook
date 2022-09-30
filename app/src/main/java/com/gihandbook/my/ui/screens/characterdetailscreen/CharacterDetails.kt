@@ -22,8 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.SavedStateHandle
-import androidx.palette.graphics.Palette
 import coil.compose.AsyncImage
 import com.gihandbook.my.R
 import com.gihandbook.my.domain.model.CharacterUIModel
@@ -34,7 +32,6 @@ import com.gihandbook.my.ui.snippets.showContent
 @Composable
 fun CharacterDetailsScreen(
     characterName: String,
-    onBackButtonClick: () -> Unit,
     viewModel: CharacterDetailScreenViewModel = hiltViewModel()
 ) {
     viewModel.setInitSettings(characterName)
@@ -50,9 +47,8 @@ fun CharacterDetailsScreen(
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 showContent(
                     stateLiveData = viewModel.character,
-                    onContent = {
-                        ShowCharacterDetails(it)
-                    })
+                    onContent = { ShowCharacterDetails(it) }
+                )
             }
         }
     }

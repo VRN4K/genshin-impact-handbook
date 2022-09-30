@@ -1,6 +1,5 @@
 package com.gihandbook.my.domain.model
 
-import android.graphics.Bitmap
 import androidx.palette.graphics.Palette
 import com.gihandbook.my.R
 import kotlinx.serialization.SerialName

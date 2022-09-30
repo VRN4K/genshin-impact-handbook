@@ -44,64 +44,49 @@ data class Constellations(
     var level: Int,
 )
 
-fun Character.toUI(resources: Resources, palette: Palette): CharacterUIModel {
+fun Character.toUI(id: String, resources: Resources, palette: Palette): CharacterUIModel {
     return CharacterUIModel(
-        name = this.name,
-        weaponType = this.weapon,
+        name = name,
+        weaponType = weapon,
         vision = Element(
-            this.vision,
-            resources.getString(
-                R.string.character_element_icon_image,
-                this.vision.lowercase()
-            )
+            vision,
+            resources.getString(R.string.character_element_icon_image, vision.lowercase())
         ),
-        description = this.description,
-        region = this.nation,
-        constellationTitle = this.constellation,
-        constellationImageUrl = resources.getString(
-            R.string.constellation_star_map,
-            this.name.lowercase()
-        ),
-        imageUrl = resources.getString(
-            R.string.character_gacha_splash_image,
-            this.name.lowercase()
-        ),
-        imageSideUrl = resources.getString(
-            R.string.character_side_image,
-            this.name.lowercase()
-        ),
-        imageUrlOnError = resources.getString(
-            R.string.character_portrait_image,
-            this.name.lowercase()
-        ),
-        rarity = this.rarity,
-        skillTalents = this.skillTalents.map {
+        description = description,
+        region = nation,
+        constellationTitle = constellation,
+        constellationImageUrl = resources.getString(R.string.constellation_star_map, id),
+        imageUrl = resources.getString(R.string.character_gacha_splash_image, id),
+        imageSideUrl = resources.getString(R.string.character_side_image, id),
+        imageUrlOnError = resources.getString(R.string.character_portrait_image, id),
+        rarity = rarity,
+        skillTalents = skillTalents.map {
             CharacterTalent(
                 it.name,
                 it.unlock,
                 it.description,
-                resources.getString(it.type!!.imageUrlId, this.name.lowercase())
+                resources.getString(it.type!!.imageUrlId, id)
             )
         },
-        passiveTalents = this.passiveTalents.map {
+        passiveTalents = passiveTalents.map {
             CharacterTalent(
                 it.name,
                 it.unlock,
                 it.description,
                 resources.getString(
                     getPassiveTalentByLevel(it.level)?.imageUrlId!!,
-                    this.name.lowercase()
+                    id
                 )
             )
         },
-        constellations = this.constellations.map {
+        constellations = constellations.map {
             CharacterTalent(
                 it.name,
                 it.unlock,
                 it.description,
                 resources.getString(
                     getConstellationsUrlByLevel(it.level),
-                    this.name.lowercase()
+                    id
                 )
             )
         },
