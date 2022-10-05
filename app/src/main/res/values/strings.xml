@@ -31,6 +31,7 @@
     <string name="character_vision_title">Vision</string>
     <string name="character_weapon_title">Weapon</string>
     <string name="character_rarity_title">Rarity</string>
+    <string name="character_profile_title">Character profile</string>
 
     // Talents
     <string name="talents_title">Talents</string>
@@ -38,6 +39,7 @@
     <string name="talent_elemental_skill">https://api.genshin.dev/characters/%s/talent-skill</string>
     <string name="talent_normal_attack">https://api.genshin.dev/characters/%s/talent-na</string>
     <string name="talent_elemental_burst">https://api.genshin.dev/characters/%s/talent-burst</string>
+    <string name="talent_right_click">https://api.genshin.dev/characters/%s/talent-passive-misc</string>
 
     <string name="talent_passive_title">Passive Talents</string>
     <string name="talent_1st_ascension_passive">https://api.genshin.dev/characters/%s/talent-passive-1</string>

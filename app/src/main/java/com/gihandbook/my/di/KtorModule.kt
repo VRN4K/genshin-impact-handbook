@@ -38,6 +38,7 @@ class KtorModule {
 
         install(ContentNegotiation) {
             json(Json {
+                isLenient = true
                 ignoreUnknownKeys = true
                 explicitNulls = false
             })

@@ -29,5 +29,15 @@ fun NavGraph(navController: NavHostController) {
                     actions.backTo()
                 })
         }
+        composable(
+            Screens.Enemy.route,
+            arguments = createNavArgument(Pair(QueryParams.ENEMY_NAME, ""))
+        ) { backStackEntry ->
+            CharacterDetailsScreen(
+                backStackEntry.getArg(QueryParams.ENEMY_NAME).toString(),
+                onBackButtonClick = {
+                    actions.backTo()
+                })
+        }
     }
 }

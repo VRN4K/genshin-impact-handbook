@@ -18,16 +18,11 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.gihandbook.my.domain.model.EnemyCardModel
 import com.gihandbook.my.domain.model.WeaponType
-import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
 import com.gihandbook.my.ui.screens.charactersscreen.CharacterCard
 import com.gihandbook.my.ui.screens.charactersscreen.CharactersScreenViewModel
 import com.gihandbook.my.domain.model.*
@@ -39,7 +34,6 @@ import com.gihandbook.my.ui.snippets.*
 import com.gihandbook.my.ui.theme.GIHandbookTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 @ExperimentalPagerApi
@@ -58,12 +52,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
     val navHostController = rememberNavController()
+
     Surface(
         modifier = Modifier
             .background(MaterialTheme.colors.background)
             .fillMaxSize()
     ) {
-        Scaffold() { paddingValues ->
+        Scaffold { paddingValues ->
             Column(modifier = Modifier.padding(paddingValues)) {
                 NavGraph(navHostController)
             }
@@ -77,6 +72,7 @@ fun CharactersScreen(
     viewModel: CharactersScreenViewModel = hiltViewModel(),
     actions: NavigationActions
 ) {
+
     var pagerState by remember { mutableStateOf(TabPagesCharacters.CHARACTERS) }
     var isFilterShown by remember { mutableStateOf(false) }
     var isSearchShown by remember { mutableStateOf(false) }
@@ -126,8 +122,9 @@ fun CharactersScreen(
                             when (filterType) {
                                 FilterItemsType.WEAPON_TYPE -> selectedCharactersWeaponType = item
                                 FilterItemsType.VISION -> selectedCharactersVision = item
-                                else -> selectedCharactersWeaponType = null.also {
-                                    selectedCharactersVision = it
+                                else -> {
+                                    selectedCharactersWeaponType = null
+                                    selectedCharactersVision = null
                                 }
                             }
 
@@ -250,11 +247,7 @@ fun ShowCharacters(
         items(items = characters, itemContent = { item ->
             if (tabPagesCharacters == TabPagesCharacters.CHARACTERS) {
                 CharacterCard(character = item as HeroCardModel, onCardClick = {
-                    actions.navigateTo(
-                        Screens.Character.setName(
-                            item.id
-                        )
-                    )
+                    actions.navigateTo(Screens.Character.setName(item.id))
                 }) {
                     ElementTitle(element = item.element)
                     WeaponTitle(weaponType = item.weaponType)

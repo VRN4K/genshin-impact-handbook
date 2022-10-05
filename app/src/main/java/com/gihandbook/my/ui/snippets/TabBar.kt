@@ -34,7 +34,7 @@ fun AppBarWithPager(
             .height(94.dp)
             .clip(RoundedCornerShape(16.dp))
             .padding(horizontal = 8.dp)
-            .padding(top = 8.dp),
+            .padding(top = 8.dp, bottom = 4.dp),
         elevation = 0.dp,
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -51,7 +51,7 @@ fun AppBarWithPager(
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_round_filter_list_24),
-                        colorFilter = ColorFilter.tint(Color.Black),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
                         contentDescription = null,
                         modifier = Modifier.padding(0.dp)
                     )
@@ -60,7 +60,7 @@ fun AppBarWithPager(
                     text = stringResource(id = title),
                     style = MaterialTheme.typography.h2,
                     color = MaterialTheme.colors.primary,
-                    modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                    modifier = Modifier.padding(vertical = 4.dp)
                 )
                 IconButton(onClick = { onSearchClick() }) {
                     Image(
@@ -74,6 +74,43 @@ fun AppBarWithPager(
         }
     }
 }
+
+@Composable
+fun AppBarWithSidesButton(
+    title: String,
+    leftButton: @Composable () -> Unit,
+    rightButton: @Composable () -> Unit
+) {
+    TopAppBar(
+        backgroundColor = Color.Transparent, //MaterialTheme.colors.onPrimary,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .padding(horizontal = 8.dp)
+            .padding(vertical = 8.dp),
+        elevation = 0.dp,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 4.dp, bottom = 8.dp)
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            leftButton.invoke()
+            Text(
+                text = title,
+                style = MaterialTheme.typography.h2,
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier
+                    .padding(top = 4.dp, bottom = 4.dp)
+            )
+            rightButton.invoke()
+        }
+    }
+}
+
 @ExperimentalPagerApi
 @Composable
 fun TabBar(selectedTabIndex: Int, onSelectedTab: (TabPagesCharacters) -> Unit) {

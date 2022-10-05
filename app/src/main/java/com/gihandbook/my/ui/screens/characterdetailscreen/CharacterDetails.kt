@@ -1,14 +1,10 @@
 package com.gihandbook.my.ui.screens.characterdetailscreen
 
-import androidx.compose.foundation.Image
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,9 +22,7 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.gihandbook.my.R
 import com.gihandbook.my.domain.model.CharacterUIModel
-import com.gihandbook.my.ui.snippets.SkillsExpandableList
-import com.gihandbook.my.ui.snippets.TextBlock
-import com.gihandbook.my.ui.snippets.showContent
+import com.gihandbook.my.ui.snippets.*
 
 @Composable
 fun CharacterDetailsScreen(
@@ -49,7 +43,7 @@ fun CharacterDetailsScreen(
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 showContent(
                     stateLiveData = viewModel.character,
-                    onContent = { ShowCharacterDetails(it) }
+                    onContent = { ShowCharacterDetails(it, onBackButtonClick) }
                 )
             }
         }
@@ -57,62 +51,88 @@ fun CharacterDetailsScreen(
 }
 
 @Composable
-fun ShowCharacterDetails(character: CharacterUIModel) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-            .fillMaxWidth()
-    ) {
-
-        AsyncImage(
-            model = character.imageUrl,
-            error = rememberAsyncImagePainter(model = character.imageUrlOnError),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .sizeIn(maxHeight = 350.dp)
-        )
-        IconWithText(title = character.name, icon = character.imageSideUrl)
-        CharacterSmallInfoRow(
-            content = {
-                InfoItemWithIcon(
-                    iconUrl = character.vision.iconUrl,
-                    itemValue = character.vision.name,
-                    itemType = stringResource(id = R.string.character_vision_title)
-                )
-
-                InfoItemWithIcon(
-                    icon = character.weaponType.imageId,
-                    itemValue = character.weaponType.title,
-                    itemType = stringResource(id = R.string.character_weapon_title)
-                )
-
-                InfoItemWithIcon(
-                    icon = R.drawable.star,
-                    itemValue = character.rarity.toString(),
-                    itemType = stringResource(id = R.string.character_rarity_title),
-                    iconColor = Color(character.colorPalette.getDominantColor(MaterialTheme.colors.onPrimary.toArgb()))
-                )
-            }
-        )
-        TextBlock(
-            title = stringResource(id = R.string.character_region_title),
-            text = character.region
-        )
-        TextBlock(
-            title = stringResource(id = R.string.character_description_title),
-            text = character.description
-        )
-        TextBlock(title = stringResource(id = R.string.talents_title))
-        SkillsExpandableList(
-            stringResource(id = R.string.talent_skills_title),
-            character.skillTalents
+fun ShowCharacterDetails(character: CharacterUIModel, onBackButtonClick: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        IconButton(
+            onClick = onBackButtonClick, modifier = Modifier
+                .padding(8.dp)
+                .align(Alignment.TopEnd)
         ) {
-            character.skillTalents.forEach {
-                it.talentImageUrlId?.let { url ->
+            Image(
+                painter = painterResource(id = R.drawable.ic_close_svgrepo_com),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
+            )
+        }
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
+                .fillMaxWidth()
+        ) {
+            AsyncImage(
+                model = character.imageUrl,
+                error = rememberAsyncImagePainter(model = character.imageUrlOnError),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .sizeIn(maxHeight = 350.dp)
+            )
+            IconWithText(title = character.name, icon = character.imageSideUrl)
+            CharacterSmallInfoRow(
+                content = {
+                    InfoItemWithIcon(
+                        iconUrl = character.vision.iconUrl,
+                        itemValue = character.vision.name,
+                        itemType = stringResource(id = R.string.character_vision_title)
+                    )
+
+                    InfoItemWithIcon(
+                        icon = character.weaponType.imageId,
+                        itemValue = character.weaponType.title,
+                        itemType = stringResource(id = R.string.character_weapon_title)
+                    )
+
+                    InfoItemWithIcon(
+                        icon = R.drawable.star,
+                        itemValue = character.rarity.toString(),
+                        itemType = stringResource(id = R.string.character_rarity_title),
+                        iconColor = Color(character.colorPalette.getDominantColor(MaterialTheme.colors.onPrimary.toArgb()))
+                    )
+                }
+            )
+            TextBlock(
+                title = stringResource(id = R.string.character_region_title),
+                text = character.region
+            )
+            TextBlock(
+                title = stringResource(id = R.string.character_description_title),
+                text = character.description
+            )
+            TextBlock(title = stringResource(id = R.string.talents_title))
+            SkillsExpandableList(
+                stringResource(id = R.string.talent_skills_title),
+                character.skillTalents
+            ) {
+                character.skillTalents.forEach {
+                    it.talentImageUrlId?.let { url ->
+                        AsyncImage(
+                            model = url,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(36.dp)
+                                .padding(horizontal = 4.dp)
+                        )
+                    }
+                }
+            }
+            SkillsExpandableList(
+                stringResource(id = R.string.talent_passive_title),
+                character.passiveTalents
+            ) {
+                character.passiveTalents.forEach {
                     AsyncImage(
-                        model = url,
+                        model = it.talentImageUrlId,
                         contentDescription = null,
                         modifier = Modifier
                             .size(36.dp)
@@ -120,35 +140,21 @@ fun ShowCharacterDetails(character: CharacterUIModel) {
                     )
                 }
             }
-        }
-        SkillsExpandableList(
-            stringResource(id = R.string.talent_passive_title),
-            character.passiveTalents
-        ) {
-            character.passiveTalents.forEach {
-                AsyncImage(
-                    model = it.talentImageUrlId,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(36.dp)
-                        .padding(horizontal = 4.dp)
-                )
-            }
-        }
-        TextBlock(title = stringResource(id = R.string.constellation_title))
-        ImageCard(character.constellationImageUrl, character.constellationTitle)
-        SkillsExpandableList(
-            stringResource(id = R.string.constellations_title),
-            character.constellations
-        ) {
-            character.constellations.forEach {
-                AsyncImage(
-                    model = it.talentImageUrlId,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(36.dp)
-                        .padding(horizontal = 4.dp)
-                )
+            TextBlock(title = stringResource(id = R.string.constellation_title))
+            ImageCard(character.constellationImageUrl, character.constellationTitle)
+            SkillsExpandableList(
+                stringResource(id = R.string.constellations_title),
+                character.constellations
+            ) {
+                character.constellations.forEach {
+                    AsyncImage(
+                        model = it.talentImageUrlId,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(36.dp)
+                            .padding(horizontal = 4.dp)
+                    )
+                }
             }
         }
     }

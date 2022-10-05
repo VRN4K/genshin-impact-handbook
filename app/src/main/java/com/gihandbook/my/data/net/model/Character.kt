@@ -4,6 +4,7 @@ import android.content.res.Resources
 import androidx.palette.graphics.Palette
 import com.gihandbook.my.R
 import com.gihandbook.my.domain.model.*
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -25,7 +26,7 @@ data class SkillTalent(
     var name: String,
     var unlock: String,
     var description: String,
-    var type: TalentsType? = null
+    var type: TalentsType? = TalentsType.RIGHT_CLICK
 )
 
 @Serializable
@@ -33,7 +34,7 @@ data class PassiveTalent(
     var name: String,
     var unlock: String,
     var description: String,
-    var level: Int? = null
+    var level: PassiveSkillsType? = PassiveSkillsType.UTILITY_PASSIVE
 )
 
 @Serializable
@@ -41,7 +42,7 @@ data class Constellations(
     var name: String,
     var unlock: String,
     var description: String,
-    var level: Int,
+    var level: ConstellationsLevels,
 )
 
 fun Character.toUI(id: String, resources: Resources, palette: Palette): CharacterUIModel {
@@ -74,7 +75,7 @@ fun Character.toUI(id: String, resources: Resources, palette: Palette): Characte
                 it.unlock,
                 it.description,
                 resources.getString(
-                    getPassiveTalentByLevel(it.level)?.imageUrlId!!,
+                    it.level?.imageUrlId!!,
                     id
                 )
             )
@@ -85,7 +86,7 @@ fun Character.toUI(id: String, resources: Resources, palette: Palette): Characte
                 it.unlock,
                 it.description,
                 resources.getString(
-                    getConstellationsUrlByLevel(it.level),
+                    it.level.imageUrlId,
                     id
                 )
             )
@@ -99,44 +100,32 @@ enum class TalentsType(val imageUrlId: Int) {
     NORMAL_ATTACK(R.string.talent_normal_attack),
     ELEMENTAL_SKILL(R.string.talent_elemental_skill),
     ELEMENTAL_BURST(R.string.talent_elemental_burst),
+    RIGHT_CLICK(R.string.talent_right_click)
 }
 
-enum class PassiveSkillsType(val level: Int?, val imageUrlId: Int) {
-    FIRST_ASCENSION_PASSIVE(1, R.string.talent_1st_ascension_passive),
-    FOURTH_ASCENSION_PASSIVE(4, R.string.talent_4st_ascension_passive),
-    UTILITY_PASSIVE(null, R.string.talent_utility_passive)
+@Serializable
+enum class PassiveSkillsType(val imageUrlId: Int) {
+    @SerialName("1")
+    FIRST_ASCENSION_PASSIVE(R.string.talent_1st_ascension_passive),
+    @SerialName("4")
+    FOURTH_ASCENSION_PASSIVE(R.string.talent_4st_ascension_passive),
+    UTILITY_PASSIVE(R.string.talent_utility_passive)
 }
 
-enum class ConstellationsLevels(val level: Int, val imageUrlId: Int) {
-    FIRST_LEVEL(1, R.string.constellation_level_1),
-    SECOND_LEVEL(2, R.string.constellation_level_2),
-    THIRD_LEVEL(3, R.string.constellation_level_3),
-    FOURTH_LEVEL(4, R.string.constellation_level_4),
-    FIFTH_LEVEL(5, R.string.constellation_level_5),
-    SIXTH_LEVEL(6, R.string.constellation_level_6)
-}
-
-private fun getPassiveTalentByLevel(level: Int?): PassiveSkillsType? {
-    return when (level) {
-        PassiveSkillsType.FIRST_ASCENSION_PASSIVE.level -> PassiveSkillsType.FIRST_ASCENSION_PASSIVE
-        PassiveSkillsType.FOURTH_ASCENSION_PASSIVE.level -> PassiveSkillsType.FOURTH_ASCENSION_PASSIVE
-        PassiveSkillsType.UTILITY_PASSIVE.level -> PassiveSkillsType.UTILITY_PASSIVE
-        else -> null
-    }
-}
-
-private fun getConstellationsUrlByLevel(level: Int): Int {
-    return when (level) {
-        ConstellationsLevels.FIRST_LEVEL.level -> ConstellationsLevels.FIRST_LEVEL.imageUrlId
-        ConstellationsLevels.SECOND_LEVEL.level -> ConstellationsLevels.SECOND_LEVEL.imageUrlId
-        ConstellationsLevels.THIRD_LEVEL.level -> ConstellationsLevels.THIRD_LEVEL.imageUrlId
-        ConstellationsLevels.FOURTH_LEVEL.level -> ConstellationsLevels.FOURTH_LEVEL.imageUrlId
-        ConstellationsLevels.FIFTH_LEVEL.level -> ConstellationsLevels.FIFTH_LEVEL.imageUrlId
-        ConstellationsLevels.SIXTH_LEVEL.level -> ConstellationsLevels.SIXTH_LEVEL.imageUrlId
-        else -> {
-            0
-        }
-    }
+@Serializable
+enum class ConstellationsLevels(val imageUrlId: Int) {
+    @SerialName("1")
+    FIRST_LEVEL(R.string.constellation_level_1),
+    @SerialName("2")
+    SECOND_LEVEL(R.string.constellation_level_2),
+    @SerialName("3")
+    THIRD_LEVEL(R.string.constellation_level_3),
+    @SerialName("4")
+    FOURTH_LEVEL(R.string.constellation_level_4),
+    @SerialName("5")
+    FIFTH_LEVEL(R.string.constellation_level_5),
+    @SerialName("6")
+    SIXTH_LEVEL(R.string.constellation_level_6)
 }
 
 fun Character.toCardModel(
