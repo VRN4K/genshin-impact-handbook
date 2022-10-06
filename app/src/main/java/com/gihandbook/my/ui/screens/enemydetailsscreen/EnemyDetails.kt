@@ -44,14 +44,14 @@ fun EnemyDetailsScreen(
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 ShowContent(
                     stateLiveData = viewModel.character,
-                    onContent = { ShowEnemyDetails(it, onBackButtonClick) })
+                    onContent = { ShowEnemyDetailsContent(it, onBackButtonClick) })
             }
         }
     }
 }
 
 @Composable
-fun ShowEnemyDetails(enemy: EnemyUIModel, onBackButtonClick: () -> Unit) {
+fun ShowEnemyDetailsContent(enemy: EnemyUIModel, onBackButtonClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         IconButton(
             onClick = onBackButtonClick, modifier = Modifier
