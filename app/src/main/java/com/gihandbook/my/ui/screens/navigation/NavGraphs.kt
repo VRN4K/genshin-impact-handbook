@@ -3,7 +3,6 @@ package com.gihandbook.my.ui.screens.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.gihandbook.my.CharactersScreen
 import com.gihandbook.my.ui.screens.Screens
 import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
 import com.google.accompanist.pager.ExperimentalPagerApi

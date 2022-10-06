@@ -37,7 +37,7 @@ fun EnemyDetailsScreen(
             contentAlignment = Alignment.Center
         ) {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                showContent(
+                ShowContent(
                     stateLiveData = viewModel.character,
                     onContent = { ShowEnemyDetails(it, onBackButtonClick) })
             }

@@ -21,7 +21,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 @ExperimentalPagerApi
 @Composable
 fun AppBarWithPager(
-    title: Int,
+    title: String,
     selectedTabIndex: Int,
     onSelectedTab: (TabPagesCharacters) -> Unit,
     onFilterClick: () -> Unit,
@@ -57,7 +57,7 @@ fun AppBarWithPager(
                     )
                 }
                 Text(
-                    text = stringResource(id = title),
+                    text = title,
                     style = MaterialTheme.typography.h2,
                     color = MaterialTheme.colors.primary,
                     modifier = Modifier.padding(vertical = 4.dp)

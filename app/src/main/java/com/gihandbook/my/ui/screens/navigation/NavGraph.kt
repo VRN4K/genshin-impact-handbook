@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.gihandbook.my.CharactersScreen
 import com.gihandbook.my.ui.screens.QueryParams
 import com.gihandbook.my.ui.screens.Screens
 import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
+import com.gihandbook.my.ui.screens.charactersscreen.CharactersScreen
 import com.gihandbook.my.ui.screens.enemydetailsscreen.EnemyDetailsScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 

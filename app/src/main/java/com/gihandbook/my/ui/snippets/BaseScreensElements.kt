@@ -1,6 +1,7 @@
 package com.gihandbook.my.ui.snippets
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,15 +16,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import com.gihandbook.my.FilterItemsType
+import coil.compose.AsyncImage
 import com.gihandbook.my.R
 import com.gihandbook.my.domain.StateData
 import com.gihandbook.my.domain.StateLiveData
+import com.gihandbook.my.domain.model.Element
 import com.gihandbook.my.domain.model.Vision
 import com.gihandbook.my.domain.model.WeaponType
+import com.gihandbook.my.ui.screens.charactersscreen.FilterItemsType
 import com.gihandbook.my.ui.theme.FilterChipClicked
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
@@ -83,6 +87,7 @@ fun SearchView(
         }
     }
 }
+
 
 @Composable
 fun FilterHeroesBlock(
@@ -296,6 +301,41 @@ fun FilterItem(
 }
 
 @Composable
+fun ElementTitle(element: Element) {
+    Row {
+        AsyncImage(
+            model = element.iconUrl,
+            modifier = Modifier
+                .sizeIn(minHeight = 30.dp, maxHeight = 30.dp),
+            contentDescription = null
+        )
+        Text(
+            modifier = Modifier.padding(start = 4.dp),
+            text = element.name, color = MaterialTheme.colors.primary,
+            style = MaterialTheme.typography.body1
+        )
+    }
+}
+
+@Composable
+fun WeaponTitle(weaponType: WeaponType) {
+    Row(modifier = Modifier.background(MaterialTheme.colors.onPrimary)) {
+        Image(
+            modifier = Modifier
+                .sizeIn(maxHeight = 30.dp)
+                .padding(start = 8.dp),
+            painter = painterResource(id = weaponType.imageId),
+            contentDescription = null
+        )
+        Text(
+            modifier = Modifier.padding(start = 4.dp),
+            text = weaponType.title, color = MaterialTheme.colors.primary,
+            style = MaterialTheme.typography.body1
+        )
+    }
+}
+
+@Composable
 fun ShowLoading() {
     CircularProgressIndicator(color = MaterialTheme.colors.primary, modifier = Modifier)
 }
@@ -309,7 +349,7 @@ fun ShowNotFoundText() {
 }
 
 @Composable
-fun <T> showContent(
+fun <T> ShowContent(
     stateLiveData: StateLiveData<T>,
     onContent: @Composable (T) -> Unit,
     onLoading: @Composable () -> Unit = { ShowLoading() },

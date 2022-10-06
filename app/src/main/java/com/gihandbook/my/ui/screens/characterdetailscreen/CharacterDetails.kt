@@ -11,6 +11,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,7 +41,7 @@ fun CharacterDetailsScreen(
             contentAlignment = Alignment.Center
         ) {
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                showContent(
+                ShowContent(
                     stateLiveData = viewModel.character,
                     onContent = { ShowCharacterDetails(it, onBackButtonClick) }
                 )
@@ -95,7 +96,8 @@ fun ShowCharacterDetails(character: CharacterUIModel, onBackButtonClick: () -> U
                     InfoItemWithIcon(
                         icon = R.drawable.star,
                         itemValue = character.rarity.toString(),
-                        itemType = stringResource(id = R.string.character_rarity_title)
+                        itemType = stringResource(id = R.string.character_rarity_title),
+                        iconColor = Color(character.colorPalette.getDominantColor(MaterialTheme.colors.onPrimary.toArgb()))
                     )
                 }
             )
