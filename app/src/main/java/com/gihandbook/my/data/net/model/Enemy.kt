@@ -12,11 +12,11 @@ import kotlinx.serialization.Serializable
 class Enemy(
     val name: String,
     val region: String?,
-    val description: String,
+    val description: String?,
     val type: String,
     val elements: List<String>?,
-    val drops: List<Drop>,
-    val artifacts: List<Artifacts>,
+    val drops: List<Drop>?,
+    val artifacts: List<Artifacts>?,
     @SerialName("elemental-description")
     val elementalDescription: List<ElementalDescription>?,
     @SerialName("mora-gained")
@@ -75,7 +75,7 @@ fun Enemy.toUIModel(resources: Resources): EnemyUIModel {
                 elementalDescription?.find { it.element == element }?.description ?: ""
             )
         },
-        drops = drops.map {
+        drops = drops?.map {
             DropUI(
                 it.name,
                 it.rarity,
@@ -90,7 +90,7 @@ fun Enemy.toUIModel(resources: Resources): EnemyUIModel {
                 )
             )
         },
-        artifacts = artifacts.map {
+        artifacts = artifacts?.map {
             ArtifactUI(
                 it.name,
                 it.rarity.getMaxRarity(),

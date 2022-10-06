@@ -8,6 +8,7 @@ import com.gihandbook.my.CharactersScreen
 import com.gihandbook.my.ui.screens.QueryParams
 import com.gihandbook.my.ui.screens.Screens
 import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
+import com.gihandbook.my.ui.screens.enemydetailsscreen.EnemyDetailsScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 @OptIn(ExperimentalPagerApi::class)
@@ -33,7 +34,7 @@ fun NavGraph(navController: NavHostController) {
             Screens.Enemy.route,
             arguments = createNavArgument(Pair(QueryParams.ENEMY_NAME, ""))
         ) { backStackEntry ->
-            CharacterDetailsScreen(
+            EnemyDetailsScreen(
                 backStackEntry.getArg(QueryParams.ENEMY_NAME).toString(),
                 onBackButtonClick = {
                     actions.backTo()

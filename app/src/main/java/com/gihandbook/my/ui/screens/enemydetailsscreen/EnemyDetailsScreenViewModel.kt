@@ -11,13 +11,15 @@ import javax.inject.Inject
 @HiltViewModel
 class EnemyDetailsScreenViewModel @Inject constructor(private val characterInteractor: ICharacterInteractor) :
     BaseViewModel() {
-    private val mockName = "abyss-mage"
     val character = StateLiveData<EnemyUIModel>()
 
     init {
         character.postLoading()
+    }
+
+    fun setInitSettings(name: String) {
         launchIO(handler) {
-            character.postComplete(characterInteractor.getEnemyDetailInformation(mockName))
+            character.postComplete(characterInteractor.getEnemyDetailInformation(name))
         }
     }
 }

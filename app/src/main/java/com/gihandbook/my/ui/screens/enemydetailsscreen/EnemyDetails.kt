@@ -22,7 +22,11 @@ import com.gihandbook.my.ui.screens.characterdetailscreen.*
 import com.gihandbook.my.ui.snippets.*
 
 @Composable
-fun EnemyDetailsScreen(viewModel: EnemyDetailsScreenViewModel = hiltViewModel()) {
+fun EnemyDetailsScreen(
+    characterName: String,
+    onBackButtonClick: () -> Unit, viewModel: EnemyDetailsScreenViewModel = hiltViewModel()
+) {
+    viewModel.setInitSettings(characterName)
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     ) { insets ->
@@ -35,14 +39,14 @@ fun EnemyDetailsScreen(viewModel: EnemyDetailsScreenViewModel = hiltViewModel())
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 showContent(
                     stateLiveData = viewModel.character,
-                    onContent = { ShowEnemyDetails(it) })
+                    onContent = { ShowEnemyDetails(it, onBackButtonClick) })
             }
         }
     }
 }
 
 @Composable
-fun ShowEnemyDetails(enemy: EnemyUIModel) {
+fun ShowEnemyDetails(enemy: EnemyUIModel, onBackButtonClick: () -> Unit) {
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -96,34 +100,39 @@ fun ShowEnemyDetails(enemy: EnemyUIModel) {
                 }
             )
         }
-        ExpandableList(
-            title = stringResource(id = R.string.enemy_drops_title),
-            itemsList = enemy.drops,
-            rowContent = {
-                enemy.drops.forEach { element ->
-                    ExpandableListIcon(
-                        element.imageUrl,
-                        element.imageUrlOnError
-                    )
+
+        enemy.drops?.let {
+            ExpandableList(
+                title = stringResource(id = R.string.enemy_drops_title),
+                itemsList = it,
+                rowContent = {
+                    enemy.drops.forEach { element ->
+                        ExpandableListIcon(
+                            element.imageUrl,
+                            element.imageUrlOnError
+                        )
+                    }
+                },
+                bodyContent = { element ->
+                    DropsExpandableListItem(element as DropUI)
                 }
-            },
-            bodyContent = { element ->
-                DropsExpandableListItem(element as DropUI)
-            }
-        )
-        ExpandableList(
-            title = stringResource(id = R.string.enemy_artifact_title),
-            itemsList = enemy.artifacts,
-            rowContent = {
-                enemy.artifacts.forEach { element ->
-                    ExpandableListIcon(
-                        element.imageUrl
-                    )
+            )
+        }
+        enemy.artifacts?.let {
+            ExpandableList(
+                title = stringResource(id = R.string.enemy_artifact_title),
+                itemsList = it,
+                rowContent = {
+                    enemy.artifacts.forEach { element ->
+                        ExpandableListIcon(
+                            element.imageUrl
+                        )
+                    }
+                },
+                bodyContent = { element ->
+                    ArtifactsExpandableListItem(element as ArtifactUI)
                 }
-            },
-            bodyContent = { element ->
-                ArtifactsExpandableListItem(element as ArtifactUI)
-            }
-        )
+            )
+        }
     }
 }

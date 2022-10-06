@@ -4,11 +4,11 @@ class EnemyUIModel(
     val name: String,
     val region: String?,
     val imageUrl: String,
-    val description: String,
+    val description: String?,
     val type: String,
     val elements: List<Element>?,
-    val drops: List<DropUI>,
-    val artifacts: List<ArtifactUI>,
+    val drops: List<DropUI>?,
+    val artifacts: List<ArtifactUI>?,
     val moraGained: String
 )
 

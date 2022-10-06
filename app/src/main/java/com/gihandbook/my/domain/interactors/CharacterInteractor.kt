@@ -15,8 +15,7 @@ import com.gihandbook.my.domain.model.*
 import javax.inject.Inject
 
 class CharacterInteractor @Inject constructor(
-    private val charactersNetRepository: ICharacterNetRepository,
-    private val resources: Resources
+    private val charactersNetRepository: ICharacterNetRepository
 ) : ICharacterInteractor {
 
     @Inject
@@ -40,14 +39,6 @@ class CharacterInteractor @Inject constructor(
                     name,
                     resources.getString(R.string.character_card_image, name),
                     resources.getString(R.string.character_card_image_on_error, name),
-                    resources.getString(
-                        R.string.character_card_image,
-                        name.lowercase()
-                    ),
-                    resources.getString(
-                        R.string.character_card_image_on_error,
-                        name.lowercase()
-                    ),
                     resources.getString(
                         R.string.character_element_icon_image,
                         character.vision.lowercase()

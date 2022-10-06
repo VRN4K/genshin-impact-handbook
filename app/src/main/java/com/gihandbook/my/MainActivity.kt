@@ -27,11 +27,9 @@ import com.gihandbook.my.ui.screens.charactersscreen.CharacterCard
 import com.gihandbook.my.ui.screens.charactersscreen.CharactersScreenViewModel
 import com.gihandbook.my.domain.model.*
 import com.gihandbook.my.ui.screens.Screens
-import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
 import com.gihandbook.my.ui.screens.charactersscreen.*
 import com.gihandbook.my.ui.screens.navigation.NavGraph
 import com.gihandbook.my.ui.screens.navigation.NavigationActions
-import com.gihandbook.my.ui.screens.enemydetailsscreen.EnemyDetailsScreen
 import com.gihandbook.my.ui.snippets.*
 import com.gihandbook.my.ui.theme.GIHandbookTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -257,7 +255,7 @@ fun ShowCharacters(
             } else {
                 CharacterCard(character = item as EnemyCardModel,
                     onCardClick = {
-                        TODO()
+                        actions.navigateTo(Screens.Enemy.setName(item.id))
                     }) {
                     AnimatedVisibility(
                         visible = item.element.isNotEmpty(),

@@ -16,7 +16,7 @@ fun <T> List<T>.contains(list: List<T>): Boolean {
 }
 
 fun String.convertNameToUrlName(): String {
-    return this.lowercase().replace(" ", "-")
+    return this.lowercase().replace(" ", "-").replace("'", "-")
 }
 
 fun String.getMaxRarity(): Int {

@@ -1,6 +1,5 @@
 package com.gihandbook.my.ui.screens.characterdetailscreen
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,7 +11,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -94,52 +92,61 @@ fun ShowCharacterDetails(character: CharacterUIModel, onBackButtonClick: () -> U
                         itemType = stringResource(id = R.string.character_weapon_title)
                     )
 
-                InfoItemWithIcon(
-                    icon = R.drawable.star,
-                    itemValue = character.rarity.toString(),
-                    itemType = stringResource(id = R.string.character_rarity_title)
-                )
-            }
-        )
-        TextBlock(
-            title = stringResource(id = R.string.character_region_title),
-            text = character.region
-        )
-        TextBlock(
-            title = stringResource(id = R.string.character_description_title),
-            text = character.description
-        )
-        TextBlock(title = stringResource(id = R.string.talents_title))
-        ExpandableList(
-            stringResource(id = R.string.talent_skills_title),
-            character.skillTalents,
-            rowContent = {
-                character.skillTalents.forEach { talent -> ExpandableListIcon(talent.talentImageUrlId) }
-            },
-            bodyContent = { talent ->
-                SkillsExpandableListItem(characterTalent = talent as CharacterTalent)
-            }
-        )
+                    InfoItemWithIcon(
+                        icon = R.drawable.star,
+                        itemValue = character.rarity.toString(),
+                        itemType = stringResource(id = R.string.character_rarity_title)
+                    )
+                }
+            )
+            TextBlock(
+                title = stringResource(id = R.string.character_region_title),
+                text = character.region
+            )
+            TextBlock(
+                title = stringResource(id = R.string.character_description_title),
+                text = character.description
+            )
+            TextBlock(title = stringResource(id = R.string.talents_title))
+            ExpandableList(
+                stringResource(id = R.string.talent_skills_title),
+                character.skillTalents,
+                rowContent = {
+                    character.skillTalents.forEach { talent ->
+                        talent.talentImageUrlId?.let {
+                            ExpandableListIcon(it)
+                        }
+                    }
+                },
+                bodyContent = { talent ->
+                    SkillsExpandableListItem(characterTalent = talent as CharacterTalent)
+                }
+            )
 
-        ExpandableList(
-            stringResource(id = R.string.talent_passive_title),
-            character.passiveTalents,
-            rowContent = {
-                character.passiveTalents.forEach { talent -> ExpandableListIcon(talent.talentImageUrlId) }
-            },
-            bodyContent = { talent ->
-                SkillsExpandableListItem(characterTalent = talent as CharacterTalent)
-            }
-        )
-        TextBlock(title = stringResource(id = R.string.constellation_title))
-        ImageCard(character.constellationImageUrl, character.constellationTitle)
-        ExpandableList(
-            stringResource(id = R.string.constellations_title),
-            character.constellations,
-            bodyContent = { constellation ->
-                SkillsExpandableListItem(characterTalent = constellation as CharacterTalent)
-            }
-        )
+            ExpandableList(
+                stringResource(id = R.string.talent_passive_title),
+                character.passiveTalents,
+                rowContent = {
+                    character.passiveTalents.forEach { talent ->
+                        talent.talentImageUrlId?.let {
+                            ExpandableListIcon(it)
+                        }
+                    }
+                },
+                bodyContent = { talent ->
+                    SkillsExpandableListItem(characterTalent = talent as CharacterTalent)
+                }
+            )
+            TextBlock(title = stringResource(id = R.string.constellation_title))
+            ImageCard(character.constellationImageUrl, character.constellationTitle)
+            ExpandableList(
+                stringResource(id = R.string.constellations_title),
+                character.constellations,
+                bodyContent = { constellation ->
+                    SkillsExpandableListItem(characterTalent = constellation as CharacterTalent)
+                }
+            )
+        }
     }
 }
 
