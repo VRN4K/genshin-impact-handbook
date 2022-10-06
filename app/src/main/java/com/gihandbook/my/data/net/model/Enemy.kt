@@ -2,9 +2,9 @@ package com.gihandbook.my.data.net.model
 
 import android.content.res.Resources
 import com.gihandbook.my.R
-import com.gihandbook.my.domain.model.Element
-import com.gihandbook.my.domain.model.EnemyCardModel
-import com.gihandbook.my.domain.model.EnemyUIModel
+import com.gihandbook.my.domain.extensions.convertNameToUrlName
+import com.gihandbook.my.domain.extensions.getMaxRarity
+import com.gihandbook.my.domain.model.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,16 +15,16 @@ class Enemy(
     val description: String,
     val type: String,
     val elements: List<String>?,
-    val drops: List<Drops>,
+    val drops: List<Drop>,
     val artifacts: List<Artifacts>,
     @SerialName("elemental-description")
-    val elementalDescription: List<ElementalDescription>,
+    val elementalDescription: List<ElementalDescription>?,
     @SerialName("mora-gained")
-    val moraGained: Int
+    val moraGained: Int? = 0
 )
 
 @Serializable
-class Drops(
+class Drop(
     val name: String,
     val rarity: Int,
     @SerialName("minimum-level")
@@ -71,11 +71,35 @@ fun Enemy.toUIModel(resources: Resources): EnemyUIModel {
                     R.string.character_element_icon_image,
                     element.lowercase()
                 ),
-                elementalDescription.find { it.element == element }?.description ?: ""
+                elementalDescription?.find { it.element == element }?.description ?: ""
             )
         },
-        drops = drops,
-        artifacts = artifacts,
-        moraGained = this.moraGained.toString()
+        drops = drops.map {
+            DropUI(
+                it.name,
+                it.rarity,
+                it.minimum_level,
+                resources.getString(
+                    R.string.enemy_materials_common_ascension,
+                    it.name.convertNameToUrlName()
+                ),
+                resources.getString(
+                    R.string.enemy_materials_common_ascension,
+                    it.name.convertNameToUrlName().dropLast(1)
+                )
+            )
+        },
+        artifacts = artifacts.map {
+            ArtifactUI(
+                it.name,
+                it.rarity.getMaxRarity(),
+                it.set,
+                resources.getString(
+                    R.string.enemy_artifact_set,
+                    it.set.convertNameToUrlName()
+                )
+            )
+        },
+        moraGained = moraGained.toString()
     )
 }

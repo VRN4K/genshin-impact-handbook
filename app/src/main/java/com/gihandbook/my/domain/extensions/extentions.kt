@@ -1,9 +1,5 @@
 package com.gihandbook.my.domain.extensions
 
-import android.annotation.SuppressLint
-import java.text.SimpleDateFormat
-import java.util.*
-
 fun <T> List<T>.contains(list: List<T>): Boolean {
     var isContains = false
 
@@ -19,13 +15,14 @@ fun <T> List<T>.contains(list: List<T>): Boolean {
     return isContains
 }
 
-@SuppressLint("SimpleDateFormat")
-fun String.fromStringToDate(patternFrom: String, patternTo: String): Date {
-    val dateFormat = SimpleDateFormat(patternFrom)
-    val fromDate = dateFormat.parse(this)
-    dateFormat.applyPattern(patternTo)
+fun String.convertNameToUrlName(): String {
+    return this.lowercase().replace(" ", "-")
+}
 
-    return requireNotNull(
-        dateFormat.parse(dateFormat.format(requireNotNull(fromDate)))
-    )
+fun String.getMaxRarity(): Int {
+    val rarityDelimiter = "/"
+    if (this.contains(rarityDelimiter, false)) {
+        return this.substringAfter(rarityDelimiter).toInt()
+    }
+    return this.toInt()
 }

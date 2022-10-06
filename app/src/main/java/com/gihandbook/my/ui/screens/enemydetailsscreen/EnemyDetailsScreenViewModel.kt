@@ -20,5 +20,4 @@ class EnemyDetailsScreenViewModel @Inject constructor(private val characterInter
             character.postComplete(characterInteractor.getEnemyDetailInformation(mockName))
         }
     }
-
 }

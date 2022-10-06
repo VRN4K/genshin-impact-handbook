@@ -14,6 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.gihandbook.my.R
+import com.gihandbook.my.domain.model.ArtifactUI
+import com.gihandbook.my.domain.model.DropUI
 import com.gihandbook.my.domain.model.Element
 import com.gihandbook.my.domain.model.EnemyUIModel
 import com.gihandbook.my.ui.screens.characterdetailscreen.*
@@ -58,13 +60,13 @@ fun ShowEnemyDetails(enemy: EnemyUIModel) {
         CharacterSmallInfoRow(
             content = {
                 InfoItemWithIcon(
-                    icon = R.drawable.ic_map,
+                    icon = R.drawable.ic_map_svgrepo_com,
                     itemType = stringResource(id = R.string.character_region_title),
                     itemValue = enemy.region!!
                 )
 
                 InfoItemWithIcon(
-                    icon = R.drawable.ic_baseline_person_24,
+                    icon = R.drawable.ic_user_svgrepo_com__1_,
                     itemType = "Type",
                     itemValue = enemy.type
                 )
@@ -83,7 +85,7 @@ fun ShowEnemyDetails(enemy: EnemyUIModel) {
 
         TextBlock(title = stringResource(id = R.string.enemy_materials_title))
         enemy.elements?.let {
-            ExpandableListWithIconsRow(
+            ExpandableList(
                 title = stringResource(id = R.string.enemy_vision_title),
                 itemsList = it,
                 rowContent = {
@@ -95,10 +97,32 @@ fun ShowEnemyDetails(enemy: EnemyUIModel) {
             )
         }
         ExpandableList(
-            title = "Drops",
+            title = stringResource(id = R.string.enemy_drops_title),
             itemsList = enemy.drops,
+            rowContent = {
+                enemy.drops.forEach { element ->
+                    ExpandableListIcon(
+                        element.imageUrl,
+                        element.imageUrlOnError
+                    )
+                }
+            },
             bodyContent = { element ->
-                ElementExpandableListItem(element = element as Element)
+                DropsExpandableListItem(element as DropUI)
+            }
+        )
+        ExpandableList(
+            title = stringResource(id = R.string.enemy_artifact_title),
+            itemsList = enemy.artifacts,
+            rowContent = {
+                enemy.artifacts.forEach { element ->
+                    ExpandableListIcon(
+                        element.imageUrl
+                    )
+                }
+            },
+            bodyContent = { element ->
+                ArtifactsExpandableListItem(element as ArtifactUI)
             }
         )
     }

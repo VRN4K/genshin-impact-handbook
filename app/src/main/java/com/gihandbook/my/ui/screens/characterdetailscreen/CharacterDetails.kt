@@ -93,7 +93,7 @@ fun ShowCharacterDetails(character: CharacterUIModel) {
             text = character.description
         )
         TextBlock(title = stringResource(id = R.string.talents_title))
-        ExpandableListWithIconsRow(
+        ExpandableList(
             stringResource(id = R.string.talent_skills_title),
             character.skillTalents,
             rowContent = {
@@ -104,7 +104,7 @@ fun ShowCharacterDetails(character: CharacterUIModel) {
             }
         )
 
-        ExpandableListWithIconsRow(
+        ExpandableList(
             stringResource(id = R.string.talent_passive_title),
             character.passiveTalents,
             rowContent = {
@@ -116,12 +116,9 @@ fun ShowCharacterDetails(character: CharacterUIModel) {
         )
         TextBlock(title = stringResource(id = R.string.constellation_title))
         ImageCard(character.constellationImageUrl, character.constellationTitle)
-        ExpandableListWithIconsRow(
+        ExpandableList(
             stringResource(id = R.string.constellations_title),
             character.constellations,
-            rowContent = {
-                character.constellations.forEach { constellation -> ExpandableListIcon(constellation.talentImageUrlId) }
-            },
             bodyContent = { constellation ->
                 SkillsExpandableListItem(characterTalent = constellation as CharacterTalent)
             }

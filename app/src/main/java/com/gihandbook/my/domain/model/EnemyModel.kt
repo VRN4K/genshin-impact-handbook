@@ -1,8 +1,5 @@
 package com.gihandbook.my.domain.model
 
-import com.gihandbook.my.data.net.model.Artifacts
-import com.gihandbook.my.data.net.model.Drops
-
 class EnemyUIModel(
     val name: String,
     val region: String?,
@@ -10,9 +7,24 @@ class EnemyUIModel(
     val description: String,
     val type: String,
     val elements: List<Element>?,
-    val drops: List<Drops>,
-    val artifacts: List<Artifacts>,
+    val drops: List<DropUI>,
+    val artifacts: List<ArtifactUI>,
     val moraGained: String
+)
+
+class DropUI(
+    val name: String,
+    val rarity: Int,
+    val minimum_level: Int,
+    val imageUrl: String,
+    val imageUrlOnError: String
+)
+
+class ArtifactUI(
+    val name: String,
+    val rarity: Int,
+    val set: String,
+    val imageUrl: String
 )
 
 class EnemyCardModel(
