@@ -20,7 +20,6 @@
     <string name="character_element_icon">https://api.genshin.dev/elements/%s/icon</string>
     <string name="character_enemy_card_image">https://api.genshin.dev/enemies/%s/icon</string>
 
-
     //Character Details
     <string name="character_gacha_splash_image">https://api.genshin.dev/characters/%s/gacha-splash</string>
     <string name="character_side_image">https://api.genshin.dev/characters/%s/icon-side</string>
@@ -32,6 +31,20 @@
     <string name="character_weapon_title">Weapon</string>
     <string name="character_rarity_title">Rarity</string>
     <string name="character_profile_title">Character profile</string>
+
+    //Enemy Details
+    <string name="enemy_portrait_image">https://api.genshin.dev/enemies/%s/portrait</string>
+    <string name="enemy_materials_title">Elements and materials</string>
+    <string name="enemy_vision_title">Elemental description</string>
+    <string name="enemy_mora_gained">Mora gained</string>
+    <string name="enemy_minimum_level">Minimum level: %s</string>
+    <string name="enemy_materials_common_ascension">https://api.genshin.dev/materials/common-ascension/%s</string>
+    <string name="enemy_rarity_title">Rarity:</string>
+    <string name="enemy_set_title">%s set</string>
+    <string name="enemy_artifact_set">https://api.genshin.dev/artifacts/%s/flower-of-life</string>
+    <string name="enemy_artifact_title">Artifacts</string>
+    <string name="enemy_drops_title">Drops</string>
+
 
     // Talents
     <string name="talents_title">Talents</string>

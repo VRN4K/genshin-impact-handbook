@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.gihandbook.my.R
+import com.gihandbook.my.domain.model.CharacterTalent
 import com.gihandbook.my.domain.model.CharacterUIModel
 import com.gihandbook.my.ui.snippets.*
 
@@ -93,70 +94,52 @@ fun ShowCharacterDetails(character: CharacterUIModel, onBackButtonClick: () -> U
                         itemType = stringResource(id = R.string.character_weapon_title)
                     )
 
-                    InfoItemWithIcon(
-                        icon = R.drawable.star,
-                        itemValue = character.rarity.toString(),
-                        itemType = stringResource(id = R.string.character_rarity_title),
-                        iconColor = Color(character.colorPalette.getDominantColor(MaterialTheme.colors.onPrimary.toArgb()))
-                    )
-                }
-            )
-            TextBlock(
-                title = stringResource(id = R.string.character_region_title),
-                text = character.region
-            )
-            TextBlock(
-                title = stringResource(id = R.string.character_description_title),
-                text = character.description
-            )
-            TextBlock(title = stringResource(id = R.string.talents_title))
-            SkillsExpandableList(
-                stringResource(id = R.string.talent_skills_title),
-                character.skillTalents
-            ) {
-                character.skillTalents.forEach {
-                    it.talentImageUrlId?.let { url ->
-                        AsyncImage(
-                            model = url,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(36.dp)
-                                .padding(horizontal = 4.dp)
-                        )
-                    }
-                }
+                InfoItemWithIcon(
+                    icon = R.drawable.star,
+                    itemValue = character.rarity.toString(),
+                    itemType = stringResource(id = R.string.character_rarity_title)
+                )
             }
-            SkillsExpandableList(
-                stringResource(id = R.string.talent_passive_title),
-                character.passiveTalents
-            ) {
-                character.passiveTalents.forEach {
-                    AsyncImage(
-                        model = it.talentImageUrlId,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(36.dp)
-                            .padding(horizontal = 4.dp)
-                    )
-                }
+        )
+        TextBlock(
+            title = stringResource(id = R.string.character_region_title),
+            text = character.region
+        )
+        TextBlock(
+            title = stringResource(id = R.string.character_description_title),
+            text = character.description
+        )
+        TextBlock(title = stringResource(id = R.string.talents_title))
+        ExpandableList(
+            stringResource(id = R.string.talent_skills_title),
+            character.skillTalents,
+            rowContent = {
+                character.skillTalents.forEach { talent -> ExpandableListIcon(talent.talentImageUrlId) }
+            },
+            bodyContent = { talent ->
+                SkillsExpandableListItem(characterTalent = talent as CharacterTalent)
             }
-            TextBlock(title = stringResource(id = R.string.constellation_title))
-            ImageCard(character.constellationImageUrl, character.constellationTitle)
-            SkillsExpandableList(
-                stringResource(id = R.string.constellations_title),
-                character.constellations
-            ) {
-                character.constellations.forEach {
-                    AsyncImage(
-                        model = it.talentImageUrlId,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(36.dp)
-                            .padding(horizontal = 4.dp)
-                    )
-                }
+        )
+
+        ExpandableList(
+            stringResource(id = R.string.talent_passive_title),
+            character.passiveTalents,
+            rowContent = {
+                character.passiveTalents.forEach { talent -> ExpandableListIcon(talent.talentImageUrlId) }
+            },
+            bodyContent = { talent ->
+                SkillsExpandableListItem(characterTalent = talent as CharacterTalent)
             }
-        }
+        )
+        TextBlock(title = stringResource(id = R.string.constellation_title))
+        ImageCard(character.constellationImageUrl, character.constellationTitle)
+        ExpandableList(
+            stringResource(id = R.string.constellations_title),
+            character.constellations,
+            bodyContent = { constellation ->
+                SkillsExpandableListItem(characterTalent = constellation as CharacterTalent)
+            }
+        )
     }
 }
 
@@ -242,16 +225,18 @@ fun InfoItemWithIcon(
 }
 
 @Composable
-fun IconWithText(title: String, icon: String) {
+fun IconWithText(title: String, icon: String?) {
     Row(
         modifier = Modifier.padding(top = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AsyncImage(
-            model = icon, contentDescription = null,
-            modifier = Modifier.size(48.dp),
-            colorFilter = ColorFilter.tint(Color.Black)
-        )
+        icon?.let {
+            AsyncImage(
+                model = icon, contentDescription = null,
+                modifier = Modifier.size(48.dp),
+                colorFilter = ColorFilter.tint(Color.Black)
+            )
+        }
         Text(
             text = title,
             style = MaterialTheme.typography.h1,

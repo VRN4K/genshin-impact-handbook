@@ -4,20 +4,19 @@ import android.content.res.Resources
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.RequestManager
 import com.gihandbook.my.R
-import com.gihandbook.my.data.net.model.Character
-import com.gihandbook.my.data.net.model.Enemy
-import com.gihandbook.my.data.net.model.toCardModel
-import com.gihandbook.my.data.net.model.toUI
+import com.gihandbook.my.data.net.model.*
 import com.gihandbook.my.domain.datacontracts.ICharacterInteractor
 import com.gihandbook.my.domain.datacontracts.ICharacterNetRepository
 import com.gihandbook.my.domain.model.CharacterCardModel
 import com.gihandbook.my.domain.model.CharacterUIModel
 import com.gihandbook.my.domain.model.Element
 import com.gihandbook.my.domain.model.EnemyCardModel
+import com.gihandbook.my.domain.model.*
 import javax.inject.Inject
 
 class CharacterInteractor @Inject constructor(
-    private val charactersNetRepository: ICharacterNetRepository
+    private val charactersNetRepository: ICharacterNetRepository,
+    private val resources: Resources
 ) : ICharacterInteractor {
 
     @Inject
@@ -42,6 +41,14 @@ class CharacterInteractor @Inject constructor(
                     resources.getString(R.string.character_card_image, name),
                     resources.getString(R.string.character_card_image_on_error, name),
                     resources.getString(
+                        R.string.character_card_image,
+                        name.lowercase()
+                    ),
+                    resources.getString(
+                        R.string.character_card_image_on_error,
+                        name.lowercase()
+                    ),
+                    resources.getString(
                         R.string.character_element_icon_image,
                         character.vision.lowercase()
                     )
@@ -59,6 +66,10 @@ class CharacterInteractor @Inject constructor(
         ).submit().get()
 
         return character.toUI(name, resources, Palette.from(elementBitmap).generate())
+    }
+
+    override suspend fun getEnemyDetailInformation(name: String): EnemyUIModel {
+        return charactersNetRepository.getEnemyByName(name).toUIModel(resources)
     }
 
     override suspend fun getEnemyByName(name: String): Enemy {
