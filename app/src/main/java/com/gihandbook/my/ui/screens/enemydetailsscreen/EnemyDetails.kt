@@ -83,13 +83,15 @@ fun ShowEnemyDetailsContent(enemy: EnemyUIModel, onBackButtonClick: () -> Unit) 
                     InfoItemWithIcon(
                         icon = R.drawable.ic_map_svgrepo_com,
                         itemType = stringResource(id = R.string.character_region_title),
-                        itemValue = enemy.region!!
+                        itemValue = enemy.region!!,
+                        iconColor = MaterialTheme.colors.primary
                     )
 
                     InfoItemWithIcon(
                         icon = R.drawable.ic_user_svgrepo_com__1_,
                         itemType = "Type",
-                        itemValue = enemy.type
+                        itemValue = enemy.type,
+                        iconColor = MaterialTheme.colors.primary
                     )
 
                     InfoItemWithIcon(
@@ -98,12 +100,12 @@ fun ShowEnemyDetailsContent(enemy: EnemyUIModel, onBackButtonClick: () -> Unit) 
                         itemValue = enemy.moraGained
                     )
                 })
-
-            TextBlock(
-                title = stringResource(id = R.string.character_description_title),
-                text = enemy.description
-            )
-
+            enemy.description?.let {
+                TextBlock(
+                    title = stringResource(id = R.string.character_description_title),
+                    text = enemy.description
+                )
+            }
             TextBlock(title = stringResource(id = R.string.enemy_materials_title))
             enemy.elements?.let {
                 ExpandableList(

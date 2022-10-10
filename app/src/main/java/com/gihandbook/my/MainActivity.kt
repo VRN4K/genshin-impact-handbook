@@ -32,6 +32,7 @@ import com.gihandbook.my.ui.screens.navigation.NavigationActions
 import com.gihandbook.my.ui.snippets.*
 import com.gihandbook.my.ui.theme.GIHandbookTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,7 +42,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val systemUiController = rememberSystemUiController()
             GIHandbookTheme {
+                systemUiController.setSystemBarsColor(MaterialTheme.colors.onPrimary)
                 MainScreen()
             }
         }

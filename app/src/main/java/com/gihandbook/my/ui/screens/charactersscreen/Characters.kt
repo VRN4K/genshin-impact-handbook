@@ -58,6 +58,7 @@ fun CharactersScreen(
             ShowScreenContent(viewModel, actions)
             ShowFilterBlock(viewModel)
             ShowSearchView(
+                initialSearchValue = viewModel.searchQuery.value,
                 isShow = viewModel.isSearchShown.value,
                 onSearchButtonClick = { viewModel.onSystemSearchButtonClick(it) },
                 onClearButtonClick = { viewModel.onClearButtonClick() }
@@ -94,6 +95,7 @@ fun ShowFilterBlock(viewModel: CharactersScreenViewModel) {
 @Composable
 fun ShowSearchView(
     isShow: Boolean,
+    initialSearchValue: String,
     onSearchButtonClick: (searchText: String) -> Unit,
     onClearButtonClick: () -> Unit
 ) {
@@ -103,6 +105,7 @@ fun ShowSearchView(
         exit = fadeOut(animationSpec = tween(800))
     ) {
         SearchView(
+            initialSearchValue = initialSearchValue,
             onSearchButtonClick = { onSearchButtonClick(it) },
             onClearButtonClick = { onClearButtonClick() })
     }

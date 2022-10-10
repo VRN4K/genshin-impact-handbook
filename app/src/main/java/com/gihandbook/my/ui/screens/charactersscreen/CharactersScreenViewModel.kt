@@ -28,6 +28,8 @@ class CharactersScreenViewModel @Inject constructor(
     var selectedCharactersWeaponType = mutableStateOf<String?>(null)
     var selectedCharactersVision = mutableStateOf<String?>(null)
 
+    val searchQuery = mutableStateOf("")
+
     val characterState = StateLiveData<List<CharacterCardModel>>()
     val enemiesState = StateLiveData<List<CharacterCardModel>>()
 
@@ -104,6 +106,7 @@ class CharactersScreenViewModel @Inject constructor(
     }
 
     fun onSystemSearchButtonClick(searchText: String) {
+        searchQuery.value = searchText
         (if (this.selectedTab.value == TabPagesCharacters.CHARACTERS) charactersFromServer else enemiesFromServer).filter {
             it.name.contains(searchText, true) || it.region.contains(searchText, true)
         }.showCharacters()
@@ -117,8 +120,10 @@ class CharactersScreenViewModel @Inject constructor(
 
     fun onClearButtonClick() {
         if (selectedTab.value == TabPagesCharacters.CHARACTERS) {
+            searchQuery.value = ""
             characterState.postComplete(charactersFromServer)
         } else {
+            searchQuery.value = ""
             selectedEnemiesVision.clear()
             enemiesState.postComplete(enemiesFromServer)
         }

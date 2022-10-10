@@ -38,38 +38,26 @@ fun AppBarWithPager(
         elevation = 0.dp,
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp)
-                    .padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+            AppBarWithSidesButton(title = title, leftButton = {
                 IconButton(
                     onClick = { onFilterClick() }
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_round_filter_list_24),
+                        painter = painterResource(id = R.drawable.ic_filter_svgrepo_com),
                         colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
-                        contentDescription = null,
-                        modifier = Modifier.padding(0.dp)
-                    )
-                }
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.h2,
-                    color = MaterialTheme.colors.primary,
-                    modifier = Modifier.padding(vertical = 4.dp)
-                )
-                IconButton(onClick = { onSearchClick() }) {
-                    Image(
-                        imageVector = Icons.Outlined.Search,
-                        colorFilter = ColorFilter.tint(Color.Black),
                         contentDescription = null
                     )
                 }
-            }
+            },
+                rightButton = {
+                    IconButton(onClick = { onSearchClick() }) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_search_svgrepo_com__4_),
+                            colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
+                            contentDescription = null
+                        )
+                    }
+                })
             TabBar(selectedTabIndex = selectedTabIndex, onSelectedTab = { onSelectedTab(it) })
         }
     }
@@ -82,18 +70,17 @@ fun AppBarWithSidesButton(
     rightButton: @Composable () -> Unit
 ) {
     TopAppBar(
-        backgroundColor = Color.Transparent, //MaterialTheme.colors.onPrimary,
+        backgroundColor = Color.Transparent,
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .padding(horizontal = 8.dp)
-            .padding(vertical = 8.dp),
+            .padding(horizontal = 8.dp),
         elevation = 0.dp,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 4.dp, bottom = 8.dp)
+                .padding(top = 4.dp)
                 .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -104,7 +91,7 @@ fun AppBarWithSidesButton(
                 style = MaterialTheme.typography.h2,
                 color = MaterialTheme.colors.primary,
                 modifier = Modifier
-                    .padding(top = 4.dp, bottom = 4.dp)
+                    .padding(top = 4.dp)
             )
             rightButton.invoke()
         }

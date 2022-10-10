@@ -1,6 +1,8 @@
 package com.gihandbook.my.ui.snippets
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.animate
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,6 +10,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,6 +28,7 @@ import com.gihandbook.my.domain.model.Element
 fun ExpandableList(
     title: String,
     itemsList: List<Any>,
+    arrowColor: Color? = null,
     rowContent: (@Composable () -> Unit)? = null,
     bodyContent: @Composable (Any) -> Unit
 ) {
@@ -39,16 +44,27 @@ fun ExpandableList(
         elevation = 2.dp
     ) {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            AnimatedContent(
+                targetState = isClicked,
+                transitionSpec = { animationVerticalSideInAndOut(1000) }) { isClicked ->
+                Image(
+                    painter = painterResource(
+                        id = if (isClicked) R.drawable.ic_chevron_up_svgrepo_com else R.drawable.ic_chevron_down_svgrepo_com
+                    ),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(arrowColor ?: MaterialTheme.colors.primary),
+                    modifier = Modifier.padding(horizontal = 12.dp)
+                )
+
+            }
             Text(
                 text = title,
                 style = MaterialTheme.typography.h2,
-                modifier = Modifier
-                    .padding(start = 12.dp)
-                    .padding(vertical = 16.dp)
+                modifier = Modifier.padding(vertical = 16.dp)
             )
+            Spacer(modifier = Modifier.weight(1f))
             rowContent?.let {
                 Row(modifier = Modifier.padding(horizontal = 16.dp)) {
                     it.invoke()

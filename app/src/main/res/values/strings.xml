@@ -7,7 +7,7 @@
 
     //Search
     <string name="search_character_not_found">No relevant character found</string>
-    <string name="search_searchview_text">Text for searching</string>
+    <string name="search_searchview_text">Name or region for search</string>
 
     //Filter
     <string name="filter_title_weapon_type">Weapon type</string>
@@ -35,7 +35,7 @@
     //Enemy Details
     <string name="enemy_portrait_image">https://api.genshin.dev/enemies/%s/portrait</string>
     <string name="enemy_materials_title">Elements and materials</string>
-    <string name="enemy_vision_title">Elemental description</string>
+    <string name="enemy_vision_title">Elements</string>
     <string name="enemy_mora_gained">Mora gained</string>
     <string name="enemy_minimum_level">Minimum level: %s</string>
     <string name="enemy_materials_common_ascension">https://api.genshin.dev/materials/common-ascension/%s</string>

@@ -52,7 +52,11 @@ fun CharacterDetailsScreen(
 
 @Composable
 fun ShowCharacterDetails(character: CharacterUIModel, onBackButtonClick: () -> Unit) {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 12.dp)
+    ) {
         IconButton(
             onClick = onBackButtonClick, modifier = Modifier
                 .padding(8.dp)
@@ -243,7 +247,7 @@ fun IconWithText(title: String, icon: String?) {
             AsyncImage(
                 model = icon, contentDescription = null,
                 modifier = Modifier.size(48.dp),
-                colorFilter = ColorFilter.tint(Color.Black)
+                colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
             )
         }
         Text(
