@@ -145,3 +145,7 @@ class CharactersScreenViewModel @Inject constructor(
         if (isSearchShown.value) isFilterShown.value = false
     }
 }
+
+enum class FilterItemsType {
+    WEAPON_TYPE, VISION
+}

@@ -111,9 +111,7 @@ fun ShowSearchView(
     }
 }
 
-enum class FilterItemsType {
-    WEAPON_TYPE, VISION
-}
+
 
 @Composable
 fun ShowScreenContent(
