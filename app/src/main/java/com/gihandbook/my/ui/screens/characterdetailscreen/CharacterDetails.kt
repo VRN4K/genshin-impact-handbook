@@ -31,9 +31,7 @@ fun CharacterDetailsScreen(
     viewModel: CharacterDetailScreenViewModel = hiltViewModel()
 ) {
     viewModel.setInitSettings(characterName)
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-    ) { insets ->
+    Scaffold(modifier = Modifier.fillMaxSize()) { insets ->
         Box(
             modifier = Modifier
                 .padding(insets)
@@ -71,7 +69,6 @@ fun ShowCharacterDetails(character: CharacterUIModel, onBackButtonClick: () -> U
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
                 .fillMaxWidth()
         ) {
             AsyncImage(

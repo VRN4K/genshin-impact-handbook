@@ -66,7 +66,7 @@ fun Character.toUI(id: String, resources: Resources, palette: Palette): Characte
                 it.name,
                 it.unlock,
                 it.description,
-                it.type?.let { it1 -> resources.getString(it1.imageUrlId, id) }
+                it.type?.let { skillType -> resources.getString(skillType.imageUrlId, id) }
             )
         },
         passiveTalents = passiveTalents.map {
