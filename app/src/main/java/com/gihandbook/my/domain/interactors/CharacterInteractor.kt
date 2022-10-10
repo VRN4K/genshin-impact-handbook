@@ -28,8 +28,8 @@ class CharacterInteractor @Inject constructor(
         return charactersNetRepository.getPlayableCharacterByName(name)
     }
 
-    override suspend fun getHeroesList(): List<CharacterCardModel> {
-        val characters = mutableListOf<CharacterCardModel>()
+    override suspend fun getHeroesList(): List<HeroCardModel> {
+        val characters = mutableListOf<HeroCardModel>()
 
         charactersNetRepository.getPlayableCharacters().onEach { name ->
             val character = charactersNetRepository.getPlayableCharacterByName(name)

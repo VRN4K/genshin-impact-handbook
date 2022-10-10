@@ -17,8 +17,8 @@ class CharactersScreenViewModel @Inject constructor(
     private val characterInteractor: ICharacterInteractor
 ) :
     BaseViewModel() {
-    private var charactersFromServer = emptyList<CharacterCardModel>()
-    private var enemiesFromServer = emptyList<CharacterCardModel>()
+    private var charactersFromServer = emptyList<HeroCardModel>()
+    private var enemiesFromServer = emptyList<EnemyCardModel>()
 
     var selectedTab = mutableStateOf(TabPagesCharacters.CHARACTERS)
     var isFilterShown = mutableStateOf(false)
@@ -61,7 +61,7 @@ class CharactersScreenViewModel @Inject constructor(
         }
 
         characterState.postComplete(
-            (charactersFromServer as List<HeroCardModel>).filter(
+            filterHeroesByWeaponAndElement(
                 selectedCharactersWeaponType.value?.let { WeaponType.valueOf(it.uppercase()) },
                 selectedCharactersVision.value?.let { Vision.valueOf(it) }
             )
@@ -77,29 +77,33 @@ class CharactersScreenViewModel @Inject constructor(
             else -> onClearButtonClick()
         }
 
-        enemiesState.postComplete((enemiesFromServer as List<EnemyCardModel>).filter(this.selectedEnemiesVision))
+        enemiesState.postComplete(filterEnemiesByElementsList(this.selectedEnemiesVision))
     }
 
-    private fun List<HeroCardModel>.filter(
+    private fun filterHeroesByWeaponAndElement(
         weaponType: WeaponType? = null,
         element: Vision? = null
     ): List<HeroCardModel> {
-        return when {
-            weaponType != null && element == null -> filter { character -> character.weaponType == weaponType }
-            weaponType == null && element != null -> filter { character -> character.element.name == element.name }
-            weaponType != null && element != null -> filter { character ->
-                character.weaponType == weaponType && character.element.name == element.name
+        charactersFromServer.apply {
+            return when {
+                weaponType != null && element == null -> filter { character -> character.weaponType == weaponType }
+                weaponType == null && element != null -> filter { character -> character.element.name == element.name }
+                weaponType != null && element != null -> filter { character ->
+                    character.weaponType == weaponType && character.element.name == element.name
+                }
+                else -> this
             }
-            else -> this
         }
     }
 
-    private fun List<EnemyCardModel>.filter(filteredElementList: List<String>): List<EnemyCardModel> {
-        return when {
-            filteredElementList.isNotEmpty() -> filter { enemy ->
-                enemy.element.map { it.name }.contains(filteredElementList)
+    private fun filterEnemiesByElementsList(filteredElementList: List<String>): List<EnemyCardModel> {
+        enemiesFromServer.apply {
+            return when {
+                filteredElementList.isNotEmpty() -> filter { enemy ->
+                    enemy.element.map { it.name }.contains(filteredElementList)
+                }
+                else -> this
             }
-            else -> this
         }
     }
 

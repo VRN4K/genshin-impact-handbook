@@ -9,7 +9,7 @@ import com.gihandbook.my.domain.model.*
 
 interface ICharacterInteractor {
     suspend fun getHeroByName(name: String): Character
-    suspend fun getHeroesList(): List<CharacterCardModel>
+    suspend fun getHeroesList(): List<HeroCardModel>
     suspend fun getHeroDetailInformation(name: String): CharacterUIModel
     suspend fun getEnemyDetailInformation(name: String): EnemyUIModel
     suspend fun getEnemyByName(name: String): Enemy
