@@ -112,16 +112,12 @@ fun ShowSearchView(
 }
 
 
-
 @Composable
 fun ShowScreenContent(
     viewModel: CharactersScreenViewModel,
     actions: NavigationActions
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         if (viewModel.selectedTab.value == TabPagesCharacters.CHARACTERS) {
             ShowContent(
                 stateLiveData = viewModel.characterState,
@@ -197,8 +193,9 @@ fun CharacterCard(
                     .background(ImagesBackgroundColorLight)
             )
             Column(
-                modifier =
-                Modifier.padding(top = 4.dp, start = 12.dp, bottom = 4.dp)
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .padding(start = 12.dp)
             ) {
                 Text(
                     modifier = Modifier.padding(top = 4.dp, start = 4.dp),
