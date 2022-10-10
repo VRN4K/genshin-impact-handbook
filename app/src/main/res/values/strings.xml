@@ -1,3 +1,73 @@
 <resources>
     <string name="app_name">GI Handbook</string>
+
+    <string name="screen_title_characters">Characters</string>
+    <string name="pager_title_heroes">Heroes</string>
+    <string name="pager_title_enemies">Enemies</string>
+
+    //Search
+    <string name="search_character_not_found">No relevant character found</string>
+    <string name="search_searchview_text">Name or region for search</string>
+
+    //Filter
+    <string name="filter_title_weapon_type">Weapon type</string>
+    <string name="filter_title_vision">Vision</string>
+    <string name="filter_reset_button_title">Reset</string>
+
+    //Character list
+    <string name="character_card_image">https://api.genshin.dev/characters/%s/icon-big</string>
+    <string name="character_card_image_on_error">https://api.genshin.dev/characters/%s/icon</string>
+    <string name="character_element_icon">https://api.genshin.dev/elements/%s/icon</string>
+    <string name="character_enemy_card_image">https://api.genshin.dev/enemies/%s/icon</string>
+
+    //Character Details
+    <string name="character_gacha_splash_image">https://api.genshin.dev/characters/%s/gacha-splash</string>
+    <string name="character_side_image">https://api.genshin.dev/characters/%s/icon-side</string>
+    <string name="character_portrait_image">https://api.genshin.dev/characters/%s/portrait</string>
+    <string name="character_element_icon_image">https://api.genshin.dev/elements/%s/icon</string>
+    <string name="character_region_title">Region</string>
+    <string name="character_description_title">About</string>
+    <string name="character_vision_title">Vision</string>
+    <string name="character_weapon_title">Weapon</string>
+    <string name="character_rarity_title">Rarity</string>
+    <string name="character_profile_title">Character profile</string>
+
+    //Enemy Details
+    <string name="enemy_portrait_image">https://api.genshin.dev/enemies/%s/portrait</string>
+    <string name="enemy_materials_title">Elements and materials</string>
+    <string name="enemy_vision_title">Elements</string>
+    <string name="enemy_mora_gained">Mora gained</string>
+    <string name="enemy_minimum_level">Minimum level: %s</string>
+    <string name="enemy_materials_common_ascension">https://api.genshin.dev/materials/common-ascension/%s</string>
+    <string name="enemy_rarity_title">Rarity:</string>
+    <string name="enemy_set_title">%s set</string>
+    <string name="enemy_artifact_set">https://api.genshin.dev/artifacts/%s/flower-of-life</string>
+    <string name="enemy_artifact_title">Artifacts</string>
+    <string name="enemy_drops_title">Drops</string>
+
+
+    // Talents
+    <string name="talents_title">Talents</string>
+    <string name="talent_skills_title">Skill Talents</string>
+    <string name="talent_elemental_skill">https://api.genshin.dev/characters/%s/talent-skill</string>
+    <string name="talent_normal_attack">https://api.genshin.dev/characters/%s/talent-na</string>
+    <string name="talent_elemental_burst">https://api.genshin.dev/characters/%s/talent-burst</string>
+    <string name="talent_right_click">https://api.genshin.dev/characters/%s/talent-passive-misc</string>
+
+    <string name="talent_passive_title">Passive Talents</string>
+    <string name="talent_1st_ascension_passive">https://api.genshin.dev/characters/%s/talent-passive-1</string>
+    <string name="talent_4st_ascension_passive">https://api.genshin.dev/characters/%s/talent-passive-2</string>
+    <string name="talent_utility_passive">https://api.genshin.dev/characters/%s/talent-passive-0</string>
+
+    // Constellations
+    <string name="constellation_skills_title">Skills</string>
+    <string name="constellation_title">Constellation</string>
+    <string name="constellations_title">Constellations</string>
+    <string name="constellation_star_map">https://api.genshin.dev/characters/%s/constellation</string>
+    <string name="constellation_level_1">https://api.genshin.dev/characters/%s/constellation-1</string>
+    <string name="constellation_level_2">https://api.genshin.dev/characters/%s/constellation-2</string>
+    <string name="constellation_level_3">https://api.genshin.dev/characters/%s/constellation-3</string>
+    <string name="constellation_level_4">https://api.genshin.dev/characters/%s/constellation-4</string>
+    <string name="constellation_level_5">https://api.genshin.dev/characters/%s/constellation-5</string>
+    <string name="constellation_level_6">https://api.genshin.dev/characters/%s/constellation-6</string>
 </resources>
