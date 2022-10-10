@@ -175,6 +175,7 @@ fun CharacterCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .heightIn(max = 104.dp)
             .clickable { onCardClick.invoke() },
         shape = RoundedCornerShape(12.dp),
         backgroundColor = MaterialTheme.colors.onPrimary,

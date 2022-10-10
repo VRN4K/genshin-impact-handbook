@@ -8,7 +8,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
@@ -160,8 +159,7 @@ fun ImageCard(imageUrl: String, title: String?) {
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         shape = RoundedCornerShape(12.dp),
-        backgroundColor = MaterialTheme.colors.onPrimary,
-        elevation = 1.dp
+        backgroundColor = MaterialTheme.colors.onPrimary
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),

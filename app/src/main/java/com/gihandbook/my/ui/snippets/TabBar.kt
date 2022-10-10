@@ -1,11 +1,10 @@
 package com.gihandbook.my.ui.snippets
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,39 +26,35 @@ fun AppBarWithPager(
     onFilterClick: () -> Unit,
     onSearchClick: () -> Unit
 ) {
-    TopAppBar(
-        backgroundColor = MaterialTheme.colors.onPrimary,
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(94.dp)
-            .clip(RoundedCornerShape(16.dp))
             .padding(horizontal = 8.dp)
-            .padding(top = 8.dp, bottom = 4.dp),
-        elevation = 0.dp,
+            .padding(top = 6.dp, bottom = 4.dp)
+            .background(MaterialTheme.colors.onPrimary, RoundedCornerShape(4.dp))
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            AppBarWithSidesButton(title = title, leftButton = {
-                IconButton(
-                    onClick = { onFilterClick() }
-                ) {
+        AppBarWithSidesButton(title = title, leftButton = {
+            IconButton(
+                onClick = { onFilterClick() }
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_filter_svgrepo_com),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
+                    contentDescription = null
+                )
+            }
+        },
+            rightButton = {
+                IconButton(onClick = { onSearchClick() }) {
                     Image(
-                        painter = painterResource(id = R.drawable.ic_filter_svgrepo_com),
+                        painter = painterResource(id = R.drawable.ic_search_svgrepo_com__4_),
                         colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
                         contentDescription = null
                     )
                 }
-            },
-                rightButton = {
-                    IconButton(onClick = { onSearchClick() }) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_search_svgrepo_com__4_),
-                            colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
-                            contentDescription = null
-                        )
-                    }
-                })
-            TabBar(selectedTabIndex = selectedTabIndex, onSelectedTab = { onSelectedTab(it) })
-        }
+            })
+        TabBar(selectedTabIndex = selectedTabIndex, onSelectedTab = { onSelectedTab(it) })
     }
 }
 
@@ -90,8 +85,7 @@ fun AppBarWithSidesButton(
                 text = title,
                 style = MaterialTheme.typography.h2,
                 color = MaterialTheme.colors.primary,
-                modifier = Modifier
-                    .padding(top = 4.dp)
+                modifier = Modifier.padding(top = 4.dp)
             )
             rightButton.invoke()
         }
@@ -101,11 +95,7 @@ fun AppBarWithSidesButton(
 @ExperimentalPagerApi
 @Composable
 fun TabBar(selectedTabIndex: Int, onSelectedTab: (TabPagesCharacters) -> Unit) {
-    TabRow(
-        selectedTabIndex = selectedTabIndex,
-        backgroundColor = MaterialTheme.colors.onPrimary,
-        modifier = Modifier
-    ) {
+    TabRow(selectedTabIndex = selectedTabIndex, backgroundColor = MaterialTheme.colors.onPrimary) {
         TabPagesCharacters.values().forEachIndexed { index, tabPagesCharacters ->
             Tab(
                 selected = index == selectedTabIndex,

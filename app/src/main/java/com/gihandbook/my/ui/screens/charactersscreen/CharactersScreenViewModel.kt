@@ -61,7 +61,7 @@ class CharactersScreenViewModel @Inject constructor(
         }
 
         characterState.postComplete(
-            charactersFromServer.filter(
+            (charactersFromServer as List<HeroCardModel>).filter(
                 selectedCharactersWeaponType.value?.let { WeaponType.valueOf(it.uppercase()) },
                 selectedCharactersVision.value?.let { Vision.valueOf(it) }
             )
@@ -77,14 +77,13 @@ class CharactersScreenViewModel @Inject constructor(
             else -> onClearButtonClick()
         }
 
-        enemiesState.postComplete(enemiesFromServer.filter(this.selectedEnemiesVision))
+        enemiesState.postComplete((enemiesFromServer as List<EnemyCardModel>).filter(this.selectedEnemiesVision))
     }
 
-    private fun List<CharacterCardModel>.filter(
+    private fun List<HeroCardModel>.filter(
         weaponType: WeaponType? = null,
         element: Vision? = null
     ): List<HeroCardModel> {
-        this as List<HeroCardModel>
         return when {
             weaponType != null && element == null -> filter { character -> character.weaponType == weaponType }
             weaponType == null && element != null -> filter { character -> character.element.name == element.name }
@@ -95,8 +94,7 @@ class CharactersScreenViewModel @Inject constructor(
         }
     }
 
-    private fun List<CharacterCardModel>.filter(filteredElementList: List<String>): List<EnemyCardModel> {
-        this as List<EnemyCardModel>
+    private fun List<EnemyCardModel>.filter(filteredElementList: List<String>): List<EnemyCardModel> {
         return when {
             filteredElementList.isNotEmpty() -> filter { enemy ->
                 enemy.element.map { it.name }.contains(filteredElementList)
