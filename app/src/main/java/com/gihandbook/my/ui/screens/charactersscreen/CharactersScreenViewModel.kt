@@ -15,8 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CharactersScreenViewModel @Inject constructor(
     private val characterInteractor: ICharacterInteractor
-) :
-    BaseViewModel() {
+) : BaseViewModel() {
+
     private var charactersFromServer = emptyList<HeroCardModel>()
     private var enemiesFromServer = emptyList<EnemyCardModel>()
 

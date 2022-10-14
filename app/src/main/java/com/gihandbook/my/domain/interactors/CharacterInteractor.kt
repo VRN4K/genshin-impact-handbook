@@ -7,7 +7,6 @@ import com.gihandbook.my.R
 import com.gihandbook.my.data.net.model.*
 import com.gihandbook.my.domain.datacontracts.ICharacterInteractor
 import com.gihandbook.my.domain.datacontracts.ICharacterNetRepository
-import com.gihandbook.my.domain.model.CharacterCardModel
 import com.gihandbook.my.domain.model.CharacterUIModel
 import com.gihandbook.my.domain.model.Element
 import com.gihandbook.my.domain.model.EnemyCardModel

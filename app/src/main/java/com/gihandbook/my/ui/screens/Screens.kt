@@ -24,5 +24,7 @@ sealed class Screens(val route: String) {
         fun setName(name: String) =
             this.route.replace(oldValue = "{$ENEMY_NAME}", newValue = name)
     }
+
+    object Weapons : Screens("weapon")
 }
 

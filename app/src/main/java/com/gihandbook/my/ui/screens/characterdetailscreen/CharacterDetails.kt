@@ -193,44 +193,7 @@ fun ImageCard(imageUrl: String, title: String?) {
     }
 }
 
-@Composable
-fun InfoItemWithIcon(
-    icon: Int? = null,
-    iconUrl: String? = null,
-    itemValue: String,
-    itemType: String,
-    iconColor: Color? = null
-) {
-    Row(
-        modifier = Modifier.padding(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        icon?.let {
-            Image(
-                painter = painterResource(id = it),
-                contentDescription = null,
-                modifier = Modifier.size(30.dp),
-                colorFilter = iconColor?.let { it1 -> ColorFilter.tint(it1) }
-            )
-        }
 
-        iconUrl?.let {
-            AsyncImage(
-                model = it,
-                modifier = Modifier
-                    .sizeIn(minHeight = 30.dp, maxHeight = 30.dp),
-                contentDescription = null
-            )
-        }
-        Column(
-            modifier = Modifier.padding(start = 4.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = itemValue, style = MaterialTheme.typography.h3)
-            Text(text = itemType, style = MaterialTheme.typography.h5)
-        }
-    }
-}
 
 @Composable
 fun IconWithText(title: String, icon: String?) {

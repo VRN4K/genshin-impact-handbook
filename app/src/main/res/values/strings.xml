@@ -70,4 +70,9 @@
     <string name="constellation_level_4">https://api.genshin.dev/characters/%s/constellation-4</string>
     <string name="constellation_level_5">https://api.genshin.dev/characters/%s/constellation-5</string>
     <string name="constellation_level_6">https://api.genshin.dev/characters/%s/constellation-6</string>
+
+    //Weapons
+    <string name="weapon_icon_url">https://api.genshin.dev/weapons/%s/icon</string>
+    <string name="weapon_base_atk">Base ATK: %s</string>
+    <string name="weapon_screen_title">Weapons</string>
 </resources>

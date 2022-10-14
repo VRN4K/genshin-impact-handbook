@@ -1,8 +1,6 @@
 package com.gihandbook.my.ui.snippets
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
@@ -227,7 +226,6 @@ fun ArtifactsExpandableListItem(artifact: ArtifactUI) {
     }
 }
 
-
 @Composable
 fun ExpandableListIcon(iconUrl: String, iconOnError: String? = null) {
     AsyncImage(
@@ -241,20 +239,26 @@ fun ExpandableListIcon(iconUrl: String, iconOnError: String? = null) {
 }
 
 @Composable
-fun RarityIcons(count: Int) {
-    Row {
-        Text(
-            text = stringResource(id = R.string.enemy_rarity_title),
-            style = MaterialTheme.typography.h4,
-            color = MaterialTheme.colors.secondary,
-            modifier = Modifier.padding(bottom = 4.dp, end = 4.dp)
-        )
+fun RarityIcons(
+    count: Int,
+    title: String? = stringResource(id = R.string.enemy_rarity_title),
+    starsSize: Dp = 12.dp
+) {
+    Row(modifier = Modifier.padding(2.dp)) {
+        title?.let {
+            Text(
+                text = it,
+                style = MaterialTheme.typography.h4,
+                color = MaterialTheme.colors.secondary,
+                modifier = Modifier.padding(bottom = 4.dp, end = 4.dp)
+            )
+        }
         for (star in 0 until count) {
             Image(
                 painter = painterResource(id = R.drawable.star),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(12.dp)
+                    .size(starsSize)
                     .align(Alignment.CenterVertically)
             )
         }

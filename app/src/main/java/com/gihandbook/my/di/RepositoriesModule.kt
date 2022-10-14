@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.res.Resources
 import com.bumptech.glide.Glide
 import com.gihandbook.my.data.net.repositories.CharactersNetRepository
+import com.gihandbook.my.data.net.repositories.WeaponsNetRepository
 import com.gihandbook.my.domain.datacontracts.ICharacterNetRepository
+import com.gihandbook.my.domain.datacontracts.IWeaponNetRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,4 +38,8 @@ class RepositoriesModule {
     fun provideCharactersRepository(httpClient: HttpClient): ICharacterNetRepository =
         CharactersNetRepository(httpClient)
 
+    @Provides
+    @Singleton
+    fun provideWeaponRepository(httpClient: HttpClient): IWeaponNetRepository =
+        WeaponsNetRepository(httpClient)
 }

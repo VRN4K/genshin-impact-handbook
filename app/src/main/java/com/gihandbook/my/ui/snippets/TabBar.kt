@@ -15,6 +15,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.gihandbook.my.R
+import com.gihandbook.my.ui.screens.navigation.NavigationActions
+import com.gihandbook.my.ui.screens.navigation.NavigationItems
+import com.gihandbook.my.ui.theme.TextSecondaryDark
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 @ExperimentalPagerApi
@@ -30,8 +33,6 @@ fun AppBarWithPager(
         modifier = Modifier
             .fillMaxWidth()
             .height(94.dp)
-            .padding(horizontal = 8.dp)
-            .padding(top = 6.dp, bottom = 4.dp)
             .background(MaterialTheme.colors.onPrimary, RoundedCornerShape(4.dp))
     ) {
         AppBarWithSidesButton(title = title, leftButton = {
@@ -68,8 +69,9 @@ fun AppBarWithSidesButton(
         backgroundColor = Color.Transparent,
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .padding(horizontal = 8.dp),
+            .background(MaterialTheme.colors.onPrimary, RoundedCornerShape(4.dp))
+            .padding(horizontal = 8.dp)
+            .padding(top = 6.dp, bottom = 4.dp),
         elevation = 0.dp,
     ) {
         Row(
@@ -105,6 +107,33 @@ fun TabBar(selectedTabIndex: Int, onSelectedTab: (TabPagesCharacters) -> Unit) {
                         text = stringResource(id = tabPagesCharacters.tabTitle),
                         style = MaterialTheme.typography.h2
                     )
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun BottomNavigation(navItems: List<NavigationItems>, actions: NavigationActions) {
+    BottomNavigation(
+        backgroundColor = MaterialTheme.colors.onPrimary,
+        contentColor = MaterialTheme.colors.primary
+    ) {
+        navItems.forEach { item ->
+            BottomNavigationItem(
+                icon = {
+                    Icon(
+                        painter = painterResource(id = item.icon),
+                        contentDescription = null
+                    )
+                },
+                label = { Text(text = item.title) },
+                selectedContentColor = TextSecondaryDark,
+                unselectedContentColor = MaterialTheme.colors.primary,
+                alwaysShowLabel = true,
+                selected = actions.currentRoute() == item.route,
+                onClick = {
+                    actions.newRootScreen(item.route)
                 }
             )
         }

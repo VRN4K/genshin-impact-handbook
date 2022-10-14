@@ -24,4 +24,10 @@ class NavigationActions(private val navController: NavController) {
     val navigateTo: (route: String) -> Unit = {
         navController.navigate(it)
     }
+
+
+    val currentRoute: () -> String? = {
+        navController.currentBackStackEntry?.destination?.route
+    }
+
 }

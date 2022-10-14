@@ -28,6 +28,7 @@ import com.gihandbook.my.R
 import com.gihandbook.my.domain.model.*
 import com.gihandbook.my.ui.screens.Screens
 import com.gihandbook.my.ui.screens.navigation.NavigationActions
+import com.gihandbook.my.ui.screens.navigation.NavigationItems
 import com.gihandbook.my.ui.snippets.*
 import com.gihandbook.my.ui.theme.ImagesBackgroundColorLight
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -48,7 +49,8 @@ fun CharactersScreen(
                 onFilterClick = { viewModel.onFilterClick() },
                 onSearchClick = { viewModel.onSearchButtonClick() }
             )
-        }
+        },
+        bottomBar = { BottomNavigation(NavigationItems.values().asList(), actions) }
     ) { insets ->
         Box(
             modifier = Modifier
@@ -137,8 +139,9 @@ fun ShowCharacters(
     actions: NavigationActions
 ) {
     LazyColumn(
+        modifier = Modifier.padding(vertical = 4.dp),
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 3.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(items = characters, itemContent = { item ->
             if (tabPagesCharacters == TabPagesCharacters.CHARACTERS) {

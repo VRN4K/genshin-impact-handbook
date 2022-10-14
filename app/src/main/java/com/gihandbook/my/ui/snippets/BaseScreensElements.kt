@@ -89,6 +89,54 @@ fun SearchView(
     }
 }
 
+@Composable
+fun FilterWeaponBlock(
+    initialSelectedWeaponType: String?,
+    onChipClick: (FilterItemsType?, String?) -> Unit
+) {
+    var isFilterReset by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+
+        shape = RoundedCornerShape(2.dp),
+        backgroundColor = MaterialTheme.colors.onPrimary
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+        ) {
+            SingleSelectChipGrid(
+                stringResource(id = R.string.filter_title_weapon_type),
+                isFilterReset = isFilterReset,
+                itemsList = WeaponType.values().map { it.title },
+                initialSelectedValue = initialSelectedWeaponType,
+                onItemSelected = { onChipClick(FilterItemsType.WEAPON_TYPE, it) },
+            )
+
+            isFilterReset = false
+
+            TextButton(
+                onClick = {
+                    onChipClick(null, null)
+                    isFilterReset = true
+                }, modifier = Modifier
+                    .padding(top = 8.dp)
+                    .padding(horizontal = 16.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.filter_reset_button_title),
+                    style = MaterialTheme.typography.h3
+                )
+            }
+        }
+    }
+}
+
 
 @Composable
 fun FilterHeroesBlock(
@@ -297,41 +345,6 @@ fun FilterItem(
             color = if (isClicked) Color.White else MaterialTheme.colors.secondary,
             style = MaterialTheme.typography.h4,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-        )
-    }
-}
-
-@Composable
-fun ElementTitle(element: Element) {
-    Row {
-        AsyncImage(
-            model = element.iconUrl,
-            modifier = Modifier
-                .sizeIn(minHeight = 30.dp, maxHeight = 30.dp),
-            contentDescription = null
-        )
-        Text(
-            modifier = Modifier.padding(start = 4.dp),
-            text = element.name, color = MaterialTheme.colors.primary,
-            style = MaterialTheme.typography.body1
-        )
-    }
-}
-
-@Composable
-fun WeaponTitle(weaponType: WeaponType) {
-    Row(modifier = Modifier.background(MaterialTheme.colors.onPrimary)) {
-        Image(
-            modifier = Modifier
-                .sizeIn(maxHeight = 30.dp)
-                .padding(start = 8.dp),
-            painter = painterResource(id = weaponType.imageId),
-            contentDescription = null
-        )
-        Text(
-            modifier = Modifier.padding(start = 4.dp),
-            text = weaponType.title, color = MaterialTheme.colors.primary,
-            style = MaterialTheme.typography.body1
         )
     }
 }
