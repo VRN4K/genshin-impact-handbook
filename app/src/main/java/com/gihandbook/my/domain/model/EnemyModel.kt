@@ -33,5 +33,6 @@ class EnemyCardModel(
     imageUrlOnError: String,
     name: String,
     imageUrl: String,
-    region: String
-) : CharacterCardModel(id, name, imageUrl, imageUrlOnError, region)
+    region: String,
+    isFavorite: Boolean
+) : CharacterCardModel(id, name, imageUrl, imageUrlOnError, region, isFavorite)

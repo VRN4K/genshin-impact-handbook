@@ -5,6 +5,8 @@ import androidx.palette.graphics.Palette
 import com.bumptech.glide.RequestManager
 import com.gihandbook.my.R
 import com.gihandbook.my.data.net.model.*
+import com.gihandbook.my.data.storage.entities.toCardModel
+import com.gihandbook.my.domain.datacontracts.ICharacterDBRepository
 import com.gihandbook.my.domain.datacontracts.ICharacterInteractor
 import com.gihandbook.my.domain.datacontracts.ICharacterNetRepository
 import com.gihandbook.my.domain.model.CharacterUIModel
@@ -14,7 +16,8 @@ import com.gihandbook.my.domain.model.*
 import javax.inject.Inject
 
 class CharacterInteractor @Inject constructor(
-    private val charactersNetRepository: ICharacterNetRepository
+    private val charactersNetRepository: ICharacterNetRepository,
+    private val charactersDBRepository: ICharacterDBRepository
 ) : ICharacterInteractor {
 
     @Inject
@@ -23,12 +26,17 @@ class CharacterInteractor @Inject constructor(
     @Inject
     lateinit var resources: Resources
 
+    private var favoritePlayableCharacters: MutableList<HeroCardModel> = mutableListOf()
+    private val favoriteEnemyCharacters: MutableList<EnemyCardModel> = mutableListOf()
+
     override suspend fun getHeroByName(name: String): Character {
         return charactersNetRepository.getPlayableCharacterByName(name)
     }
 
     override suspend fun getHeroesList(): List<HeroCardModel> {
+        getFavoritePlayableCharacters()
         val characters = mutableListOf<HeroCardModel>()
+
 
         charactersNetRepository.getPlayableCharacters().onEach { name ->
             val character = charactersNetRepository.getPlayableCharacterByName(name)
@@ -41,7 +49,8 @@ class CharacterInteractor @Inject constructor(
                     resources.getString(
                         R.string.character_element_icon_image,
                         character.vision.lowercase()
-                    )
+                    ),
+                    isPlayableCharacterInFavorite(name)
                 )
             )
         }
@@ -85,9 +94,55 @@ class CharacterInteractor @Inject constructor(
                             it.lowercase()
                         )
                     )
-                } ?: emptyList()
+                } ?: emptyList(),
+                isEnemyCharacterInFavorite(name)
             ))
         }
         return enemies
+    }
+
+    override suspend fun getFavoritePlayableCharacters(): MutableList<HeroCardModel> {
+        if (favoritePlayableCharacters.isEmpty()) {
+            favoritePlayableCharacters.addAll(charactersDBRepository.getAllFavoritePlayableCharacters()
+                .map { it.toCardModel(resources) })
+        }
+        return favoritePlayableCharacters
+    }
+
+    override suspend fun getFavoriteEnemiesCharacters(): MutableList<EnemyCardModel> {
+        if (favoriteEnemyCharacters.isEmpty()) {
+            favoriteEnemyCharacters.addAll(
+                charactersDBRepository.getAllFavoriteEnemyCharacters()
+                    .map { it.toCardModel(resources) })
+        }
+        return favoriteEnemyCharacters
+    }
+
+    override suspend fun addPlayableCharacterToFavorite(character: HeroCardModel) {
+        favoritePlayableCharacters.add(character)
+        charactersDBRepository.addPlayableCharacterToFavorite(character.toEntity())
+    }
+
+    override suspend fun addEnemyCharacterToFavorite(character: EnemyCardModel) {
+        favoriteEnemyCharacters.add(character)
+        // charactersDBRepository.addEnemyCharacterToFavorite(character.toEntity())
+    }
+
+    override suspend fun removePlayableCharacterFromFavorite(character: HeroCardModel) {
+        favoritePlayableCharacters.apply { remove(find { character.id == it.id }) }
+        charactersDBRepository.deletePlayableCharacterById(character.id)
+    }
+
+    override suspend fun removeEnemyCharacterFromFavorite(character: EnemyCardModel) {
+        favoriteEnemyCharacters.remove(character)
+        charactersDBRepository.deleteEnemyCharacterById(character.id)
+    }
+
+    override suspend fun isPlayableCharacterInFavorite(characterId: String): Boolean {
+        return favoritePlayableCharacters.any { it.id == characterId }
+    }
+
+    override suspend fun isEnemyCharacterInFavorite(characterId: String): Boolean {
+        return favoriteEnemyCharacters.any { it.id == characterId }
     }
 }

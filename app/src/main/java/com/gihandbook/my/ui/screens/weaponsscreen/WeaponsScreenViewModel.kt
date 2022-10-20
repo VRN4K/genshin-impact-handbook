@@ -1,5 +1,6 @@
 package com.gihandbook.my.ui.screens.weaponsscreen
 
+import androidx.compose.material.*
 import androidx.compose.runtime.mutableStateOf
 import com.gihandbook.my.domain.StateLiveData
 import com.gihandbook.my.domain.datacontracts.IWeaponInteractor
@@ -11,15 +12,18 @@ import launchIO
 import javax.inject.Inject
 
 @HiltViewModel
+@OptIn(ExperimentalMaterialApi::class)
 class WeaponsScreenViewModel @Inject constructor(weaponInteractor: IWeaponInteractor) :
     BaseViewModel() {
-    private var weapons = emptyList<WeaponUIModel>()
+    private var weapons = emptyList<WeaponCardModel>()
+    var clickedWeapon = mutableStateOf<WeaponCardModel?>(null)
 
+    val bottomState = ModalBottomSheetState(ModalBottomSheetValue.Hidden)
     var isFilterShown = mutableStateOf(false)
     var isSearchShown = mutableStateOf(false)
     var selectedWeaponType = mutableStateOf<String?>(null)
 
-    val weaponState = StateLiveData<List<WeaponUIModel>>()
+    val weaponState = StateLiveData<List<WeaponCardModel>>()
     val searchQuery = mutableStateOf("")
 
     init {
@@ -41,7 +45,7 @@ class WeaponsScreenViewModel @Inject constructor(weaponInteractor: IWeaponIntera
         weaponState.postComplete(filterWeapon(chipValue?.let { WeaponType.valueOf(it.uppercase()) }))
     }
 
-    private fun filterWeapon(weaponType: WeaponType? = null): List<WeaponUIModel> {
+    private fun filterWeapon(weaponType: WeaponType? = null): List<WeaponCardModel> {
         weapons.apply {
             return when {
                 weaponType != null -> this.filter { weapon -> weapon.type == weaponType }
@@ -55,7 +59,7 @@ class WeaponsScreenViewModel @Inject constructor(weaponInteractor: IWeaponIntera
         weapons.filter { it.name.contains(searchText, true) }.showWeapons()
     }
 
-    private fun List<WeaponUIModel>.showWeapons() {
+    private fun List<WeaponCardModel>.showWeapons() {
         weaponState.apply {
             if (isEmpty()) postNotFound() else postComplete(this@showWeapons)
         }
@@ -74,5 +78,9 @@ class WeaponsScreenViewModel @Inject constructor(weaponInteractor: IWeaponIntera
     fun onSearchButtonClick() {
         isSearchShown.value = !isSearchShown.value
         if (isSearchShown.value) isFilterShown.value = false
+    }
+
+    fun onCardClicked(weapon: WeaponCardModel) {
+        clickedWeapon.value = weapon
     }
 }

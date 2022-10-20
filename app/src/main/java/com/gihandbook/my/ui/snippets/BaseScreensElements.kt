@@ -1,5 +1,7 @@
 package com.gihandbook.my.ui.snippets
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,11 +10,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -346,6 +354,36 @@ fun FilterItem(
             style = MaterialTheme.typography.h4,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
         )
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+fun FavoriteCheckBox(initialCheckBoxStatus: Boolean = false, onClick: (Boolean) -> Unit) {
+    var isChecked by remember { mutableStateOf(initialCheckBoxStatus) }
+
+    IconButton(modifier = Modifier
+        .padding(6.dp),
+        onClick = {
+            isChecked = !isChecked
+            onClick.invoke(isChecked)
+        }) {
+//Заменить на метод затухания в анимации
+        AnimatedContent(
+            targetState = isChecked,
+            transitionSpec = {
+                fadeIn(animationSpec = tween(durationMillis = 800)) with
+                        fadeOut(animationSpec = tween(durationMillis = 800))
+            }) { isChecked ->
+            Icon(
+                painter = painterResource(
+                    id = if (isChecked) R.drawable.ic_baseline_favorite_filled_24 else R.drawable.ic_baseline_favorite_outlined_24
+                ),
+                tint = MaterialTheme.colors.primary,
+                contentDescription = null,
+                modifier = Modifier.alpha(0.87f)
+            )
+        }
     }
 }
 

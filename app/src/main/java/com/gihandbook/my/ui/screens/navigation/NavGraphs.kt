@@ -8,6 +8,8 @@ import com.gihandbook.my.ui.screens.Screens
 import com.gihandbook.my.ui.screens.characterdetailscreen.CharacterDetailsScreen
 import com.gihandbook.my.ui.screens.charactersscreen.CharactersScreen
 import com.gihandbook.my.ui.screens.enemydetailsscreen.EnemyDetailsScreen
+import com.gihandbook.my.ui.screens.favoritesscreen.FavoritesScreen
+import com.gihandbook.my.ui.screens.favoritesscreen.FavoritesScreenViewModel
 import com.gihandbook.my.ui.screens.weaponsscreen.WeaponsScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -29,6 +31,11 @@ fun NavGraphBuilder.homeNavGraph(actions: NavigationActions) {
                 onBackButtonClick = {
                     actions.backTo()
                 })
+        }
+        composable(
+            Screens.Favorites.route,
+        ) {
+            FavoritesScreen(actions = actions)
         }
         composable(
             Screens.Enemy.route,

@@ -2,6 +2,7 @@ package com.gihandbook.my.domain.model
 
 import androidx.palette.graphics.Palette
 import com.gihandbook.my.R
+import com.gihandbook.my.data.storage.entities.HeroEntity
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -69,7 +70,8 @@ abstract class CharacterCardModel(
     open val name: String,
     val imageUrl: String,
     val imageUrlOnError: String,
-    val region: String
+    val region: String,
+    var isFavorite: Boolean
 )
 
 class HeroCardModel(
@@ -79,5 +81,18 @@ class HeroCardModel(
     name: String,
     imageUrl: String,
     imageUrlOnError: String,
-    region: String
-) : CharacterCardModel(id, name, imageUrl, imageUrlOnError, region)
+    region: String,
+    isFavorite: Boolean
+) : CharacterCardModel(id, name, imageUrl, imageUrlOnError, region, isFavorite)
+
+fun HeroCardModel.toEntity(): HeroEntity {
+    return HeroEntity(
+        id = id,
+        name = name,
+        element = element.name,
+        region = region,
+        weapon = weaponType.title,
+        imageUrl = imageUrl,
+        imageUrlOnError = imageUrlOnError
+    )
+}

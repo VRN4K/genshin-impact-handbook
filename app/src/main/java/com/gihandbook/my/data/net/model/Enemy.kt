@@ -44,14 +44,20 @@ class ElementalDescription(
     val description: String
 )
 
-fun Enemy.toCardModel(id: String, imageUrl: String, elements: List<Element>): EnemyCardModel {
+fun Enemy.toCardModel(
+    id: String,
+    imageUrl: String,
+    elements: List<Element>,
+    isFavorite: Boolean
+): EnemyCardModel {
     return EnemyCardModel(
         id = id,
         element = elements,
         imageUrlOnError = "",
         name = name,
         imageUrl = imageUrl,
-        region = let { region } ?: "Unknown"
+        region = let { region } ?: "Unknown",
+        isFavorite = isFavorite
     )
 }
 

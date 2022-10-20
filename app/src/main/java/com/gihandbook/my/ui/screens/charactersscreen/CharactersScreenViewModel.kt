@@ -2,6 +2,7 @@ package com.gihandbook.my.ui.screens.charactersscreen
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import asyncIO
 import com.gihandbook.my.domain.StateLiveData
 import com.gihandbook.my.domain.extensions.contains
 import com.gihandbook.my.domain.datacontracts.ICharacterInteractor
@@ -10,6 +11,7 @@ import com.gihandbook.my.ui.base.BaseViewModel
 import com.gihandbook.my.ui.snippets.TabPagesCharacters
 import dagger.hilt.android.lifecycle.HiltViewModel
 import launchIO
+import launchUI
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,15 +40,18 @@ class CharactersScreenViewModel @Inject constructor(
     }
 
     private fun getCharacters() {
-        launchIO(handler) {
+        launchUI(handler) {
             characterState.postLoading()
             enemiesState.postLoading()
-            charactersFromServer = characterInteractor.getHeroesList()
-            launchIO(handler) {
-                enemiesFromServer = characterInteractor.getEnemiesList()
-                enemiesState.postComplete(enemiesFromServer)
-            }
+
+            val charactersFromServerJob = asyncIO { characterInteractor.getHeroesList() }
+            val enemiesFromServerJob = asyncIO { characterInteractor.getEnemiesList() }
+
+            charactersFromServer = charactersFromServerJob.await()
+            enemiesFromServer = enemiesFromServerJob.await()
+
             characterState.postComplete(charactersFromServer)
+            enemiesState.postComplete(enemiesFromServer)
         }
     }
 
@@ -145,6 +150,34 @@ class CharactersScreenViewModel @Inject constructor(
     fun onSearchButtonClick() {
         isSearchShown.value = !isSearchShown.value
         if (isSearchShown.value) isFilterShown.value = false
+    }
+
+    fun onAddToFavoriteClick(character: CharacterCardModel, isChecked: Boolean) {
+        character.isFavorite = isChecked
+
+        launchIO {
+            if (isChecked) {
+                addCharacterToFavorite(character)
+            } else {
+                removeCharacterFromFavorite(character)
+            }
+        }
+    }
+
+    private suspend fun addCharacterToFavorite(character: CharacterCardModel) {
+        if (selectedTab.value == TabPagesCharacters.CHARACTERS) {
+            characterInteractor.addPlayableCharacterToFavorite(character as HeroCardModel)
+        } else {
+            characterInteractor.addEnemyCharacterToFavorite(character as EnemyCardModel)
+        }
+    }
+
+    private suspend fun removeCharacterFromFavorite(character: CharacterCardModel) {
+        if (selectedTab.value == TabPagesCharacters.CHARACTERS) {
+            characterInteractor.removePlayableCharacterFromFavorite(character as HeroCardModel)
+        } else {
+            characterInteractor.removeEnemyCharacterFromFavorite(character as EnemyCardModel)
+        }
     }
 }
 

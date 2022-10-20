@@ -1,20 +1,38 @@
 package com.gihandbook.my.ui.snippets
 
+import androidx.compose.animation.*
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.gihandbook.my.domain.model.Element
-import com.gihandbook.my.domain.model.WeaponType
+import com.gihandbook.my.R
+import com.gihandbook.my.domain.model.*
+import com.gihandbook.my.ui.screens.Screens
+import com.gihandbook.my.ui.screens.charactersscreen.CharacterCard
+import com.gihandbook.my.ui.screens.charactersscreen.CharactersScreenViewModel
+import com.gihandbook.my.ui.screens.charactersscreen.ShowCharacters
+import com.gihandbook.my.ui.screens.favoritesscreen.FavoritesScreenViewModel
+import com.gihandbook.my.ui.screens.navigation.NavigationActions
+import com.gihandbook.my.ui.theme.Shapes
 
 @Composable
 fun TextBlock(title: String, text: String? = null) {
@@ -73,7 +91,7 @@ fun InfoItemWithBigText(itemValue: String, itemType: String) {
 
 @Composable
 fun ElementTitle(element: Element) {
-    Row {
+    Row(modifier = Modifier.wrapContentWidth()) {
         AsyncImage(
             model = element.iconUrl,
             modifier = Modifier
@@ -89,8 +107,40 @@ fun ElementTitle(element: Element) {
 }
 
 @Composable
+fun CardWithItem(title: String, imageUrl: String? = null) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        shape = RoundedCornerShape(12.dp),
+        backgroundColor = MaterialTheme.colors.onPrimary,
+        elevation = 0.dp
+    ) {
+        Row(
+            modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = title,
+                modifier = Modifier.padding(bottom = 4.dp),
+                style = MaterialTheme.typography.h2
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            AsyncImage(
+                model = imageUrl?.also { println(it) },
+                contentDescription = null,
+                modifier = Modifier
+                    .sizeIn(maxHeight = 70.dp)
+                    .padding(horizontal = 4.dp)
+            )
+        }
+    }
+}
+
+@Composable
 fun WeaponTitle(weaponType: WeaponType) {
-    Row(modifier = Modifier.background(MaterialTheme.colors.onPrimary)) {
+    Row(modifier = Modifier.wrapContentWidth()) {
         Image(
             modifier = Modifier
                 .sizeIn(maxHeight = 30.dp)
@@ -105,3 +155,4 @@ fun WeaponTitle(weaponType: WeaponType) {
         )
     }
 }
+

@@ -26,7 +26,7 @@ class NavigationActions(private val navController: NavController) {
     }
 
 
-    val currentRoute: () -> String? = {
+    var currentRoute: () -> String? = {
         navController.currentBackStackEntry?.destination?.route
     }
 

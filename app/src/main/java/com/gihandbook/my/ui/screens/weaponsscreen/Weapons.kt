@@ -5,17 +5,17 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -24,73 +24,106 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.gihandbook.my.R
 import com.gihandbook.my.domain.extensions.forwardingPainter
+import com.gihandbook.my.domain.model.WeaponCardModel
+import com.gihandbook.my.domain.model.WeaponDetails
 import com.gihandbook.my.domain.model.WeaponUIModel
+import com.gihandbook.my.ui.screens.charactersscreen.FloatingFavoriteActionButton
 import com.gihandbook.my.ui.screens.charactersscreen.ShowSearchView
 import com.gihandbook.my.ui.screens.navigation.NavigationActions
 import com.gihandbook.my.ui.screens.navigation.NavigationItems
 import com.gihandbook.my.ui.snippets.*
+import launchIO
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun WeaponsScreen(viewModel: WeaponsScreenViewModel = hiltViewModel(), actions: NavigationActions) {
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        bottomBar = { BottomNavigation(NavigationItems.values().asList(), actions) },
-        topBar = {
-            AppBarWithSidesButton(title = stringResource(id = R.string.weapon_screen_title),
-                leftButton = {
-                    IconButton(
-                        onClick = { viewModel.onFilterClick() }
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_filter_svgrepo_com),
-                            colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
-                            contentDescription = null
-                        )
-                    }
-                },
-                rightButton = {
-                    IconButton(onClick = { viewModel.onSearchButtonClick() }) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_search_svgrepo_com__4_),
-                            colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
-                            contentDescription = null
-                        )
-                    }
-                })
+    ModalBottomSheetLayout(
+        sheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+        sheetBackgroundColor = MaterialTheme.colors.onPrimary,
+        sheetState = viewModel.bottomState,
+        sheetContent = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+            ) {
+                Text(
+                    text = "Weapon description",
+                    style = MaterialTheme.typography.h2,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+                FavoriteCheckBox(onClick = {})
+            }
+            Divider(modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
+            viewModel.clickedWeapon.value?.let {
+                WeaponDetails(it.weaponDetails!!)
+            }
         }
-    ) { insets ->
-        Box(
-            modifier = Modifier
-                .padding(insets)
-                .fillMaxSize()
-        ) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                ShowContent(
-                    stateLiveData = viewModel.weaponState,
-                    onContent = { ShowWeaponsScreenContent(it) }
+    ) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                AppBarWithSidesButton(title = stringResource(id = R.string.weapon_screen_title),
+                    leftButton = {
+                        IconButton(
+                            onClick = { viewModel.onFilterClick() }
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_filter_svgrepo_com),
+                                colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
+                                contentDescription = null
+                            )
+                        }
+                    },
+                    rightButton = {
+                        IconButton(onClick = { viewModel.onSearchButtonClick() }) {
+                            Image(
+                                painter = painterResource(id = R.drawable.ic_search_svgrepo_com__4_),
+                                colorFilter = ColorFilter.tint(MaterialTheme.colors.primary),
+                                contentDescription = null
+                            )
+                        }
+                    }
+                )
+            },
+            bottomBar = { BottomNavigationWithFAB(NavigationItems.values().asList(), actions) },
+            isFloatingActionButtonDocked = true,
+            floatingActionButton = { FloatingFavoriteActionButton(actions = actions) },
+            floatingActionButtonPosition = FabPosition.Center,
+        ) { insets ->
+            Box(
+                modifier = Modifier
+                    .padding(insets)
+                    .fillMaxSize()
+            ) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    ShowContent(
+                        stateLiveData = viewModel.weaponState,
+                        onContent = { ShowWeaponsScreenContent(it, viewModel) }
+                    )
+                }
+                ShowWeaponFilterBlock(viewModel)
+                ShowSearchView(
+                    isShow = viewModel.isSearchShown.value,
+                    initialSearchValue = viewModel.searchQuery.value,
+                    onSearchButtonClick = { viewModel.onSystemSearchButtonClick(it) },
+                    onClearButtonClick = { viewModel.onClearButtonClick() }
                 )
             }
-            ShowWeaponFilterBlock(viewModel)
-            ShowSearchView(
-                isShow = viewModel.isSearchShown.value,
-                initialSearchValue = viewModel.searchQuery.value,
-                onSearchButtonClick = { viewModel.onSystemSearchButtonClick(it) },
-                onClearButtonClick = { viewModel.onClearButtonClick() }
-            )
         }
     }
 }
 
 
 @Composable
-fun ShowWeaponsScreenContent(weapons: List<WeaponUIModel>) {
+fun ShowWeaponsScreenContent(weapons: List<WeaponCardModel>, viewModel: WeaponsScreenViewModel) {
     LazyColumn(
         modifier = Modifier.padding(vertical = 4.dp),
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 3.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(items = weapons, itemContent = { item ->
-            WeaponCard(weapon = item)
+            WeaponCard(weapon = item, viewModel = viewModel)
         })
     }
 }
@@ -114,14 +147,24 @@ fun ShowWeaponFilterBlock(viewModel: WeaponsScreenViewModel) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun WeaponCard(weapon: WeaponUIModel) {
+fun WeaponCard(weapon: WeaponCardModel, viewModel: WeaponsScreenViewModel) {
+    val coroutineScope = rememberCoroutineScope()
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                coroutineScope.launchIO {
+                    viewModel.onCardClicked(weapon)
+                    viewModel.bottomState.show()
+                }
+            },
         shape = RoundedCornerShape(12.dp),
         backgroundColor = MaterialTheme.colors.onPrimary,
         elevation = 2.dp
     ) {
+
         Row(modifier = Modifier.fillMaxWidth()) {
             Column(
                 modifier = Modifier
@@ -165,6 +208,18 @@ fun WeaponCard(weapon: WeaponUIModel) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(126.dp)
             )
+        }
+    }
+}
+
+@Composable
+fun WeaponDetails(weapon: WeaponDetails) {
+    Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
+        TextBlock(title = weapon.passiveName, text = weapon.passiveDesc)
+        TextBlock(title = "Location:", text = weapon.location)
+        weapon.ascensionMaterial?.let {
+            TextBlock(title = "Ascension material:", weapon.ascensionMaterial)
+
         }
     }
 }

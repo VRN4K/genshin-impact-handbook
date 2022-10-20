@@ -26,5 +26,6 @@ sealed class Screens(val route: String) {
     }
 
     object Weapons : Screens("weapon")
+    object Favorites : Screens("favorites")
 }
 

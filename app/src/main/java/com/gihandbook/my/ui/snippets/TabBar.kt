@@ -5,10 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -62,8 +61,8 @@ fun AppBarWithPager(
 @Composable
 fun AppBarWithSidesButton(
     title: String,
-    leftButton: @Composable () -> Unit,
-    rightButton: @Composable () -> Unit
+    leftButton: (@Composable () -> Unit)? = null,
+    rightButton: (@Composable () -> Unit)? = null
 ) {
     TopAppBar(
         backgroundColor = Color.Transparent,
@@ -82,14 +81,14 @@ fun AppBarWithSidesButton(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            leftButton.invoke()
+            leftButton?.invoke() ?: Spacer(modifier = Modifier.size(24.dp))
             Text(
                 text = title,
                 style = MaterialTheme.typography.h2,
                 color = MaterialTheme.colors.primary,
                 modifier = Modifier.padding(top = 4.dp)
             )
-            rightButton.invoke()
+            rightButton?.invoke() ?: Spacer(modifier = Modifier.size(24.dp))
         }
     }
 }
@@ -114,8 +113,12 @@ fun TabBar(selectedTabIndex: Int, onSelectedTab: (TabPagesCharacters) -> Unit) {
 }
 
 @Composable
-fun BottomNavigation(navItems: List<NavigationItems>, actions: NavigationActions) {
-    BottomNavigation(
+fun BottomNavigationWithFAB(navItems: List<NavigationItems>, actions: NavigationActions) {
+    var selected by remember { mutableStateOf(actions.currentRoute()) }
+
+    BottomAppBar(
+        cutoutShape = RoundedCornerShape(50),
+        elevation = 0.dp,
         backgroundColor = MaterialTheme.colors.onPrimary,
         contentColor = MaterialTheme.colors.primary
     ) {
@@ -131,8 +134,9 @@ fun BottomNavigation(navItems: List<NavigationItems>, actions: NavigationActions
                 selectedContentColor = TextSecondaryDark,
                 unselectedContentColor = MaterialTheme.colors.primary,
                 alwaysShowLabel = true,
-                selected = actions.currentRoute() == item.route,
+                selected = selected == item.route,
                 onClick = {
+                    selected = item.route
                     actions.newRootScreen(item.route)
                 }
             )

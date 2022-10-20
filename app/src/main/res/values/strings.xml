@@ -75,4 +75,11 @@
     <string name="weapon_icon_url">https://api.genshin.dev/weapons/%s/icon</string>
     <string name="weapon_base_atk">Base ATK: %s</string>
     <string name="weapon_screen_title">Weapons</string>
+    <string name="weapon_ascension_url">https://api.genshin.dev/materials/weapon-ascension/%s</string>
+
+    //Favorites
+    <string name="favorite_screen_title">Favorites</string>
+    <string name="favorite_heroes_list_title">Favorite playable characters</string>
+    <string name="favorite_enemies_list_title">Favorite enemies</string>
+    <string name="favorite_weapons_list_title">Favorite weapons</string>
 </resources>

@@ -107,6 +107,7 @@ enum class TalentsType(val imageUrlId: Int) {
 enum class PassiveSkillsType(val imageUrlId: Int) {
     @SerialName("1")
     FIRST_ASCENSION_PASSIVE(R.string.talent_1st_ascension_passive),
+
     @SerialName("4")
     FOURTH_ASCENSION_PASSIVE(R.string.talent_4st_ascension_passive),
     UTILITY_PASSIVE(R.string.talent_utility_passive)
@@ -116,14 +117,19 @@ enum class PassiveSkillsType(val imageUrlId: Int) {
 enum class ConstellationsLevels(val imageUrlId: Int) {
     @SerialName("1")
     FIRST_LEVEL(R.string.constellation_level_1),
+
     @SerialName("2")
     SECOND_LEVEL(R.string.constellation_level_2),
+
     @SerialName("3")
     THIRD_LEVEL(R.string.constellation_level_3),
+
     @SerialName("4")
     FOURTH_LEVEL(R.string.constellation_level_4),
+
     @SerialName("5")
     FIFTH_LEVEL(R.string.constellation_level_5),
+
     @SerialName("6")
     SIXTH_LEVEL(R.string.constellation_level_6)
 }
@@ -132,7 +138,8 @@ fun Character.toCardModel(
     id: String,
     imageUrl: String,
     imageUrlOnError: String,
-    elementImageUrl: String
+    elementImageUrl: String,
+    isFavorite: Boolean
 ): HeroCardModel {
     return HeroCardModel(
         weapon,
@@ -141,6 +148,7 @@ fun Character.toCardModel(
         name,
         imageUrl,
         imageUrlOnError,
-        nation
+        nation,
+        isFavorite
     )
 }

@@ -1,5 +1,9 @@
 package com.gihandbook.my.data.net.model
 
+import android.content.res.Resources
+import com.gihandbook.my.R
+import com.gihandbook.my.domain.model.WeaponCardModel
+import com.gihandbook.my.domain.model.WeaponDetails
 import com.gihandbook.my.domain.model.WeaponType
 import kotlinx.serialization.Serializable
 
@@ -15,3 +19,24 @@ data class Weapon(
     val location: String,
     val ascensionMaterial: String?
 )
+
+fun Weapon.toCardModel(id: String, resources: Resources): WeaponCardModel {
+    return WeaponCardModel(
+        id = id,
+        name = name,
+        type = type,
+        rarity = rarity,
+        subStat = subStat,
+        baseAttack = baseAttack,
+        weaponDetails = WeaponDetails(
+            passiveName = passiveName,
+            passiveDesc = passiveDesc,
+            location = location,
+            ascensionMaterial = ascensionMaterial
+        ),
+        imageUrl = resources.getString(
+            R.string.weapon_icon_url,
+            id
+        )
+    )
+}

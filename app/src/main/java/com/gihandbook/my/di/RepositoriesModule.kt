@@ -5,7 +5,12 @@ import android.content.res.Resources
 import com.bumptech.glide.Glide
 import com.gihandbook.my.data.net.repositories.CharactersNetRepository
 import com.gihandbook.my.data.net.repositories.WeaponsNetRepository
+import com.gihandbook.my.data.storage.GIDataBase
+import com.gihandbook.my.data.storage.repositories.CharactersDBRepository
+import com.gihandbook.my.data.storage.repositories.WeaponDBRepository
+import com.gihandbook.my.domain.datacontracts.ICharacterDBRepository
 import com.gihandbook.my.domain.datacontracts.ICharacterNetRepository
+import com.gihandbook.my.domain.datacontracts.IWeaponDBRepository
 import com.gihandbook.my.domain.datacontracts.IWeaponNetRepository
 import dagger.Module
 import dagger.Provides
@@ -42,4 +47,14 @@ class RepositoriesModule {
     @Singleton
     fun provideWeaponRepository(httpClient: HttpClient): IWeaponNetRepository =
         WeaponsNetRepository(httpClient)
+
+    @Provides
+    @Singleton
+    fun provideCharacterDBRepository(database: GIDataBase): ICharacterDBRepository =
+        CharactersDBRepository(database)
+
+    @Provides
+    @Singleton
+    fun provideWeaponDBRepository(database: GIDataBase): IWeaponDBRepository =
+        WeaponDBRepository(database)
 }

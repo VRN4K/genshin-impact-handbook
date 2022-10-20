@@ -2,7 +2,9 @@ package com.gihandbook.my.ui.snippets
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -56,7 +58,6 @@ fun ExpandableList(
                     colorFilter = ColorFilter.tint(arrowColor ?: MaterialTheme.colors.primary),
                     modifier = Modifier.padding(horizontal = 12.dp)
                 )
-
             }
             Text(
                 text = title,
@@ -88,11 +89,85 @@ fun ExpandableList(
                 itemsList.forEach {
                     bodyContent.invoke(it)
                     if (it != itemsList.last()) {
-                        Divider(
-                            modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
-                        )
+                        Divider(modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
                     }
                 }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
+@Composable
+fun ExpandableCardsListWithCountIndicator(
+    title: String,
+    itemsList: List<Any>,
+    bodyContent: @Composable (Any) -> Unit
+) {
+    var isClicked by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        shape = RoundedCornerShape(12.dp),
+        backgroundColor = MaterialTheme.colors.onPrimary,
+        onClick = { isClicked = !isClicked },
+        elevation = 2.dp
+    ) {
+        Row(
+            modifier = Modifier.padding(end = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            AnimatedContent(
+                targetState = isClicked,
+                transitionSpec = { animationVerticalSideInAndOut(1000) }) { isClicked ->
+                if (itemsList.isNotEmpty()) {
+                    Image(
+                        painter = painterResource(
+                            id = if (isClicked) R.drawable.ic_chevron_up_svgrepo_com else R.drawable.ic_chevron_down_svgrepo_com
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    )
+                } else {
+                    Spacer(modifier = Modifier.size(46.dp))
+                }
+            }
+            Text(
+                text = title,
+                style = MaterialTheme.typography.h2,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Row(
+                modifier = Modifier
+                    .size(24.dp)
+                    .background(Color.Red, CircleShape),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = itemsList.size.toString(),
+                    color = Color.White,
+                    style = MaterialTheme.typography.h3
+                )
+            }
+        }
+    }
+    AnimatedVisibility(
+        visible = if(itemsList.isEmpty()) false else isClicked,
+        enter = expandVertically(),
+        exit = shrinkVertically() + fadeOut()
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            backgroundColor = Color.Transparent,
+            elevation = 0.dp
+        ) {
+            Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 0.dp)) {
+                bodyContent.invoke(itemsList)
             }
         }
     }
@@ -198,7 +273,7 @@ fun DropsExpandableListItem(drop: DropUI) {
 fun ArtifactsExpandableListItem(artifact: ArtifactUI) {
     Row(
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
