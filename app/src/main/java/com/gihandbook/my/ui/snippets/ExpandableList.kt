@@ -166,7 +166,7 @@ fun ExpandableCardsListWithCountIndicator(
             backgroundColor = Color.Transparent,
             elevation = 0.dp
         ) {
-            Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 0.dp)) {
+            Column(modifier = Modifier) {
                 bodyContent.invoke(itemsList)
             }
         }

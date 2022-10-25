@@ -66,7 +66,8 @@ fun CharactersScreen(
                 initialSearchValue = viewModel.searchQuery.value,
                 isShow = viewModel.isSearchShown.value,
                 onSearchButtonClick = { viewModel.onSystemSearchButtonClick(it) },
-                onClearButtonClick = { viewModel.onClearButtonClick() }
+                onClearButtonClick = { viewModel.onClearButtonClick() },
+                placeholder = stringResource(id = R.string.search_searchview_text)
             )
         }
     }
@@ -100,6 +101,7 @@ fun ShowFilterBlock(viewModel: CharactersScreenViewModel) {
 @Composable
 fun ShowSearchView(
     isShow: Boolean,
+    placeholder: String,
     initialSearchValue: String,
     onSearchButtonClick: (searchText: String) -> Unit,
     onClearButtonClick: () -> Unit
@@ -112,7 +114,9 @@ fun ShowSearchView(
         SearchView(
             initialSearchValue = initialSearchValue,
             onSearchButtonClick = { onSearchButtonClick(it) },
-            onClearButtonClick = { onClearButtonClick() })
+            onClearButtonClick = { onClearButtonClick() },
+            placeholder = placeholder
+        )
     }
 }
 

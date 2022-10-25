@@ -14,6 +14,7 @@ object QueryParams {
 }
 
 sealed class Screens(val route: String) {
+    object Splash : Screens("splash")
     object Home : Screens("home")
     object Character : Screens("character?characterName={$CHARACTER_NAME}") {
         fun setName(name: String) =

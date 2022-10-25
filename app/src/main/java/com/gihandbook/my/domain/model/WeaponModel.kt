@@ -13,7 +13,8 @@ data class WeaponCardModel(
     val subStat: String,
     val baseAttack: Int?,
     val imageUrl: String,
-    val weaponDetails: WeaponDetails?
+    val weaponDetails: WeaponDetails,
+    var isFavorite: Boolean = false
 )
 
 data class WeaponDetails(
@@ -23,41 +24,18 @@ data class WeaponDetails(
     val ascensionMaterial: String?
 )
 
-data class WeaponUIModel(
-    val id: String,
-    val name: String,
-    val type: WeaponType,
-    val rarity: Int,
-    val subStat: String,
-    val baseAttack: Int?,
-    val passiveName: String,
-    val passiveDesc: String,
-    val location: String,
-    val ascensionMaterial: String?,
-    val imageUrl: String
-)
-
-fun Weapon.toUI(id: String, resources: Resources): WeaponUIModel {
-    return WeaponUIModel(
-        id = id,
-        name = name,
-        type = type,
-        rarity = rarity,
-        subStat = subStat,
-        baseAttack = baseAttack,
-        passiveName = passiveName,
-        passiveDesc = passiveDesc,
-        location = location,
-        ascensionMaterial = ascensionMaterial,
-        imageUrl = resources.getString(
-            R.string.weapon_icon_url,
-            id
-        )
-    )
-}
-
-fun WeaponUIModel.toEntity(): WeaponEntity {
+fun WeaponCardModel.toEntity(): WeaponEntity {
     return WeaponEntity(
-        id, name, type, rarity, subStat, baseAttack, imageUrl
+        id,
+        name,
+        type,
+        rarity,
+        subStat,
+        baseAttack,
+        imageUrl,
+        weaponDetails.passiveName,
+        weaponDetails.passiveDesc,
+        weaponDetails.location,
+        weaponDetails.ascensionMaterial
     )
 }

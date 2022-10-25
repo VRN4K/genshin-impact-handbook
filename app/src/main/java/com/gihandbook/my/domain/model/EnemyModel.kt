@@ -1,5 +1,7 @@
 package com.gihandbook.my.domain.model
 
+import com.gihandbook.my.data.storage.entities.EnemyEntity
+
 class EnemyUIModel(
     val name: String,
     val region: String?,
@@ -36,3 +38,14 @@ class EnemyCardModel(
     region: String,
     isFavorite: Boolean
 ) : CharacterCardModel(id, name, imageUrl, imageUrlOnError, region, isFavorite)
+
+fun EnemyCardModel.toEntity(): EnemyEntity {
+    return EnemyEntity(
+        id = id,
+        name = name,
+        region = region,
+        imageUrl = imageUrl,
+        elements = element.map { it.name },
+        imageUrlOnError = imageUrlOnError
+    )
+}

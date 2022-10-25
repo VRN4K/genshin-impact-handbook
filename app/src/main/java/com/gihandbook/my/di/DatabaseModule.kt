@@ -32,12 +32,12 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideRoomDatabase(@ApplicationContext context: Context): GIDataBase =
+    fun provideRoomDatabase(@ApplicationContext context: Context, gson: Gson): GIDataBase =
         Room.databaseBuilder(
             context,
             GIDataBase::class.java,
             "gi-database"
-        ).addTypeConverter(ElementConverter())
+        ).addTypeConverter(ElementConverter(gson))
             .fallbackToDestructiveMigration()
             .build()
 

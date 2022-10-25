@@ -22,8 +22,8 @@ interface ICharacterInteractor {
     suspend fun addPlayableCharacterToFavorite(character: HeroCardModel)
     suspend fun addEnemyCharacterToFavorite(character: EnemyCardModel)
 
-    suspend fun removePlayableCharacterFromFavorite(character: HeroCardModel)
-    suspend fun removeEnemyCharacterFromFavorite(character: EnemyCardModel)
+    suspend fun removePlayableCharacterFromFavorite(characterId: String)
+    suspend fun removeEnemyCharacterFromFavorite(characterId: String)
 
     suspend fun isPlayableCharacterInFavorite(characterId: String): Boolean
     suspend fun isEnemyCharacterInFavorite(characterId: String): Boolean

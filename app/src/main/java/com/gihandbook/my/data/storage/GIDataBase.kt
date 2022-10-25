@@ -10,7 +10,7 @@ import com.gihandbook.my.data.storage.entities.EnemyEntity
 import com.gihandbook.my.data.storage.entities.HeroEntity
 import com.gihandbook.my.data.storage.entities.WeaponEntity
 
-@Database(entities = [HeroEntity::class, EnemyEntity::class, WeaponEntity::class], version = 2)
+@Database(entities = [HeroEntity::class, EnemyEntity::class, WeaponEntity::class], version = 3)
 
 @TypeConverters(ElementConverter::class)
 abstract class GIDataBase : RoomDatabase() {

@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 @OptIn(ExperimentalMaterialApi::class)
-class WeaponsScreenViewModel @Inject constructor(weaponInteractor: IWeaponInteractor) :
+class WeaponsScreenViewModel @Inject constructor(private val weaponInteractor: IWeaponInteractor) :
     BaseViewModel() {
     private var weapons = emptyList<WeaponCardModel>()
     var clickedWeapon = mutableStateOf<WeaponCardModel?>(null)
@@ -82,5 +82,15 @@ class WeaponsScreenViewModel @Inject constructor(weaponInteractor: IWeaponIntera
 
     fun onCardClicked(weapon: WeaponCardModel) {
         clickedWeapon.value = weapon
+    }
+
+    fun onAddToFavoriteClick(isChecked: Boolean) {
+        launchIO(handler) {
+            if (isChecked) {
+                weaponInteractor.addWeaponToFavorite(clickedWeapon.value!!)
+            } else {
+                weaponInteractor.removeWeaponFromFavorite(clickedWeapon.value!!.id)
+            }
+        }
     }
 }

@@ -42,6 +42,7 @@ import com.google.accompanist.flowlayout.SizeMode
 @Composable
 fun SearchView(
     initialSearchValue: String = "",
+    placeholder: String,
     onSearchButtonClick: (String) -> Unit,
     onClearButtonClick: () -> Unit,
 ) {
@@ -63,7 +64,7 @@ fun SearchView(
                 textStyle = MaterialTheme.typography.h3,
                 placeholder = {
                     Text(
-                        stringResource(id = R.string.search_searchview_text),
+                        placeholder,
                         style = MaterialTheme.typography.h2
                     )
                 },
@@ -359,11 +360,11 @@ fun FilterItem(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun FavoriteCheckBox(initialCheckBoxStatus: Boolean = false, onClick: (Boolean) -> Unit) {
+fun FavoriteCheckBox(initialCheckBoxStatus: Boolean, onClick: (Boolean) -> Unit) {
     var isChecked by remember { mutableStateOf(initialCheckBoxStatus) }
 
     IconButton(modifier = Modifier
-        .padding(6.dp),
+        .padding(horizontal = 4.dp),
         onClick = {
             isChecked = !isChecked
             onClick.invoke(isChecked)

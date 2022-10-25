@@ -26,7 +26,6 @@ import com.gihandbook.my.R
 import com.gihandbook.my.domain.extensions.forwardingPainter
 import com.gihandbook.my.domain.model.WeaponCardModel
 import com.gihandbook.my.domain.model.WeaponDetails
-import com.gihandbook.my.domain.model.WeaponUIModel
 import com.gihandbook.my.ui.screens.charactersscreen.FloatingFavoriteActionButton
 import com.gihandbook.my.ui.screens.charactersscreen.ShowSearchView
 import com.gihandbook.my.ui.screens.navigation.NavigationActions
@@ -48,15 +47,21 @@ fun WeaponsScreen(viewModel: WeaponsScreenViewModel = hiltViewModel(), actions: 
                     .padding(horizontal = 8.dp)
             ) {
                 Text(
-                    text = "Weapon description",
+                    text = stringResource(id = R.string.weapon_description_title),
                     style = MaterialTheme.typography.h2,
                     modifier = Modifier.align(Alignment.Center)
                 )
-                FavoriteCheckBox(onClick = {})
+
             }
+            FavoriteCheckBox(
+                initialCheckBoxStatus = viewModel.clickedWeapon.value?.isFavorite ?: false,
+                onClick = { isChecked ->
+                    viewModel.clickedWeapon.value?.isFavorite = isChecked
+                    viewModel.onAddToFavoriteClick(isChecked)
+                })
             Divider(modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp))
             viewModel.clickedWeapon.value?.let {
-                WeaponDetails(it.weaponDetails!!)
+                WeaponDetails(it.weaponDetails)
             }
         }
     ) {
@@ -99,7 +104,12 @@ fun WeaponsScreen(viewModel: WeaponsScreenViewModel = hiltViewModel(), actions: 
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     ShowContent(
                         stateLiveData = viewModel.weaponState,
-                        onContent = { ShowWeaponsScreenContent(it, viewModel) }
+                        onContent = {
+                            ShowWeaponsScreenContent(
+                                it,
+                                bottomState = viewModel.bottomState,
+                                onCardClicked = { weapon -> viewModel.onCardClicked(weapon) })
+                        }
                     )
                 }
                 ShowWeaponFilterBlock(viewModel)
@@ -107,7 +117,8 @@ fun WeaponsScreen(viewModel: WeaponsScreenViewModel = hiltViewModel(), actions: 
                     isShow = viewModel.isSearchShown.value,
                     initialSearchValue = viewModel.searchQuery.value,
                     onSearchButtonClick = { viewModel.onSystemSearchButtonClick(it) },
-                    onClearButtonClick = { viewModel.onClearButtonClick() }
+                    onClearButtonClick = { viewModel.onClearButtonClick() },
+                    placeholder = stringResource(id = R.string.weapon_search_text)
                 )
             }
         }
@@ -115,15 +126,23 @@ fun WeaponsScreen(viewModel: WeaponsScreenViewModel = hiltViewModel(), actions: 
 }
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ShowWeaponsScreenContent(weapons: List<WeaponCardModel>, viewModel: WeaponsScreenViewModel) {
+fun ShowWeaponsScreenContent(
+    weapons: List<WeaponCardModel>,
+    bottomState: ModalBottomSheetState,
+    onCardClicked: (WeaponCardModel) -> Unit
+) {
     LazyColumn(
         modifier = Modifier.padding(vertical = 4.dp),
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 3.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(items = weapons, itemContent = { item ->
-            WeaponCard(weapon = item, viewModel = viewModel)
+            WeaponCard(
+                weapon = item,
+                bottomState = bottomState,
+                onCardClicked = { onCardClicked(it) })
         })
     }
 }
@@ -149,15 +168,19 @@ fun ShowWeaponFilterBlock(viewModel: WeaponsScreenViewModel) {
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun WeaponCard(weapon: WeaponCardModel, viewModel: WeaponsScreenViewModel) {
+fun WeaponCard(
+    weapon: WeaponCardModel,
+    onCardClicked: (WeaponCardModel) -> Unit,
+    bottomState: ModalBottomSheetState
+) {
     val coroutineScope = rememberCoroutineScope()
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
                 coroutineScope.launchIO {
-                    viewModel.onCardClicked(weapon)
-                    viewModel.bottomState.show()
+                    onCardClicked(weapon)
+                    bottomState.show()
                 }
             },
         shape = RoundedCornerShape(12.dp),
@@ -216,10 +239,15 @@ fun WeaponCard(weapon: WeaponCardModel, viewModel: WeaponsScreenViewModel) {
 fun WeaponDetails(weapon: WeaponDetails) {
     Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)) {
         TextBlock(title = weapon.passiveName, text = weapon.passiveDesc)
-        TextBlock(title = "Location:", text = weapon.location)
+        TextBlock(
+            title = stringResource(id = R.string.weapon_location_title),
+            text = weapon.location
+        )
         weapon.ascensionMaterial?.let {
-            TextBlock(title = "Ascension material:", weapon.ascensionMaterial)
-
+            TextBlock(
+                title = stringResource(id = R.string.weapon_ascension_material_title),
+                weapon.ascensionMaterial
+            )
         }
     }
 }

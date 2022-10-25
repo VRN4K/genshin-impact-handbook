@@ -76,6 +76,10 @@
     <string name="weapon_base_atk">Base ATK: %s</string>
     <string name="weapon_screen_title">Weapons</string>
     <string name="weapon_ascension_url">https://api.genshin.dev/materials/weapon-ascension/%s</string>
+    <string name="weapon_description_title">Weapon description</string>
+    <string name="weapon_location_title">Location:</string>
+    <string name="weapon_ascension_material_title">Ascension material:</string>
+    <string name="weapon_search_text">Weapon name</string>
 
     //Favorites
     <string name="favorite_screen_title">Favorites</string>

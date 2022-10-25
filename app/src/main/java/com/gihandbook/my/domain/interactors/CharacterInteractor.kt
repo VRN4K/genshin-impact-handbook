@@ -125,17 +125,17 @@ class CharacterInteractor @Inject constructor(
 
     override suspend fun addEnemyCharacterToFavorite(character: EnemyCardModel) {
         favoriteEnemyCharacters.add(character)
-        // charactersDBRepository.addEnemyCharacterToFavorite(character.toEntity())
+        charactersDBRepository.addEnemyCharacterToFavorite(character.toEntity())
     }
 
-    override suspend fun removePlayableCharacterFromFavorite(character: HeroCardModel) {
-        favoritePlayableCharacters.apply { remove(find { character.id == it.id }) }
-        charactersDBRepository.deletePlayableCharacterById(character.id)
+    override suspend fun removePlayableCharacterFromFavorite(characterId: String) {
+        favoritePlayableCharacters.apply { remove(find { characterId == it.id }) }
+        charactersDBRepository.deletePlayableCharacterById(characterId)
     }
 
-    override suspend fun removeEnemyCharacterFromFavorite(character: EnemyCardModel) {
-        favoriteEnemyCharacters.remove(character)
-        charactersDBRepository.deleteEnemyCharacterById(character.id)
+    override suspend fun removeEnemyCharacterFromFavorite(characterId: String) {
+        favoriteEnemyCharacters.apply { remove(find { characterId == it.id }) }
+        charactersDBRepository.deleteEnemyCharacterById(characterId)
     }
 
     override suspend fun isPlayableCharacterInFavorite(characterId: String): Boolean {

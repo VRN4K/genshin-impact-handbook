@@ -54,6 +54,7 @@ class EnemyEntity(
     val imageUrlOnError: String,
 )
 
+
 fun EnemyEntity.toCardModel(resources: Resources): EnemyCardModel {
     return EnemyCardModel(
         element = elements?.map {
@@ -75,9 +76,7 @@ fun EnemyEntity.toCardModel(resources: Resources): EnemyCardModel {
 }
 
 @ProvidedTypeConverter
-class ElementConverter {
-    @Inject
-    lateinit var gson: Gson
+class ElementConverter @Inject constructor(private val gson: Gson) {
 
     @TypeConverter
     fun fromList(elements: List<String>): String {
@@ -85,8 +84,8 @@ class ElementConverter {
     }
 
     @TypeConverter
-    fun toString(elements: String): List<String> {
-        return gson.fromJson(elements, listOf<String>()::class.java)
+    fun toString(elements: String): MutableList<String> {
+        return gson.fromJson(elements, mutableListOf<String>()::class.java)
     }
 }
 

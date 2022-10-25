@@ -75,9 +75,9 @@ class CharactersScreenViewModel @Inject constructor(
 
     fun onEnemyFilterChipClick(filterItemsType: FilterItemsType?, chipValue: String?) {
         when {
-            filterItemsType == FilterItemsType.VISION && selectedEnemiesVision.contains(chipValue) ->
-                selectedEnemiesVision.add(chipValue!!)
             filterItemsType == FilterItemsType.VISION && !selectedEnemiesVision.contains(chipValue) ->
+                selectedEnemiesVision.add(chipValue!!)
+            filterItemsType == FilterItemsType.VISION && selectedEnemiesVision.contains(chipValue) ->
                 selectedEnemiesVision.remove(chipValue!!)
             else -> onClearButtonClick()
         }
@@ -174,9 +174,9 @@ class CharactersScreenViewModel @Inject constructor(
 
     private suspend fun removeCharacterFromFavorite(character: CharacterCardModel) {
         if (selectedTab.value == TabPagesCharacters.CHARACTERS) {
-            characterInteractor.removePlayableCharacterFromFavorite(character as HeroCardModel)
+            characterInteractor.removePlayableCharacterFromFavorite(character.id)
         } else {
-            characterInteractor.removeEnemyCharacterFromFavorite(character as EnemyCardModel)
+            characterInteractor.removeEnemyCharacterFromFavorite(character.id)
         }
     }
 }
